@@ -25,26 +25,26 @@ import { assetUrl } from '../../utils/assetUrl';
 export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
   const defaultStrangers = [
     {
-      id: 'marcus',
-      name: 'Marcus',
-      role: 'The 7 AM Coffee Roaster',
-      location: 'Morning Drip Cafe · 4th & Main',
-      icon: 'coffee',
+      id: 'colten',
+      name: 'Colten',
+      role: 'Fellow Student / Campus Peer',
+      location: 'Academic Hallway · Farmer School of Business',
+      icon: 'smile',
       coords: { x: '24%', y: '32%' },
-      image: assetUrl('/topics/strangers/stranger-marcus.jpg'),
+      image: assetUrl('/topics/strangers/stranger-colten.jpg'),
       hesitation: {
         thought:
-          '“He looks swamped behind the espresso machine steaming milk. What if he glares at me or snaps for holding up the line with a weird philosophical question?”',
-        fearRating: 72,
-        heartRate: 115
+          '“Approaching another student in the corridor to ask an unexpected personal question felt nerve-wracking. What if he thought it was strange or didn’t want to be bothered?”',
+        fearRating: 65,
+        heartRate: 110
       },
-      approachPrompt: 'Step up to the counter and make eye contact',
+      approachPrompt: 'Step up, smile, and ask about what he has on him',
       question:
-        '“What is something you do here every single morning that you wish people noticed?”',
+        '“What is your favorite item you have on you right now?”',
       response:
-        '“He stopped wiping the steam wand, smiled genuinely, and whispered: ‘I recalibrate the espresso grind every morning to match the outdoor humidity. When it rains, the water pulls faster. Nobody knows I drink four bitter test shots before dawn just so their morning latte is smooth.’ He grinned and handed me a warm biscotti on the house.”',
+        '“‘My water bottle, I use it all the time.’ He grinned, held up his BlenderBottle, and we shared an instant laugh—such an honest, grounded answer that immediately broke the ice.”',
       takeaway:
-        'Behind every routine service worker is an invisible artisan wishing someone cared enough to acknowledge their craft.',
+        'Simple, lighthearted questions about everyday items break through social walls faster than rehearsed speeches.',
       expansionBoost: 25,
       xp: 150
     },

@@ -86,7 +86,7 @@ export const initialTopics = [
     title: 'Social Curiosity - talking to strangers',
     subtitle: 'Overcoming social friction to uncover the hidden stories around us',
     phase: 'Chapter 06',
-    image: assetUrl('/topics/topic-6-social-curiosity.jpg'),
+    image: assetUrl('/topics/strangers/stranger-colten.jpg'),
     accentColor: '#107c10',
     story: 'Approaching a stranger on the street with intentional curiosity was undeniably terrifying at first. Our culture defaults to headphones, averted eyes, and looking down at our phones. Taking that first step to ask genuine questions about someone\'s craft, their day, or their history shattered that invisible wall. The conversation turned into a warm, deeply human encounter. I realized that almost everyone is carrying an extraordinary story, waiting for someone to be curious enough to listen.',
     reflection: 'Social curiosity is a creative muscle. Breaking past the fear of awkwardness opened up an endless reservoir of empathy, unexpected viewpoints, and human connection.',
