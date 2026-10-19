@@ -73,28 +73,28 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       xp: 175
     },
     {
-      id: 'arthur',
-      name: 'Arthur',
-      role: 'Retired Metro Rail Conductor',
-      location: 'Temple Station Metro Railing',
-      icon: 'train',
+      id: 'josh',
+      name: 'Josh',
+      role: 'Campus Peer / Fellow Student',
+      location: 'Window Lounge · Armstrong Student Center',
+      icon: 'smile',
       coords: { x: '35%', y: '75%' },
-      image: assetUrl('/topics/strangers/stranger-arthur.jpg'),
+      image: assetUrl('/topics/strangers/stranger-josh.jpg'),
       hesitation: {
         thought:
-          '“He’s an elderly gentleman in a tweed cap looking quietly out at the street. What if he assumes I’m trying to solicit money or sell him something?”',
+          '“Interrupting someone relaxing by the window felt daunting. What if he feels like I’m putting him on the spot with a deep life question?”',
         fearRating: 68,
-        heartRate: 108
+        heartRate: 112
       },
-      approachPrompt: 'Lean against the subway railing and break the silence',
+      approachPrompt: 'Approach the window bay, offer a warm smile, and ask for his perspective',
       question:
-        '“After 40 years on the rails, what is the single most beautiful thing you saw through the front windshield?”',
+        '“What is a piece of advice you learned that turned out to be very valuable?”',
       response:
-        '“His eyes lit up instantly. ‘Sunrise breaking over the elevated bridge in mid-January. The train hits the open sky, and steam rises from hundreds of brick chimney vents below. It looks like the entire sleeping city is breathing in unison.’ He shook my hand with two hands before walking down the steps.”',
+        '“‘Your habits really make you who you are.’ He shared it with genuine conviction—such a profound and grounding insight that speaks directly to building a daily creative practice.”',
       takeaway:
-        'Elders hold decades of cinematic memories that remain locked away simply because nobody asks them to open the archives.',
+        'Wisdom isn’t reserved for lectures or distant mentors; your peers are carrying transformative life lessons learned through their own daily habits.',
       expansionBoost: 25,
-      xp: 200
+      xp: 175
     },
     {
       id: 'maya',
