@@ -175,18 +175,20 @@ function App() {
 
   return (
     <div className="story-app">
-      {/* Windows 10 Metro / Fluent Navigation Bar */}
-      <StoryNavbar
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-        isAutoPlaying={isAutoPlaying}
-        setIsAutoPlaying={setIsAutoPlaying}
-        currentChapter={currentIndex + 1}
-        totalChapters={topics.length}
-        themeMode={themeMode}
-        effectiveTheme={effectiveTheme}
-        onToggleTheme={handleToggleTheme}
-      />
+      {/* Windows 10 Metro Navigation Bar - shown on Start Screen */}
+      {viewMode === 'grid' && (
+        <StoryNavbar
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          isAutoPlaying={isAutoPlaying}
+          setIsAutoPlaying={setIsAutoPlaying}
+          currentChapter={currentIndex + 1}
+          totalChapters={topics.length}
+          themeMode={themeMode}
+          effectiveTheme={effectiveTheme}
+          onToggleTheme={handleToggleTheme}
+        />
+      )}
 
       <main className="story-main">
         {viewMode === 'story' ? (
@@ -199,7 +201,11 @@ function App() {
             onOpenEditModal={(topic) => setEditingTopic(topic)}
             onUpdateTopicData={handleSaveTopicNotes}
             isAutoPlaying={isAutoPlaying}
+            setIsAutoPlaying={setIsAutoPlaying}
             autoPlayProgress={autoPlayProgress}
+            onBackToStart={() => setViewMode('grid')}
+            themeMode={themeMode}
+            onToggleTheme={handleToggleTheme}
           />
         ) : (
           <CardsOverview

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
+  ArrowLeft,
   Sparkles,
   Edit3,
   Quote,
@@ -13,7 +14,12 @@ import {
   Video,
   Wrench,
   Camera,
-  Users
+  Users,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Monitor
 } from 'lucide-react';
 import Chapter1CharacterCreation from './games/Chapter1CharacterCreation';
 import Chapter3MentorInterview from './games/Chapter3MentorInterview';
@@ -31,10 +37,21 @@ export default function StoryChapterView({
   onOpenEditModal,
   onUpdateTopicData,
   isAutoPlaying,
-  autoPlayProgress
+  setIsAutoPlaying,
+  autoPlayProgress,
+  onBackToStart,
+  themeMode,
+  onToggleTheme
 }) {
   const current = topics[currentIndex] || topics[0];
   const [showFullImage, setShowFullImage] = useState(false);
+  const [isMuted, setIsMuted] = useState(soundManager.isMuted);
+
+  const toggleSound = () => {
+    soundManager.isMuted = !soundManager.isMuted;
+    setIsMuted(soundManager.isMuted);
+    if (!soundManager.isMuted) soundManager.playClick();
+  };
   
   // Game mode map per chapter (defaults to 'game' for gamified chapters)
   const [chapterModes, setChapterModes] = useState({
@@ -59,35 +76,61 @@ export default function StoryChapterView({
 
   return (
     <div className="story-container">
-      {/* Top Chapter Progress Stepper Bar */}
-      <nav className="chapter-stepper-bar" aria-label="Chapter Stepper">
-        <div className="stepper-track">
-          {topics.map((t, idx) => {
-            const isActive = idx === currentIndex;
-            const isCompleted = idx < currentIndex;
-            return (
-              <button
-                key={t.id}
-                className={`stepper-node ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
-                onClick={() => {
-                  soundManager.playSlideTransition();
-                  onSelectIndex(idx);
-                }}
-                style={{ '--step-accent': t.accentColor }}
-                title={`Jump to Chapter ${idx + 1}: ${t.title}`}
-              >
-                <span className="step-circle">{idx + 1}</span>
-                <span className="step-text">{t.title}</span>
-                {t.id === 'first-day' && <span className="game-micro-tag">RPG</span>}
-                {t.id === 'mentor-interview' && <span className="game-micro-tag zoom-tag">ZOOM</span>}
-                {t.id === 'rube-goldberg' && <span className="game-micro-tag domino-tag">CHAIN</span>}
-                {t.id === 'night-photos' && <span className="game-micro-tag darkroom-tag">LENS</span>}
-                {t.id === 'social-curiosity' && <span className="game-micro-tag comfort-tag">NPC</span>}
-              </button>
-            );
-          })}
+      {/* Subtle Minimal Top Action Bar */}
+      <header className="story-top-minimal-bar">
+        <button
+          className="story-back-btn"
+          onClick={() => {
+            soundManager.playClick();
+            if (onBackToStart) onBackToStart();
+          }}
+          title="Return to Start Screen (Home)"
+        >
+          <ArrowLeft size={16} />
+          <span>Back to Start</span>
+        </button>
+
+        <div className="story-minimal-breadcrumb">
+          <span className="crumb-badge" style={{ backgroundColor: current.accentColor }}>
+            Chapter {currentIndex + 1} of {topics.length}
+          </span>
+          <span className="crumb-title">{current.title}</span>
         </div>
-      </nav>
+
+        <div className="story-minimal-tray">
+          {setIsAutoPlaying && (
+            <button
+              className={`story-tray-btn ${isAutoPlaying ? 'active' : ''}`}
+              onClick={() => {
+                soundManager.playClick();
+                setIsAutoPlaying(!isAutoPlaying);
+              }}
+              title={isAutoPlaying ? 'Pause Auto Tour' : 'Start Auto Tour (Spacebar)'}
+            >
+              {isAutoPlaying ? <Pause size={14} /> : <Play size={14} />}
+              <span className="tray-label">{isAutoPlaying ? 'Pause' : 'Tour'}</span>
+            </button>
+          )}
+
+          <button
+            className="story-tray-btn"
+            onClick={toggleSound}
+            title={isMuted ? 'Unmute Sound' : 'Mute Sound'}
+          >
+            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+          </button>
+
+          {onToggleTheme && (
+            <button
+              className="story-tray-btn"
+              onClick={onToggleTheme}
+              title={`Toggle Theme Mode (Current: ${themeMode})`}
+            >
+              <Monitor size={15} />
+            </button>
+          )}
+        </div>
+      </header>
 
       {/* Main Single Topic Story Card */}
       <article

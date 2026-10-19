@@ -233,7 +233,147 @@
 }
 
 /* =========================================================
-   CHAPTER STEPPER BAR
+   SUBTLE MINIMAL STORY TOP BAR (Clean, distraction-free)
+   ========================================================= */
+.story-top-minimal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  margin: 8px 0 16px;
+  background: rgba(20, 20, 20, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  gap: 14px;
+  min-height: 42px;
+}
+
+.story-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.story-back-btn:hover {
+  background: var(--metro-blue);
+  border-color: var(--metro-blue);
+  color: #ffffff;
+  transform: translateX(-2px);
+}
+
+.story-minimal-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crumb-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+
+.crumb-title {
+  font-family: var(--font-heading);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #e5e5e5;
+  letter-spacing: 0.2px;
+}
+
+.story-minimal-tray {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.story-tray-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  color: #bbbbbb;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.story-tray-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.story-tray-btn.active {
+  background: var(--metro-blue);
+  border-color: var(--metro-blue);
+  color: #ffffff;
+}
+
+/* Light mode support for minimal top bar */
+[data-theme='light'] .story-top-minimal-bar {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.09);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='light'] .story-back-btn {
+  background: #f3f3f3;
+  border-color: #d1d1d1;
+  color: #1a1a1a;
+}
+
+[data-theme='light'] .story-back-btn:hover {
+  background: var(--metro-blue);
+  border-color: var(--metro-blue);
+  color: #ffffff;
+}
+
+[data-theme='light'] .crumb-title {
+  color: #1a1a1a;
+}
+
+[data-theme='light'] .story-tray-btn {
+  border-color: #d1d1d1;
+  color: #444444;
+}
+
+[data-theme='light'] .story-tray-btn:hover {
+  background: #e8e8e8;
+  color: #000000;
+}
+
+/* =========================================================
+   CHAPTER STEPPER BAR (Legacy fallback)
    ========================================================= */
 .chapter-stepper-bar {
   margin: 12px 0 24px;
