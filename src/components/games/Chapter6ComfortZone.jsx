@@ -49,26 +49,26 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       xp: 150
     },
     {
-      id: 'elena',
-      name: 'Elena',
-      role: 'The Park Bench Sketch Artist',
-      location: 'Washington Plaza Fountain Steps',
-      icon: 'palette',
+      id: 'alex',
+      name: 'Alex',
+      role: 'Campus Peer / Fellow Student',
+      location: 'Student Lounge & Dining Commons',
+      icon: 'smile',
       coords: { x: '74%', y: '28%' },
-      image: assetUrl('/topics/strangers/stranger-elena.jpg'),
+      image: assetUrl('/topics/strangers/stranger-alex.jpg'),
       hesitation: {
         thought:
-          '“She has over-ear headphones on and is completely absorbed in her sketchbook. Approaching her feels invasive—like breaking an invisible glass bubble.”',
-        fearRating: 84,
-        heartRate: 124
+          '“Asking someone what they are privately proud of is vulnerable. What if he feels put on the spot or brushes it off?”',
+        fearRating: 74,
+        heartRate: 118
       },
-      approachPrompt: 'Sit on the opposite end of the stone bench and wave gently',
+      approachPrompt: 'Take a seat nearby, smile, and ask with genuine curiosity',
       question:
-        '“What made you stop and spend an hour drawing this exact lamppost today?”',
+        '“What is something you are proud of that you never get to talk about?”',
       response:
-        '“She slipped off one headphone and turned her sketchbook toward me: ‘Look closely at the wrought iron base. A couple scratched their initials here in 1968 with a pocketknife. I don’t draw the lamp—I draw the things that quietly survive our hurry.’ We sat together for 15 minutes talking about how cities remember.”',
+        '“‘I’m proud of having good social skills.’ He smiled with pure warmth—such a genuine and ironically fitting answer while having a spontaneous conversation with someone who had just stepped out of their comfort zone to talk to him!”',
       takeaway:
-        'People who create in public often welcome curiosity as long as it honors their quiet focus rather than interrupting it.',
+        'When you invite people to share what they are quietly proud of, they reveal strengths that standard small talk completely misses.',
       expansionBoost: 25,
       xp: 175
     },
