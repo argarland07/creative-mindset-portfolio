@@ -1,0 +1,601 @@
+import { useState, useEffect, useRef } from 'react';
+import {
+  Compass,
+  Users,
+  MapPin,
+  Heart,
+  Sparkles,
+  Zap,
+  ArrowRight,
+  RotateCcw,
+  Coffee,
+  Palette,
+  Train,
+  Smile,
+  CheckCircle2,
+  AlertTriangle,
+  MessageSquare,
+  Shield,
+  HelpCircle,
+  Eye
+} from 'lucide-react';
+import { soundManager } from '../../utils/audio';
+import { assetUrl } from '../../utils/assetUrl';
+
+export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
+  const defaultStrangers = [
+    {
+      id: 'marcus',
+      name: 'Marcus',
+      role: 'The 7 AM Coffee Roaster',
+      location: 'Morning Drip Cafe · 4th & Main',
+      icon: 'coffee',
+      coords: { x: '24%', y: '32%' },
+      image: assetUrl('/topics/strangers/stranger-marcus.jpg'),
+      hesitation: {
+        thought:
+          '“He looks swamped behind the espresso machine steaming milk. What if he glares at me or snaps for holding up the line with a weird philosophical question?”',
+        fearRating: 72,
+        heartRate: 115
+      },
+      approachPrompt: 'Step up to the counter and make eye contact',
+      question:
+        '“What is something you do here every single morning that you wish people noticed?”',
+      response:
+        '“He stopped wiping the steam wand, smiled genuinely, and whispered: ‘I recalibrate the espresso grind every morning to match the outdoor humidity. When it rains, the water pulls faster. Nobody knows I drink four bitter test shots before dawn just so their morning latte is smooth.’ He grinned and handed me a warm biscotti on the house.”',
+      takeaway:
+        'Behind every routine service worker is an invisible artisan wishing someone cared enough to acknowledge their craft.',
+      expansionBoost: 25,
+      xp: 150
+    },
+    {
+      id: 'elena',
+      name: 'Elena',
+      role: 'The Park Bench Sketch Artist',
+      location: 'Washington Plaza Fountain Steps',
+      icon: 'palette',
+      coords: { x: '74%', y: '28%' },
+      image: assetUrl('/topics/strangers/stranger-elena.jpg'),
+      hesitation: {
+        thought:
+          '“She has over-ear headphones on and is completely absorbed in her sketchbook. Approaching her feels invasive—like breaking an invisible glass bubble.”',
+        fearRating: 84,
+        heartRate: 124
+      },
+      approachPrompt: 'Sit on the opposite end of the stone bench and wave gently',
+      question:
+        '“What made you stop and spend an hour drawing this exact lamppost today?”',
+      response:
+        '“She slipped off one headphone and turned her sketchbook toward me: ‘Look closely at the wrought iron base. A couple scratched their initials here in 1968 with a pocketknife. I don’t draw the lamp—I draw the things that quietly survive our hurry.’ We sat together for 15 minutes talking about how cities remember.”',
+      takeaway:
+        'People who create in public often welcome curiosity as long as it honors their quiet focus rather than interrupting it.',
+      expansionBoost: 25,
+      xp: 175
+    },
+    {
+      id: 'arthur',
+      name: 'Arthur',
+      role: 'Retired Metro Rail Conductor',
+      location: 'Temple Station Metro Railing',
+      icon: 'train',
+      coords: { x: '35%', y: '75%' },
+      image: assetUrl('/topics/strangers/stranger-arthur.jpg'),
+      hesitation: {
+        thought:
+          '“He’s an elderly gentleman in a tweed cap looking quietly out at the street. What if he assumes I’m trying to solicit money or sell him something?”',
+        fearRating: 68,
+        heartRate: 108
+      },
+      approachPrompt: 'Lean against the subway railing and break the silence',
+      question:
+        '“After 40 years on the rails, what is the single most beautiful thing you saw through the front windshield?”',
+      response:
+        '“His eyes lit up instantly. ‘Sunrise breaking over the elevated bridge in mid-January. The train hits the open sky, and steam rises from hundreds of brick chimney vents below. It looks like the entire sleeping city is breathing in unison.’ He shook my hand with two hands before walking down the steps.”',
+      takeaway:
+        'Elders hold decades of cinematic memories that remain locked away simply because nobody asks them to open the archives.',
+      expansionBoost: 25,
+      xp: 200
+    },
+    {
+      id: 'maya',
+      name: 'Maya & Barnaby',
+      role: 'Riverside Trail Dog Runner',
+      location: 'Harbor Greenway Riverwalk',
+      icon: 'smile',
+      coords: { x: '80%', y: '74%' },
+      image: assetUrl('/topics/topic-6-social-curiosity.jpg'),
+      hesitation: {
+        thought:
+          '“She’s moving fast with two energetic dogs on leashes. If I shout out, I might startle the dogs or disrupt her rhythm.”',
+        fearRating: 60,
+        heartRate: 102
+      },
+      approachPrompt: 'Slow down, smile, and address the dog first',
+      question:
+        '“Do your two dogs share one brain, or are their inner worlds completely different?”',
+      response:
+        '“She burst out laughing, panting from her run: ‘Barnaby thinks he’s a French philosopher who must inspect every single leaf for existential meaning, while Daisy is pure unadulterated chaotic happiness. You totally made my day—usually strangers just stare down at their phones!’”',
+      takeaway:
+        'Humor and warmth are the ultimate universal bypass codes for stranger danger.',
+      expansionBoost: 25,
+      xp: 150
+    }
+  ];
+
+  const strangers = topic.strangerData || defaultStrangers;
+
+  // Selected stranger for interaction
+  const [activeStrangerId, setActiveStrangerId] = useState(null);
+  // Unlocked strangers array
+  const [unlockedIds, setUnlockedIds] = useState([]);
+  // Interaction phase: 'map' | 'hesitation' | 'approaching' | 'unlocked'
+  const [phase, setPhase] = useState('map');
+  const [approachProgress, setApproachProgress] = useState(0);
+
+  const activeStranger = strangers.find((s) => s.id === activeStrangerId) || null;
+
+  // Total comfort zone percentage (starts at 20% baseline, +20% per stranger = 100%)
+  const comfortScore = Math.min(
+    100,
+    20 + unlockedIds.length * 20
+  );
+
+  // Fear of Rejection index drops as comfort grows
+  const rejectionFear = Math.max(8, 85 - unlockedIds.length * 19);
+
+  // Curiosity resonance rating rises
+  const curiosityResonance = Math.min(99, 45 + unlockedIds.length * 13);
+
+  // Select a stranger from the map
+  const handleSelectStranger = (id) => {
+    soundManager.playClick();
+    setActiveStrangerId(id);
+
+    if (unlockedIds.includes(id)) {
+      setPhase('unlocked');
+    } else {
+      setPhase('hesitation');
+      soundManager.playHeartbeat();
+    }
+  };
+
+  // Trigger the approach action
+  const handleStartApproach = () => {
+    if (phase !== 'hesitation') return;
+    setPhase('approaching');
+    soundManager.playApproach();
+
+    let prog = 0;
+    const interval = setInterval(() => {
+      prog += 15;
+      if (prog >= 100) {
+        clearInterval(interval);
+        setApproachProgress(100);
+        setTimeout(() => {
+          setUnlockedIds((prev) =>
+            prev.includes(activeStrangerId) ? prev : [...prev, activeStrangerId]
+          );
+          setPhase('unlocked');
+          soundManager.playComfortExpansion();
+          soundManager.playLevelUp();
+        }, 300);
+      } else {
+        setApproachProgress(prog);
+      }
+    }, 60);
+  };
+
+  // Keyboard shortcut: Spacebar to approach
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space' && phase === 'hesitation') {
+        e.preventDefault();
+        handleStartApproach();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [phase, activeStrangerId]);
+
+  // Reset progress
+  const handleReset = () => {
+    soundManager.playClick();
+    setUnlockedIds([]);
+    setPhase('map');
+    setActiveStrangerId(null);
+    setApproachProgress(0);
+  };
+
+  const getIcon = (type) => {
+    switch (type) {
+      case 'coffee':
+        return <Coffee size={18} />;
+      case 'palette':
+        return <Palette size={18} />;
+      case 'train':
+        return <Train size={18} />;
+      default:
+        return <Smile size={18} />;
+    }
+  };
+
+  return (
+    <div className="comfort-zone-game-root">
+      {/* Top Experience Banner & Stats */}
+      <div className="comfort-top-header">
+        <div className="comfort-title-col">
+          <div className="comfort-badge">
+            <Compass size={14} />
+            <span>Social Curiosity Simulator · Field Experiment</span>
+          </div>
+          <h2 className="comfort-main-title">The Rejection & Curiosity Gauge</h2>
+          <p className="comfort-subtitle">
+            Conquering the 5-Second Hesitation Wall by asking deep, genuine questions to random people.
+          </p>
+        </div>
+
+        {/* Dynamic Dual Gauges */}
+        <div className="comfort-gauges-cluster">
+          {/* Comfort Zone Expansion Meter */}
+          <div className="gauge-card comfort-expansion-gauge">
+            <div className="gauge-top">
+              <span className="gauge-label">
+                <Shield size={14} className="text-cyan" /> Comfort Zone Radius
+              </span>
+              <span className="gauge-val text-cyan">{comfortScore}%</span>
+            </div>
+            <div className="gauge-progress-track">
+              <div
+                className="gauge-fill-cyan"
+                style={{ width: `${comfortScore}%` }}
+              />
+            </div>
+            <span className="gauge-sub">
+              {unlockedIds.length === 4
+                ? '★ Full Social Freedom Unlocked'
+                : `Boundary Expanded +${unlockedIds.length * 20}%`}
+            </span>
+          </div>
+
+          {/* Rejection Fear Index */}
+          <div className="gauge-card fear-index-gauge">
+            <div className="gauge-top">
+              <span className="gauge-label">
+                <AlertTriangle size={14} className="text-rose" /> Rejection Fear
+              </span>
+              <span className="gauge-val text-rose">{rejectionFear}%</span>
+            </div>
+            <div className="gauge-progress-track">
+              <div
+                className="gauge-fill-rose"
+                style={{ width: `${rejectionFear}%` }}
+              />
+            </div>
+            <span className="gauge-sub">
+              {rejectionFear < 20 ? 'Dissolved into Empathy' : 'Mitigated by Curiosity'}
+            </span>
+          </div>
+
+          {/* Curiosity Resonance */}
+          <div className="gauge-card curiosity-resonance-gauge">
+            <div className="gauge-top">
+              <span className="gauge-label">
+                <Sparkles size={14} className="text-amber" /> Curiosity XP
+              </span>
+              <span className="gauge-val text-amber">{curiosityResonance} pts</span>
+            </div>
+            <div className="gauge-progress-track">
+              <div
+                className="gauge-fill-amber"
+                style={{ width: `${curiosityResonance}%` }}
+              />
+            </div>
+            <span className="gauge-sub">
+              {unlockedIds.length} of 4 Encounters Mapped
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Interactive Stage: Map + Encounter Panel */}
+      <div className="comfort-interactive-grid">
+        {/* Left Column: Interactive City Street Map */}
+        <div className="comfort-map-wrapper">
+          <div className="map-glass-header">
+            <div className="map-header-left">
+              <MapPin size={16} className="text-cyan" />
+              <span className="map-title-text">Urban Encounter Grid</span>
+            </div>
+            <div className="map-legend">
+              <span className="legend-item">
+                <span className="legend-dot dot-unlocked" /> Connected
+              </span>
+              <span className="legend-item">
+                <span className="legend-dot dot-pending" /> Unmet Stranger
+              </span>
+            </div>
+          </div>
+
+          {/* Stylized Street Map Canvas */}
+          <div className="city-map-canvas">
+            {/* Ambient Animated Concentric Expansion Rings */}
+            <div
+              className="comfort-radar-ring ring-1"
+              style={{
+                transform: `translate(-50%, -50%) scale(${0.4 + (comfortScore / 100) * 0.7})`
+              }}
+            />
+            <div
+              className="comfort-radar-ring ring-2"
+              style={{
+                transform: `translate(-50%, -50%) scale(${0.6 + (comfortScore / 100) * 0.8})`
+              }}
+            />
+
+            {/* Stylized Street Lines */}
+            <svg className="map-streets-svg" viewBox="0 0 500 400">
+              <defs>
+                <linearGradient id="streetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="rgba(255,255,255,0.08)" />
+                  <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
+                </linearGradient>
+              </defs>
+              {/* Roads */}
+              <line x1="0" y1="140" x2="500" y2="140" stroke="rgba(255,255,255,0.12)" strokeWidth="18" />
+              <line x1="0" y1="280" x2="500" y2="280" stroke="rgba(255,255,255,0.12)" strokeWidth="14" />
+              <line x1="160" y1="0" x2="160" y2="400" stroke="rgba(255,255,255,0.12)" strokeWidth="16" />
+              <line x1="360" y1="0" x2="360" y2="400" stroke="rgba(255,255,255,0.12)" strokeWidth="14" />
+              {/* Dashed bike paths & rail line */}
+              <path
+                d="M 20 380 Q 200 280 480 320"
+                fill="none"
+                stroke="rgba(6, 182, 212, 0.25)"
+                strokeWidth="4"
+                strokeDasharray="6 6"
+              />
+              <path
+                d="M 50 40 Q 250 160 460 60"
+                fill="none"
+                stroke="rgba(245, 158, 11, 0.25)"
+                strokeWidth="4"
+                strokeDasharray="8 6"
+              />
+            </svg>
+
+            {/* Landmarks Labels */}
+            <div className="map-landmark lm-cafe">☕ Morning Drip Cafe</div>
+            <div className="map-landmark lm-park">🌳 Washington Plaza</div>
+            <div className="map-landmark lm-metro">🚇 Temple Metro Hub</div>
+            <div className="map-landmark lm-river">🌊 Harbor Greenway</div>
+
+            {/* Clickable NPC Stranger Pins */}
+            {strangers.map((s) => {
+              const isUnlocked = unlockedIds.includes(s.id);
+              const isSelected = activeStrangerId === s.id;
+
+              return (
+                <button
+                  key={s.id}
+                  className={`map-npc-pin ${isUnlocked ? 'unlocked' : 'pending'} ${
+                    isSelected ? 'selected' : ''
+                  }`}
+                  style={{ left: s.coords.x, top: s.coords.y }}
+                  onClick={() => handleSelectStranger(s.id)}
+                  title={`Click to interact with ${s.name}`}
+                >
+                  <div className="pin-radar-pulse" />
+                  <div className="pin-icon-circle">
+                    {isUnlocked ? <CheckCircle2 size={16} /> : getIcon(s.icon)}
+                  </div>
+                  <div className="pin-label-tag">
+                    <span className="pin-name">{s.name}</span>
+                    <span className="pin-status">
+                      {isUnlocked ? '✓ Connected' : 'Approach NPC'}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="map-footer-guide">
+            <span className="map-instruction">
+              💡 <strong>Action:</strong> Click on any NPC marker on the street grid to face the 5-Second Hesitation Wall and initiate conversation.
+            </span>
+          </div>
+        </div>
+
+        {/* Right Column: Interaction Encounter Card */}
+        <div className="comfort-encounter-panel">
+          {/* State 1: Nothing selected yet */}
+          {phase === 'map' && (
+            <div className="panel-idle-state">
+              <div className="idle-compass-ring">
+                <Users size={42} className="text-cyan pulse-slow" />
+              </div>
+              <h3>Choose a Stranger to Approach</h3>
+              <p>
+                Every stranger is a library of unread stories. Click any marker on the urban grid to confront the fear of rejection and ask an unexpected question.
+              </p>
+              <div className="idle-quick-stats">
+                <div className="stat-pill">
+                  <strong>4</strong> Field Encounters
+                </div>
+                <div className="stat-pill">
+                  <strong>{unlockedIds.length} / 4</strong> Completed
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* State 2: Hesitation Phase (The 5-Second Wall) */}
+          {phase === 'hesitation' && activeStranger && (
+            <div className="panel-hesitation-state">
+              <div className="hesitation-alert-banner">
+                <AlertTriangle size={18} className="text-rose" />
+                <span>The 5-Second Hesitation Wall</span>
+              </div>
+
+              <div className="hesitation-stranger-preview">
+                <div className="preview-avatar-silhouette">
+                  {getIcon(activeStranger.icon)}
+                </div>
+                <div>
+                  <h4 className="preview-name">{activeStranger.name}</h4>
+                  <span className="preview-role">{activeStranger.role}</span>
+                </div>
+              </div>
+
+              {/* Heartbeat & Anxiety Meter */}
+              <div className="anxiety-monitor-box">
+                <div className="anxiety-header">
+                  <span className="heart-bpm">
+                    <Heart size={16} className="text-rose heart-throb" />{' '}
+                    {activeStranger.hesitation.heartRate} BPM
+                  </span>
+                  <span className="fear-level-tag">
+                    Hesitation Intensity: {activeStranger.hesitation.fearRating}%
+                  </span>
+                </div>
+                <div className="hesitation-thought-bubble">
+                  <div className="thought-quote-label">Internal Self-Doubt:</div>
+                  <p className="thought-quote-text">
+                    {activeStranger.hesitation.thought}
+                  </p>
+                </div>
+              </div>
+
+              {/* Approach Action Call */}
+              <div className="approach-action-area">
+                <p className="action-hint">
+                  The cure for social fear is immediate curiosity. Don’t wait for your brain to invent excuses.
+                </p>
+                <button
+                  className="btn-approach-action"
+                  onClick={handleStartApproach}
+                >
+                  <Zap size={18} />
+                  <span>Press [ SPACEBAR ] or Click to Step Forward</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* State 3: Approaching Animation */}
+          {phase === 'approaching' && activeStranger && (
+            <div className="panel-approaching-state">
+              <div className="approaching-spinner">
+                <div className="pulse-ripple" />
+                <Users size={36} className="text-cyan" />
+              </div>
+              <h3 className="approaching-title">Stepping Forward...</h3>
+              <p className="approaching-subtitle">
+                {activeStranger.approachPrompt}
+              </p>
+              <div className="approach-progress-bar">
+                <div
+                  className="approach-progress-fill"
+                  style={{ width: `${approachProgress}%` }}
+                />
+              </div>
+              <span className="approach-metric">Breaking the Silence...</span>
+            </div>
+          )}
+
+          {/* State 4: Unlocked Story & Conversation Card */}
+          {phase === 'unlocked' && activeStranger && (
+            <div className="panel-unlocked-card">
+              <div className="unlocked-header">
+                <span className="unlocked-tag">
+                  <CheckCircle2 size={14} /> Connection Made
+                </span>
+                <span className="unlocked-reward">
+                  +{activeStranger.expansionBoost}% Comfort · +{activeStranger.xp} XP
+                </span>
+              </div>
+
+              {/* Photo & Identity */}
+              <div className="unlocked-identity-strip">
+                <div className="stranger-photo-wrap">
+                  <img
+                    src={activeStranger.image}
+                    alt={activeStranger.name}
+                    className="stranger-full-photo"
+                  />
+                </div>
+                <div className="stranger-info-meta">
+                  <h3 className="stranger-title">{activeStranger.name}</h3>
+                  <p className="stranger-role-text">{activeStranger.role}</p>
+                  <p className="stranger-loc-text">
+                    <MapPin size={12} /> {activeStranger.location}
+                  </p>
+                </div>
+              </div>
+
+              {/* The Exact Question */}
+              <div className="conversation-section question-bubble">
+                <div className="dialogue-speaker-tag">
+                  <MessageSquare size={13} /> The Question I Asked:
+                </div>
+                <p className="dialogue-text-body">{activeStranger.question}</p>
+              </div>
+
+              {/* Their Unexpected Response */}
+              <div className="conversation-section response-bubble">
+                <div className="dialogue-speaker-tag response-tag">
+                  <Sparkles size={13} /> {activeStranger.name}’s Response:
+                </div>
+                <p className="dialogue-text-body response-quote">
+                  {activeStranger.response}
+                </p>
+              </div>
+
+              {/* Comfort Zone Epiphany */}
+              <div className="creative-takeaway-box">
+                <span className="takeaway-badge">
+                  <Smile size={14} /> The Creative Takeaway:
+                </span>
+                <p className="takeaway-text">{activeStranger.takeaway}</p>
+              </div>
+
+              {/* Return or Next Stranger Button */}
+              <div className="unlocked-actions">
+                <button
+                  className="btn-return-map"
+                  onClick={() => {
+                    soundManager.playClick();
+                    setPhase('map');
+                  }}
+                >
+                  <ArrowRight size={16} /> Return to Map / Next Stranger
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Bottom Summary & Celebration Banner */}
+      {unlockedIds.length === 4 && (
+        <div className="comfort-mastery-banner">
+          <div className="mastery-content">
+            <div className="mastery-icon-badge">
+              <Sparkles size={28} className="text-amber" />
+            </div>
+            <div>
+              <h4 className="mastery-title">
+                Comfort Zone Perimeter: 100% Expanded
+              </h4>
+              <p className="mastery-desc">
+                By asking questions driven by sincere wonder rather than transactional small talk, fear of rejection collapsed. Every human is walking around waiting to be seen.
+              </p>
+            </div>
+          </div>
+          <button className="btn-reset-simulator" onClick={handleReset}>
+            <RotateCcw size={15} /> Replay Simulator
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
