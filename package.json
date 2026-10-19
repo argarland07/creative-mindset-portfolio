@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://argland07.github.io/creative-mindset-portfolio",
+  "homepage": "https://argarland07.github.io/creative-mindset-portfolio",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
