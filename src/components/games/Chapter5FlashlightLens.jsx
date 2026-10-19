@@ -24,67 +24,83 @@ export default function Chapter5FlashlightLens({
   const defaultShots = [
     {
       id: 1,
-      title: 'Reflections After the Rain',
-      category: 'Specular Neon & Wet Asphalt',
-      image: assetUrl('/topics/night-shots/night-puddle.jpg'),
-      iso: 'ISO 1600',
-      aperture: 'f/1.8',
-      shutter: '1/60s',
+      title: 'Pearson Hall Entrance',
+      category: 'Architectural Warmth & Classical Arches',
+      image: assetUrl('/topics/night-shots/pearson-hall-lanterns.jpg'),
+      iso: 'ISO 800',
+      aperture: 'f/2.8',
+      shutter: '1/50s',
       lens: '35mm Prime',
-      coords: { x: '22%', y: '28%' },
+      coords: { x: '22%', y: '26%' },
       story:
-        'Puddles are nature’s spontaneous mirror. By crouching down inches from the water, the wet cobblestone transformed the rainy alley into a sea of electric cyan and vermilion.',
+        'The grand stone archway of Pearson Hall framed by twin wrought-iron coach lanterns. Walking up to the building at night, the intense golden illumination turns cold masonry into a welcoming, cinematic gateway.',
       lightingInfluence:
-        'During daylight, this alley was just dirty pavement and dumpsters. The rain and neon reflections inverted the hierarchy—the ground became more luminous and colorful than the buildings.',
-      lesson: 'Look down when everyone else is looking straight ahead. Beauty hides in puddles.'
+        'The high-contrast cast of the lantern globes emphasizes the brick masonry and etched typography above the arch, creating depth and warmth that gets completely lost in flat daytime sunlight.',
+      lesson: 'Symmetry and deliberate light fixtures turn institutional architecture into classical poetry.'
     },
     {
       id: 2,
-      title: 'Tony’s 24/7 Grocery Sanctuary',
-      category: 'Warm Tungsten vs. Nocturnal Void',
-      image: assetUrl('/topics/night-shots/night-bodega.jpg'),
-      iso: 'ISO 800',
+      title: 'King Library: “Welcome Home”',
+      category: 'Campus Heart & Nocturnal Sanctuary',
+      image: assetUrl('/topics/night-shots/king-library-welcome.jpg'),
+      iso: 'ISO 1000',
       aperture: 'f/2.0',
-      shutter: '1/80s',
-      lens: '50mm Lens',
-      coords: { x: '72%', y: '26%' },
+      shutter: '1/60s',
+      lens: '50mm Prime',
+      coords: { x: '74%', y: '25%' },
       story:
-        'At 2 AM, the city is a cold, sleeping giant. Turning a corner and seeing Tony’s bodega radiating golden tungsten light felt like discovering an oasis in a desert of shadow.',
+        'The iconic columns of King Library beneath the vibrant red "Welcome Home" banner. For students studying late into the night, this building is a second home and an undeniable beacon of focus.',
       lightingInfluence:
-        'The extreme contrast between the black street and the warm interior turned the shopkeeper into a character on a lit theater stage. Light became a visual shelter.',
-      lesson: 'Contrast creates emotional gravity. Without darkness, warmth has nothing to illuminate.'
+        'The warm uplighting inside the arched portico bounces off the brick interior, while the bold red banner catches just enough illumination to anchor the entire composition in the darkness.',
+      lesson: 'Light provides safety and reassurance. At night, a library is more than a building—it is a community refuge.'
     },
     {
       id: 3,
-      title: 'The Velocity of City Veins',
-      category: 'Long-Exposure Kinetic Painting',
-      image: assetUrl('/topics/night-shots/night-trails.jpg'),
-      iso: 'ISO 100',
-      aperture: 'f/11',
-      shutter: '4.0s Bulb',
-      lens: '24mm Wide',
-      coords: { x: '30%', y: '74%' },
+      title: 'The Nocturnal Corridor',
+      category: 'Light Falloff & Textured Masonry',
+      image: assetUrl('/topics/night-shots/archway-lanterns.jpg'),
+      iso: 'ISO 1600',
+      aperture: 'f/1.8',
+      shutter: '1/80s',
+      lens: '50mm Prime',
+      coords: { x: '50%', y: '50%' },
       story:
-        'Climbed the pedestrian overpass and clamped the tripod to the railing. Left the shutter open for four seconds as evening traffic accelerated through the highway curves.',
+        'A quiet campus entryway bathed in rich amber tungsten from a pair of lanterns mounted on weathered brick. The dark shadows of the long hallway create an intriguing sense of quiet mystery.',
       lightingInfluence:
-        'The physical vehicles disappeared from the sensor, leaving behind only the kinetic momentum of their red and white photons. Light painted the passage of time.',
-      lesson: 'Patience transforms chaos into harmony. Slowing down your perception changes what you see.'
+        'The dramatic inverse-square falloff of light drops off quickly into pitch darkness, highlighting the rough-hewn stone foundation and warm brick patina.',
+      lesson: 'What you leave in the shadows is just as important as what you choose to illuminate.'
     },
     {
       id: 4,
-      title: 'The Joy of Looking',
-      category: 'Nocturnal Urban Explorer',
-      image: assetUrl('/topics/topic-5-night-photography.jpg'),
+      title: 'Windows in the Dark: Dormitory Lives',
+      category: 'Windows as Vignettes & Collective Rest',
+      image: assetUrl('/topics/night-shots/dorm-windows-night.jpg'),
       iso: 'ISO 1250',
-      aperture: 'f/1.4',
-      shutter: '1/125s',
-      lens: '50mm Manual',
-      coords: { x: '78%', y: '72%' },
+      aperture: 'f/2.8',
+      shutter: '1/40s',
+      lens: '24mm Wide',
+      coords: { x: '18%', y: '72%' },
       story:
-        'Walking out into the cold night with a camera completely broke my autopilot routine. Instead of staring down at my smartphone, every awning, flickering lamp, and doorway became a stage set.',
+        'Looking out across the lawn at the dormitory facade at night. Scattered amber windows punctuate the dark brick exterior—each glowing pane representing a different student studying, laughing, or resting.',
       lightingInfluence:
-        'Night photography forces you to shoot with intention because photons are scarce. You have to hunt for light rather than passively absorbing it.',
-      lesson: 'Creative exploration requires altering your physical constraints—shifting time, temperature, and pace.'
+        'The darkness hides the mundane campus lawn, drawing all focus to the isolated squares of light. The low lamppost across the grass grounds the massive silhouette of the building.',
+      lesson: 'Each lit window is an untold story. Night photography turns everyday residential life into contemplative art.'
+    },
+    {
+      id: 5,
+      title: 'The Miami “M” Beacon',
+      category: 'Campus Identity & Direct Spotlight',
+      image: assetUrl('/topics/night-shots/miami-pillar-spotlight.jpg'),
+      iso: 'ISO 800',
+      aperture: 'f/2.2',
+      shutter: '1/60s',
+      lens: '50mm Prime',
+      coords: { x: '82%', y: '72%' },
+      story:
+        'A solitary brick column outside the gates with the Miami University bevelled "M" emblem spotlighted from above. The dark iron fence recedes into the night while the emblem shines sharp and proud.',
+      lightingInfluence:
+        'The tight directional spotlight creates crisp highlights along the bevel of the letterform and raking light across the brick texture.',
+      lesson: 'Directional light can elevate a quiet campus symbol into a bold statement of pride and belonging.'
     }
   ];
 

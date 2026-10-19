@@ -73,7 +73,7 @@ export const initialTopics = [
     title: 'Joyous Exploration - taking photos at night',
     subtitle: 'Reframing familiar streets through darkness, neon glows, and patient observation',
     phase: 'Chapter 05',
-    image: assetUrl('/topics/topic-5-night-photography.jpg'),
+    image: assetUrl('/topics/night-shots/pearson-hall-lanterns.jpg'),
     accentColor: '#008272',
     story: 'Heading out into the city after hours with a camera completely inverted my perception of time and space. Places that feel mundane or rushed during daylight became cinematic canvases bathed in amber streetlamps, neon signage reflections in rain puddles, and deep shadows. Without the noise and bustle of daily errands, I was forced to slow down, look up, and notice the textures of the city that usually slip by unnoticed. It was an exercise in pure joyous exploration without a predetermined destination or commercial goal.',
     reflection: 'Creativity often requires altering your physical constraints—shifting time of day, changing your pace, or looking at familiar surroundings through an entirely different lens.',

@@ -11,7 +11,13 @@ function App() {
   const [topics, setTopics] = useState(() => {
     try {
       const saved = localStorage.getItem('creativity_story_topics');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return initialTopics.map((init) => {
+          const match = parsed.find((p) => p.id === init.id);
+          return match ? { ...init, ...match, image: init.image } : init;
+        });
+      }
     } catch {
       // Fallback
     }
