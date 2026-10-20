@@ -30,7 +30,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       role: 'Fellow Student / Campus Peer',
       location: 'Academic Hallway · Farmer School of Business',
       icon: 'smile',
-      coords: { x: '20%', y: '25%' },
+      coords: { x: '18%', y: '24%' },
       image: assetUrl('/topics/strangers/stranger-colten.jpg'),
       hesitation: {
         thought:
@@ -45,7 +45,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘My water bottle, I use it all the time.’ He grinned, held up his BlenderBottle, and we shared an instant laugh—such an honest, grounded answer that immediately broke the ice.”',
       takeaway:
         'Simple, lighthearted questions about everyday items break through social walls faster than rehearsed speeches.',
-      expansionBoost: 16,
+      expansionBoost: 14,
       xp: 150
     },
     {
@@ -54,7 +54,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       role: 'Campus Peer / Fellow Student',
       location: 'Student Lounge & Dining Commons',
       icon: 'smile',
-      coords: { x: '80%', y: '25%' },
+      coords: { x: '50%', y: '20%' },
       image: assetUrl('/topics/strangers/stranger-alex.jpg'),
       hesitation: {
         thought:
@@ -69,55 +69,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘I’m proud of having good social skills.’ He smiled with pure warmth—such a genuine and ironically fitting answer while having a spontaneous conversation with someone who had just stepped out of their comfort zone to talk to him!”',
       takeaway:
         'When you invite people to share what they are quietly proud of, they reveal strengths that standard small talk completely misses.',
-      expansionBoost: 16,
-      xp: 175
-    },
-    {
-      id: 'josh',
-      name: 'Josh',
-      role: 'Campus Peer / Fellow Student',
-      location: 'Window Lounge · Armstrong Student Center',
-      icon: 'smile',
-      coords: { x: '20%', y: '75%' },
-      image: assetUrl('/topics/strangers/stranger-josh.jpg'),
-      hesitation: {
-        thought:
-          '“Interrupting someone relaxing by the window felt daunting. What if he feels like I’m putting him on the spot with a deep life question?”',
-        fearRating: 68,
-        heartRate: 112
-      },
-      approachPrompt: 'Approach the window bay, offer a warm smile, and ask for his perspective',
-      question:
-        '“What is a piece of advice you learned that turned out to be very valuable?”',
-      response:
-        '“‘Your habits really make you who you are.’ He shared it with genuine conviction—such a profound and grounding insight that speaks directly to building a daily creative practice.”',
-      takeaway:
-        'Wisdom isn’t reserved for lectures or distant mentors; your peers are carrying transformative life lessons learned through their own daily habits.',
-      expansionBoost: 16,
-      xp: 175
-    },
-    {
-      id: 'anna',
-      name: 'Anna',
-      role: 'Campus Peer / Fellow Student',
-      location: 'Atrium Lounge · Farmer School of Business',
-      icon: 'smile',
-      coords: { x: '80%', y: '75%' },
-      image: assetUrl('/topics/strangers/stranger-anna.jpg'),
-      hesitation: {
-        thought:
-          '“She was relaxing in the armchair in the atrium. Approaching someone in a quiet study space felt intrusive—what if she didn’t want to be interrupted?”',
-        fearRating: 62,
-        heartRate: 105
-      },
-      approachPrompt: 'Step into the lounge area, smile warmly, and ask with genuine interest',
-      question:
-        '“What is something you bought that has significantly improved your life?”',
-      response:
-        '“‘My car.’ She immediately smiled, pulled out her phone, and held up a photo of her car to show me—such an honest, relatable answer about daily freedom that made the conversation feel completely effortless!”',
-      takeaway:
-        'Asking about practical life upgrades brings out stories of personal independence and pride that people are eager to share.',
-      expansionBoost: 16,
+      expansionBoost: 14,
       xp: 175
     },
     {
@@ -126,7 +78,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       role: 'Campus Peer / Fellow Student',
       location: 'Grand Foyer & Colonnade Hallway',
       icon: 'smile',
-      coords: { x: '36%', y: '50%' },
+      coords: { x: '82%', y: '24%' },
       image: assetUrl('/topics/strangers/stranger-vinney.jpg'),
       hesitation: {
         thought:
@@ -141,8 +93,32 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘My Apple Watch.’ He smiled warmly and tapped his wrist—a relatable, modern answer that immediately opened the door to a relaxed and friendly conversation!”',
       takeaway:
         'Everyday tech is intimately personal; asking people about what they carry or wear creates an effortless, natural bridge between strangers.',
-      expansionBoost: 16,
+      expansionBoost: 14,
       xp: 150
+    },
+    {
+      id: 'evy',
+      name: 'Evy',
+      role: 'Campus Peer / Fellow Student',
+      location: 'Career Commons Lounge & Foyer',
+      icon: 'smile',
+      coords: { x: '32%', y: '52%' },
+      image: assetUrl('/topics/strangers/stranger-evy.jpg'),
+      hesitation: {
+        thought:
+          '“She was sitting in the Career Commons lounge. Walking up to ask a deep question about life advice felt vulnerable—what if the timing felt awkward?”',
+        fearRating: 58,
+        heartRate: 104
+      },
+      approachPrompt: 'Step forward into the lounge, smile warmly, and ask with open curiosity',
+      question:
+        '“What is a piece of advice you learned that turned out to be very valuable?”',
+      response:
+        '“‘I learned how to be curious and talk to people!’ Her face beamed with energy—such an incredible, full-circle answer that completely captures the spirit of this entire creative challenge!”',
+      takeaway:
+        'Learning to be curious and talk to people isn’t just a social skill—it is a superpower that opens every door.',
+      expansionBoost: 14,
+      xp: 175
     },
     {
       id: 'jackson',
@@ -150,7 +126,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       role: 'Campus Peer / Fellow Student',
       location: 'Stairwell Landing & Grand Hall',
       icon: 'smile',
-      coords: { x: '64%', y: '50%' },
+      coords: { x: '68%', y: '52%' },
       image: assetUrl('/topics/strangers/stranger-jackson.jpg'),
       hesitation: {
         thought:
@@ -165,8 +141,56 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘Cologne.’ He flashed a peace sign with a huge, radiant grin—such an unexpected, hilarious, and genuinely passionate answer that made the entire interaction pure gold!”',
       takeaway:
         'When you invite people to speak on an unexpected personal niche with zero judgment, you unlock pure spontaneous charisma.',
-      expansionBoost: 15,
+      expansionBoost: 14,
       xp: 160
+    },
+    {
+      id: 'josh',
+      name: 'Josh',
+      role: 'Campus Peer / Fellow Student',
+      location: 'Window Lounge · Armstrong Student Center',
+      icon: 'smile',
+      coords: { x: '24%', y: '78%' },
+      image: assetUrl('/topics/strangers/stranger-josh.jpg'),
+      hesitation: {
+        thought:
+          '“Interrupting someone relaxing by the window felt daunting. What if he feels like I’m putting him on the spot with a deep life question?”',
+        fearRating: 68,
+        heartRate: 112
+      },
+      approachPrompt: 'Approach the window bay, offer a warm smile, and ask for his perspective',
+      question:
+        '“What is a piece of advice you learned that turned out to be very valuable?”',
+      response:
+        '“‘Your habits really make you who you are.’ He shared it with genuine conviction—such a profound and grounding insight that speaks directly to building a daily creative practice.”',
+      takeaway:
+        'Wisdom isn’t reserved for lectures or distant mentors; your peers are carrying transformative life lessons learned through their own daily habits.',
+      expansionBoost: 14,
+      xp: 175
+    },
+    {
+      id: 'anna',
+      name: 'Anna',
+      role: 'Campus Peer / Fellow Student',
+      location: 'Atrium Lounge · Farmer School of Business',
+      icon: 'smile',
+      coords: { x: '76%', y: '78%' },
+      image: assetUrl('/topics/strangers/stranger-anna.jpg'),
+      hesitation: {
+        thought:
+          '“She was relaxing in the armchair in the atrium. Approaching someone in a quiet study space felt intrusive—what if she didn’t want to be interrupted?”',
+        fearRating: 62,
+        heartRate: 105
+      },
+      approachPrompt: 'Step into the lounge area, smile warmly, and ask with genuine interest',
+      question:
+        '“What is something you bought that has significantly improved your life?”',
+      response:
+        '“‘My car.’ She immediately smiled, pulled out her phone, and held up a photo of her car to show me—such an honest, relatable answer about daily freedom that made the conversation feel completely effortless!”',
+      takeaway:
+        'Asking about practical life upgrades brings out stories of personal independence and pride that people are eager to share.',
+      expansionBoost: 14,
+      xp: 175
     }
   ];
 
