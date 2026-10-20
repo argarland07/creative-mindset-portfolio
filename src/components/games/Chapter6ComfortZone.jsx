@@ -97,28 +97,28 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       xp: 175
     },
     {
-      id: 'maya',
-      name: 'Maya & Barnaby',
-      role: 'Riverside Trail Dog Runner',
-      location: 'Harbor Greenway Riverwalk',
+      id: 'anna',
+      name: 'Anna',
+      role: 'Campus Peer / Fellow Student',
+      location: 'Atrium Lounge · Farmer School of Business',
       icon: 'smile',
       coords: { x: '80%', y: '74%' },
-      image: assetUrl('/topics/topic-6-social-curiosity.jpg'),
+      image: assetUrl('/topics/strangers/stranger-anna.jpg'),
       hesitation: {
         thought:
-          '“She’s moving fast with two energetic dogs on leashes. If I shout out, I might startle the dogs or disrupt her rhythm.”',
-        fearRating: 60,
-        heartRate: 102
+          '“She was relaxing in the armchair in the atrium. Approaching someone in a quiet study space felt intrusive—what if she didn’t want to be interrupted?”',
+        fearRating: 62,
+        heartRate: 105
       },
-      approachPrompt: 'Slow down, smile, and address the dog first',
+      approachPrompt: 'Step into the lounge area, smile warmly, and ask with genuine interest',
       question:
-        '“Do your two dogs share one brain, or are their inner worlds completely different?”',
+        '“What is something you bought that has significantly improved your life?”',
       response:
-        '“She burst out laughing, panting from her run: ‘Barnaby thinks he’s a French philosopher who must inspect every single leaf for existential meaning, while Daisy is pure unadulterated chaotic happiness. You totally made my day—usually strangers just stare down at their phones!’”',
+        '“‘My car.’ She immediately smiled, pulled out her phone, and held up a photo of her car to show me—such an honest, relatable answer about daily freedom that made the conversation feel completely effortless!”',
       takeaway:
-        'Humor and warmth are the ultimate universal bypass codes for stranger danger.',
+        'Asking about practical life upgrades brings out stories of personal independence and pride that people are eager to share.',
       expansionBoost: 25,
-      xp: 150
+      xp: 175
     }
   ];
 
