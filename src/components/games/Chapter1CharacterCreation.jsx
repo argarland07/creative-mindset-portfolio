@@ -5,7 +5,6 @@ import {
   HelpCircle,
   Sparkles,
   ArrowRight,
-  RotateCcw,
   BookOpen,
   Award,
   CheckCircle,
@@ -53,13 +52,12 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
   const [guessFear, setGuessFear] = useState(5);
   const [guessUncertainty, setGuessUncertainty] = useState(5);
   const [revealed, setRevealed] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
 
-  // Editable baseline stats
-  const [actualConfidence, setActualConfidence] = useState(baselineStats.creativeConfidence);
-  const [actualFear, setActualFear] = useState(baselineStats.fearOfFailure);
-  const [actualUncertainty, setActualUncertainty] = useState(baselineStats.uncertaintyTolerance);
-  const [journalText, setJournalText] = useState(defaultJournal.entry);
+  // Baseline stats (fixed to real numbers)
+  const actualConfidence = baselineStats.creativeConfidence;
+  const actualFear = baselineStats.fearOfFailure;
+  const actualUncertainty = baselineStats.uncertaintyTolerance;
+  const journalText = defaultJournal.entry;
 
   const handleSliderChange = (setter) => (e) => {
     setter(Number(e.target.value));
@@ -71,13 +69,8 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
     soundManager.playLevelUp();
   };
 
-  const handleResetGuess = () => {
-    setRevealed(false);
-    setGuessConfidence(5);
-    setGuessFear(5);
-    setGuessUncertainty(5);
-    soundManager.playClick();
-  };
+  // Convert 1-10 to percentage along the slider track (1 -> 0%, 10 -> 100%)
+  const toTrackPct = (val) => `${((val - 1) / 9) * 100}%`;
 
   // Calculate intuition/accuracy score on 1-10 scale
   const diffConfidence = Math.abs(guessConfidence - actualConfidence);
@@ -86,25 +79,6 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
   const totalDiff = diffConfidence + diffFear + diffUncertainty;
   // Maximum total diff on a 1-10 scale across 3 metrics is at most ~27.
   const empathyScore = Math.max(0, Math.round(100 - (totalDiff * 6.5)));
-
-  const handleSaveCustomBaseline = (e) => {
-    e.preventDefault();
-    if (onUpdateTopicData) {
-      onUpdateTopicData({
-        baselineStats: {
-          creativeConfidence: actualConfidence,
-          fearOfFailure: actualFear,
-          uncertaintyTolerance: actualUncertainty
-        },
-        dayOneJournal: {
-          ...defaultJournal,
-          entry: journalText
-        }
-      });
-    }
-    setIsEditing(false);
-    soundManager.playClick();
-  };
 
   return (
     <div className="rpg-character-screen">
@@ -167,27 +141,57 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                 </div>
               </div>
 
-              <div className="slider-wrapper">
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  step="1"
-                  value={guessConfidence}
-                  disabled={revealed}
-                  onChange={handleSliderChange(setGuessConfidence)}
-                  className="rpg-slider confidence-slider"
-                />
-              </div>
-
-              {revealed && (
-                <div className="stat-diff-bar">
-                  <div
-                    className="comparison-track"
-                    style={{ '--val-guess': `${(guessConfidence / 10) * 100}%`, '--val-actual': `${(actualConfidence / 10) * 100}%` }}
-                  >
-                    <div className="bar-layer actual-bar confidence-bg" style={{ width: `${(actualConfidence / 10) * 100}%` }} />
-                    <div className="bar-marker guess-marker" style={{ left: `${(guessConfidence / 10) * 100}%` }} title="Your Guess" />
+              {!revealed ? (
+                <div className="slider-wrapper">
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value={guessConfidence}
+                    onChange={handleSliderChange(setGuessConfidence)}
+                    className="rpg-slider confidence-slider"
+                  />
+                </div>
+              ) : (
+                <div className="revealed-slider-container">
+                  <div className="revealed-unified-track">
+                    <div
+                      className="revealed-fill-bar confidence-bg"
+                      style={{ width: toTrackPct(actualConfidence) }}
+                    />
+                    {guessConfidence === actualConfidence ? (
+                      <div
+                        className="unified-slider-pin exact-pin"
+                        style={{ left: toTrackPct(actualConfidence) }}
+                      >
+                        <span className="pin-floating-tag tag-above tag-exact">
+                          🎯 Match: {actualConfidence}
+                        </span>
+                        <div className="pin-thumb" />
+                      </div>
+                    ) : (
+                      <>
+                        <div
+                          className="unified-slider-pin guess-pin"
+                          style={{ left: toTrackPct(guessConfidence) }}
+                        >
+                          <span className="pin-floating-tag tag-above tag-guess">
+                            Guess: {guessConfidence}
+                          </span>
+                          <div className="pin-thumb" />
+                        </div>
+                        <div
+                          className="unified-slider-pin reality-confidence"
+                          style={{ left: toTrackPct(actualConfidence) }}
+                        >
+                          <div className="pin-thumb" />
+                          <span className="pin-floating-tag tag-below tag-reality-confidence">
+                            Reality: {actualConfidence}
+                          </span>
+                        </div>
+                      </>
+                    )}
                   </div>
                   <span className="diff-comment">
                     {guessConfidence > actualConfidence
@@ -217,24 +221,57 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                 </div>
               </div>
 
-              <div className="slider-wrapper">
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  step="1"
-                  value={guessFear}
-                  disabled={revealed}
-                  onChange={handleSliderChange(setGuessFear)}
-                  className="rpg-slider fear-slider"
-                />
-              </div>
-
-              {revealed && (
-                <div className="stat-diff-bar">
-                  <div className="comparison-track">
-                    <div className="bar-layer actual-bar fear-bg" style={{ width: `${(actualFear / 10) * 100}%` }} />
-                    <div className="bar-marker guess-marker" style={{ left: `${(guessFear / 10) * 100}%` }} title="Your Guess" />
+              {!revealed ? (
+                <div className="slider-wrapper">
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value={guessFear}
+                    onChange={handleSliderChange(setGuessFear)}
+                    className="rpg-slider fear-slider"
+                  />
+                </div>
+              ) : (
+                <div className="revealed-slider-container">
+                  <div className="revealed-unified-track">
+                    <div
+                      className="revealed-fill-bar fear-bg"
+                      style={{ width: toTrackPct(actualFear) }}
+                    />
+                    {guessFear === actualFear ? (
+                      <div
+                        className="unified-slider-pin exact-pin"
+                        style={{ left: toTrackPct(actualFear) }}
+                      >
+                        <span className="pin-floating-tag tag-above tag-exact">
+                          🎯 Match: {actualFear}
+                        </span>
+                        <div className="pin-thumb" />
+                      </div>
+                    ) : (
+                      <>
+                        <div
+                          className="unified-slider-pin guess-pin"
+                          style={{ left: toTrackPct(guessFear) }}
+                        >
+                          <span className="pin-floating-tag tag-above tag-guess">
+                            Guess: {guessFear}
+                          </span>
+                          <div className="pin-thumb" />
+                        </div>
+                        <div
+                          className="unified-slider-pin reality-fear"
+                          style={{ left: toTrackPct(actualFear) }}
+                        >
+                          <div className="pin-thumb" />
+                          <span className="pin-floating-tag tag-below tag-reality-fear">
+                            Reality: {actualFear}
+                          </span>
+                        </div>
+                      </>
+                    )}
                   </div>
                   <span className="diff-comment">
                     {guessFear < actualFear
@@ -264,24 +301,57 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                 </div>
               </div>
 
-              <div className="slider-wrapper">
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  step="1"
-                  value={guessUncertainty}
-                  disabled={revealed}
-                  onChange={handleSliderChange(setGuessUncertainty)}
-                  className="rpg-slider uncertainty-slider"
-                />
-              </div>
-
-              {revealed && (
-                <div className="stat-diff-bar">
-                  <div className="comparison-track">
-                    <div className="bar-layer actual-bar uncertainty-bg" style={{ width: `${(actualUncertainty / 10) * 100}%` }} />
-                    <div className="bar-marker guess-marker" style={{ left: `${(guessUncertainty / 10) * 100}%` }} title="Your Guess" />
+              {!revealed ? (
+                <div className="slider-wrapper">
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value={guessUncertainty}
+                    onChange={handleSliderChange(setGuessUncertainty)}
+                    className="rpg-slider uncertainty-slider"
+                  />
+                </div>
+              ) : (
+                <div className="revealed-slider-container">
+                  <div className="revealed-unified-track">
+                    <div
+                      className="revealed-fill-bar uncertainty-bg"
+                      style={{ width: toTrackPct(actualUncertainty) }}
+                    />
+                    {guessUncertainty === actualUncertainty ? (
+                      <div
+                        className="unified-slider-pin exact-pin"
+                        style={{ left: toTrackPct(actualUncertainty) }}
+                      >
+                        <span className="pin-floating-tag tag-above tag-exact">
+                          🎯 Match: {actualUncertainty}
+                        </span>
+                        <div className="pin-thumb" />
+                      </div>
+                    ) : (
+                      <>
+                        <div
+                          className="unified-slider-pin guess-pin"
+                          style={{ left: toTrackPct(guessUncertainty) }}
+                        >
+                          <span className="pin-floating-tag tag-above tag-guess">
+                            Guess: {guessUncertainty}
+                          </span>
+                          <div className="pin-thumb" />
+                        </div>
+                        <div
+                          className="unified-slider-pin reality-uncertainty"
+                          style={{ left: toTrackPct(actualUncertainty) }}
+                        >
+                          <div className="pin-thumb" />
+                          <span className="pin-floating-tag tag-below tag-reality-uncertainty">
+                            Reality: {actualUncertainty}
+                          </span>
+                        </div>
+                      </>
+                    )}
                   </div>
                   <span className="diff-comment">
                     {guessUncertainty > actualUncertainty
@@ -295,7 +365,7 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
             </div>
           </div>
 
-          {/* Action Button: Reveal Reality or Try Again */}
+          {/* Action Button: Reveal Reality or Intuition Score */}
           <div className="rpg-action-footer">
             {!revealed ? (
               <button className="rpg-reveal-btn" onClick={handleReveal}>
@@ -304,12 +374,7 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                 <Sparkles size={16} className="sparkle-spin" />
               </button>
             ) : (
-              <div className="revealed-controls">
-                <button className="rpg-secondary-btn" onClick={handleResetGuess}>
-                  <RotateCcw size={15} />
-                  <span>Guess Again</span>
-                </button>
-
+              <div className="revealed-controls single-score">
                 <div className="empathy-score-badge">
                   <Award size={16} className="award-icon" />
                   <span>Professor Intuition: {empathyScore}% Match</span>
@@ -386,66 +451,6 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   </div>
                 </div>
               </div>
-
-              {/* Personalize Button */}
-              <div className="journal-footer-action">
-                <button
-                  className="customize-journal-btn"
-                  onClick={() => setIsEditing(!isEditing)}
-                >
-                  {isEditing ? 'Cancel Editing' : '✏️ Personalize This Baseline Entry & Numbers'}
-                </button>
-              </div>
-
-              {/* Inline Editor Form */}
-              {isEditing && (
-                <form onSubmit={handleSaveCustomBaseline} className="baseline-edit-form">
-                  <h4>Edit Your Real Day 1 Stats & Memories:</h4>
-                  <div className="form-row-stats">
-                    <label>
-                      Confidence (1-10):
-                      <input
-                        type="number"
-                        min="1"
-                        max="10"
-                        value={actualConfidence}
-                        onChange={(e) => setActualConfidence(Number(e.target.value))}
-                      />
-                    </label>
-                    <label>
-                      Fear of Failure (1-10):
-                      <input
-                        type="number"
-                        min="1"
-                        max="10"
-                        value={actualFear}
-                        onChange={(e) => setActualFear(Number(e.target.value))}
-                      />
-                    </label>
-                    <label>
-                      Uncertainty (1-10):
-                      <input
-                        type="number"
-                        min="1"
-                        max="10"
-                        value={actualUncertainty}
-                        onChange={(e) => setActualUncertainty(Number(e.target.value))}
-                      />
-                    </label>
-                  </div>
-                  <div className="form-group">
-                    <label>Your Personal Day 1 Journal Entry:</label>
-                    <textarea
-                      rows={4}
-                      value={journalText}
-                      onChange={(e) => setJournalText(e.target.value)}
-                    />
-                  </div>
-                  <button type="submit" className="save-baseline-btn">
-                    Save Custom Baseline
-                  </button>
-                </form>
-              )}
             </div>
           )}
         </div>

@@ -53,26 +53,12 @@ export default function StoryChapterView({
     if (!soundManager.isMuted) soundManager.playClick();
   };
   
-  // Game mode map per chapter (defaults to 'game' for gamified chapters)
-  const [chapterModes, setChapterModes] = useState({
-    'first-day': 'game',
-    'mentor-interview': 'game',
-    'rube-goldberg': 'game',
-    'night-photos': 'game',
-    'social-curiosity': 'game'
-  });
-
   const isChapter1 = current.id === 'first-day';
   const isChapter3 = current.id === 'mentor-interview';
   const isChapter4 = current.id === 'rube-goldberg';
   const isChapter5 = current.id === 'night-photos';
   const isChapter6 = current.id === 'social-curiosity';
   const hasGame = isChapter1 || isChapter3 || isChapter4 || isChapter5 || isChapter6;
-  const currentMode = chapterModes[current.id] || 'story';
-
-  const setModeForCurrent = (newMode) => {
-    setChapterModes((prev) => ({ ...prev, [current.id]: newMode }));
-  };
 
   return (
     <div className="story-container">
@@ -143,66 +129,28 @@ export default function StoryChapterView({
           style={{ background: current.accentColor }}
         />
 
-        {/* Mode Toggle Header for Gamified Chapters */}
-        {hasGame && (
-          <div className="chapter-mode-header">
-            <div className="mode-toggle-pill">
-              <button
-                className={`mode-btn ${currentMode === 'game' ? 'active' : ''}`}
-                onClick={() => {
-                  soundManager.playClick();
-                  setModeForCurrent('game');
-                }}
-              >
-                {isChapter1 && <Gamepad2 size={16} />}
-                {isChapter3 && <Video size={16} />}
-                {isChapter4 && <Wrench size={16} />}
-                {isChapter5 && <Camera size={16} />}
-                {isChapter6 && <Users size={16} />}
-                <span>
-                  {isChapter1 && 'RPG Character Creation Game'}
-                  {isChapter3 && 'The Wisdom Network (Zoom Dialogue)'}
-                  {isChapter4 && 'Chain-Reaction Engine (Physics Game)'}
-                  {isChapter5 && 'The Viewfinder: Flashlight Lens Game'}
-                  {isChapter6 && 'Comfort Zone Simulator (NPC Map)'}
-                </span>
-              </button>
-              <button
-                className={`mode-btn ${currentMode === 'story' ? 'active' : ''}`}
-                onClick={() => {
-                  soundManager.playClick();
-                  setModeForCurrent('story');
-                }}
-              >
-                <BookOpen size={16} />
-                <span>Narrative Story View</span>
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Gamified View vs Standard Story Layout */}
-        {isChapter1 && currentMode === 'game' ? (
+        {isChapter1 ? (
           <Chapter1CharacterCreation
             topic={current}
             onUpdateTopicData={onUpdateTopicData}
           />
-        ) : isChapter3 && currentMode === 'game' ? (
+        ) : isChapter3 ? (
           <Chapter3MentorInterview
             topic={current}
             onUpdateTopicData={onUpdateTopicData}
           />
-        ) : isChapter4 && currentMode === 'game' ? (
+        ) : isChapter4 ? (
           <Chapter4RubeGoldberg
             topic={current}
             onUpdateTopicData={onUpdateTopicData}
           />
-        ) : isChapter5 && currentMode === 'game' ? (
+        ) : isChapter5 ? (
           <Chapter5FlashlightLens
             topic={current}
             onUpdateTopicData={onUpdateTopicData}
           />
-        ) : isChapter6 && currentMode === 'game' ? (
+        ) : isChapter6 ? (
           <Chapter6ComfortZone
             topic={current}
             onUpdateTopicData={onUpdateTopicData}
