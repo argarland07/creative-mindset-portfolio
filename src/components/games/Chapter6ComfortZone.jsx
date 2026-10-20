@@ -30,7 +30,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       role: 'Fellow Student / Campus Peer',
       location: 'Academic Hallway · Farmer School of Business',
       icon: 'smile',
-      coords: { x: '24%', y: '32%' },
+      coords: { x: '20%', y: '25%' },
       image: assetUrl('/topics/strangers/stranger-colten.jpg'),
       hesitation: {
         thought:
@@ -45,7 +45,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘My water bottle, I use it all the time.’ He grinned, held up his BlenderBottle, and we shared an instant laugh—such an honest, grounded answer that immediately broke the ice.”',
       takeaway:
         'Simple, lighthearted questions about everyday items break through social walls faster than rehearsed speeches.',
-      expansionBoost: 25,
+      expansionBoost: 16,
       xp: 150
     },
     {
@@ -54,7 +54,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       role: 'Campus Peer / Fellow Student',
       location: 'Student Lounge & Dining Commons',
       icon: 'smile',
-      coords: { x: '74%', y: '28%' },
+      coords: { x: '80%', y: '25%' },
       image: assetUrl('/topics/strangers/stranger-alex.jpg'),
       hesitation: {
         thought:
@@ -69,7 +69,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘I’m proud of having good social skills.’ He smiled with pure warmth—such a genuine and ironically fitting answer while having a spontaneous conversation with someone who had just stepped out of their comfort zone to talk to him!”',
       takeaway:
         'When you invite people to share what they are quietly proud of, they reveal strengths that standard small talk completely misses.',
-      expansionBoost: 25,
+      expansionBoost: 16,
       xp: 175
     },
     {
@@ -78,7 +78,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       role: 'Campus Peer / Fellow Student',
       location: 'Window Lounge · Armstrong Student Center',
       icon: 'smile',
-      coords: { x: '35%', y: '75%' },
+      coords: { x: '20%', y: '75%' },
       image: assetUrl('/topics/strangers/stranger-josh.jpg'),
       hesitation: {
         thought:
@@ -93,7 +93,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘Your habits really make you who you are.’ He shared it with genuine conviction—such a profound and grounding insight that speaks directly to building a daily creative practice.”',
       takeaway:
         'Wisdom isn’t reserved for lectures or distant mentors; your peers are carrying transformative life lessons learned through their own daily habits.',
-      expansionBoost: 25,
+      expansionBoost: 16,
       xp: 175
     },
     {
@@ -102,7 +102,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       role: 'Campus Peer / Fellow Student',
       location: 'Atrium Lounge · Farmer School of Business',
       icon: 'smile',
-      coords: { x: '80%', y: '74%' },
+      coords: { x: '80%', y: '75%' },
       image: assetUrl('/topics/strangers/stranger-anna.jpg'),
       hesitation: {
         thought:
@@ -117,7 +117,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘My car.’ She immediately smiled, pulled out her phone, and held up a photo of her car to show me—such an honest, relatable answer about daily freedom that made the conversation feel completely effortless!”',
       takeaway:
         'Asking about practical life upgrades brings out stories of personal independence and pride that people are eager to share.',
-      expansionBoost: 20,
+      expansionBoost: 16,
       xp: 175
     },
     {
@@ -126,7 +126,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
       role: 'Campus Peer / Fellow Student',
       location: 'Grand Foyer & Colonnade Hallway',
       icon: 'smile',
-      coords: { x: '51%', y: '50%' },
+      coords: { x: '36%', y: '50%' },
       image: assetUrl('/topics/strangers/stranger-vinney.jpg'),
       hesitation: {
         thought:
@@ -141,8 +141,32 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘My Apple Watch.’ He smiled warmly and tapped his wrist—a relatable, modern answer that immediately opened the door to a relaxed and friendly conversation!”',
       takeaway:
         'Everyday tech is intimately personal; asking people about what they carry or wear creates an effortless, natural bridge between strangers.',
-      expansionBoost: 20,
+      expansionBoost: 16,
       xp: 150
+    },
+    {
+      id: 'jackson',
+      name: 'Jackson',
+      role: 'Campus Peer / Fellow Student',
+      location: 'Stairwell Landing & Grand Hall',
+      icon: 'smile',
+      coords: { x: '64%', y: '50%' },
+      image: assetUrl('/topics/strangers/stranger-jackson.jpg'),
+      hesitation: {
+        thought:
+          '“Asking someone to imagine an impromptu TED Talk on the spot is a bold prompt. What if he felt put on the spot or self-conscious?”',
+        fearRating: 63,
+        heartRate: 109
+      },
+      approachPrompt: 'Step up near the staircase, smile, and pitch the impromptu challenge',
+      question:
+        '“If you had to give a 10-minute TED Talk right now with zero preparation, what topic would it be on?”',
+      response:
+        '“‘Cologne.’ He flashed a peace sign with a huge, radiant grin—such an unexpected, hilarious, and genuinely passionate answer that made the entire interaction pure gold!”',
+      takeaway:
+        'When you invite people to speak on an unexpected personal niche with zero judgment, you unlock pure spontaneous charisma.',
+      expansionBoost: 15,
+      xp: 160
     }
   ];
 
