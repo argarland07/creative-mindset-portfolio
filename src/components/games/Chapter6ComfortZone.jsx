@@ -117,8 +117,32 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
         '“‘My car.’ She immediately smiled, pulled out her phone, and held up a photo of her car to show me—such an honest, relatable answer about daily freedom that made the conversation feel completely effortless!”',
       takeaway:
         'Asking about practical life upgrades brings out stories of personal independence and pride that people are eager to share.',
-      expansionBoost: 25,
+      expansionBoost: 20,
       xp: 175
+    },
+    {
+      id: 'vinney',
+      name: 'Vinney',
+      role: 'Campus Peer / Fellow Student',
+      location: 'Grand Foyer & Colonnade Hallway',
+      icon: 'smile',
+      coords: { x: '51%', y: '50%' },
+      image: assetUrl('/topics/strangers/stranger-vinney.jpg'),
+      hesitation: {
+        thought:
+          '“Walking up to someone in the busy foyer felt intimidating. What if he was in a rush between classes or thought the question was random?”',
+        fearRating: 60,
+        heartRate: 106
+      },
+      approachPrompt: 'Step forward in the foyer, offer a friendly smile, and break the ice',
+      question:
+        '“What is your favorite item you have on you right now?”',
+      response:
+        '“‘My Apple Watch.’ He smiled warmly and tapped his wrist—a relatable, modern answer that immediately opened the door to a relaxed and friendly conversation!”',
+      takeaway:
+        'Everyday tech is intimately personal; asking people about what they carry or wear creates an effortless, natural bridge between strangers.',
+      expansionBoost: 20,
+      xp: 150
     }
   ];
 
@@ -134,17 +158,23 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
 
   const activeStranger = strangers.find((s) => s.id === activeStrangerId) || null;
 
-  // Total comfort zone percentage (starts at 20% baseline, +20% per stranger = 100%)
+  // Total comfort zone percentage (starts at 20% baseline, scales to 100%)
   const comfortScore = Math.min(
     100,
-    20 + unlockedIds.length * 20
+    Math.round(20 + (unlockedIds.length / (strangers.length || 1)) * 80)
   );
 
   // Fear of Rejection index drops as comfort grows
-  const rejectionFear = Math.max(8, 85 - unlockedIds.length * 19);
+  const rejectionFear = Math.max(
+    8,
+    Math.round(85 - (unlockedIds.length / (strangers.length || 1)) * 75)
+  );
 
   // Curiosity resonance rating rises
-  const curiosityResonance = Math.min(99, 45 + unlockedIds.length * 13);
+  const curiosityResonance = Math.min(
+    99,
+    Math.round(45 + (unlockedIds.length / (strangers.length || 1)) * 54)
+  );
 
   // Select a stranger from the map
   const handleSelectStranger = (id) => {
