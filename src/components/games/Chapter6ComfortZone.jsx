@@ -425,9 +425,9 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
               />
             </div>
             <span className="gauge-sub">
-              {unlockedIds.length === 4
+              {unlockedIds.length === strangers.length
                 ? '★ Full Social Freedom Unlocked'
-                : `Boundary Expanded +${unlockedIds.length * 20}%`}
+                : `Boundary Expanded +${Math.round((unlockedIds.length / strangers.length) * 80)}%`}
             </span>
           </div>
 
@@ -465,7 +465,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
               />
             </div>
             <span className="gauge-sub">
-              {unlockedIds.length} of 4 Encounters Mapped
+              {unlockedIds.length} of {strangers.length} Encounters Mapped
             </span>
           </div>
         </div>
@@ -478,7 +478,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
           <div className="map-glass-header">
             <div className="map-header-left">
               <MapPin size={16} className="text-cyan" />
-              <span className="map-title-text">Urban Encounter Grid</span>
+              <span className="map-title-text">Forsythe Commons · Campus Encounter Map</span>
             </div>
             <div className="map-legend">
               <span className="legend-item">
@@ -492,6 +492,14 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
 
           {/* Stylized Street Map Canvas */}
           <div className="city-map-canvas">
+            {/* Real Campus Photo Background - Forsythe Commons */}
+            <img
+              src={assetUrl('/topics/strangers/forsythe-commons-map-bg.jpg')}
+              alt="Forsythe Commons - Farmer School of Business"
+              className="city-map-bg-photo"
+            />
+            <div className="city-map-photo-overlay" />
+
             {/* Ambient Animated Concentric Expansion Rings */}
             <div
               className="comfort-radar-ring ring-1"
@@ -506,41 +514,11 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
               }}
             />
 
-            {/* Stylized Street Lines */}
-            <svg className="map-streets-svg" viewBox="0 0 500 400">
-              <defs>
-                <linearGradient id="streetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="rgba(255,255,255,0.08)" />
-                  <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
-                </linearGradient>
-              </defs>
-              {/* Roads */}
-              <line x1="0" y1="140" x2="500" y2="140" stroke="rgba(255,255,255,0.12)" strokeWidth="18" />
-              <line x1="0" y1="280" x2="500" y2="280" stroke="rgba(255,255,255,0.12)" strokeWidth="14" />
-              <line x1="160" y1="0" x2="160" y2="400" stroke="rgba(255,255,255,0.12)" strokeWidth="16" />
-              <line x1="360" y1="0" x2="360" y2="400" stroke="rgba(255,255,255,0.12)" strokeWidth="14" />
-              {/* Dashed bike paths & rail line */}
-              <path
-                d="M 20 380 Q 200 280 480 320"
-                fill="none"
-                stroke="rgba(6, 182, 212, 0.25)"
-                strokeWidth="4"
-                strokeDasharray="6 6"
-              />
-              <path
-                d="M 50 40 Q 250 160 460 60"
-                fill="none"
-                stroke="rgba(245, 158, 11, 0.25)"
-                strokeWidth="4"
-                strokeDasharray="8 6"
-              />
-            </svg>
-
-            {/* Landmarks Labels */}
-            <div className="map-landmark lm-cafe">☕ Morning Drip Cafe</div>
-            <div className="map-landmark lm-park">🌳 Washington Plaza</div>
-            <div className="map-landmark lm-metro">🚇 Temple Metro Hub</div>
-            <div className="map-landmark lm-river">🌊 Harbor Greenway</div>
+            {/* Real Architectural Landmarks */}
+            <div className="map-landmark lm-commons">🏛️ Forsythe Commons Hall</div>
+            <div className="map-landmark lm-parlor">🛋️ Executive Study Parlor</div>
+            <div className="map-landmark lm-colonnade">🏛️ Colonnade Arches</div>
+            <div className="map-landmark lm-piano">🎹 Grand Piano Alcove</div>
 
             {/* Clickable NPC Stranger Pins */}
             {strangers.map((s) => {
@@ -574,7 +552,7 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
 
           <div className="map-footer-guide">
             <span className="map-instruction">
-              💡 <strong>Action:</strong> Click on any NPC marker on the street grid to face the 5-Second Hesitation Wall and initiate conversation.
+              💡 <strong>Action:</strong> Click on any classmate marker across Forsythe Commons to face the 5-Second Hesitation Wall and initiate conversation.
             </span>
           </div>
         </div>
