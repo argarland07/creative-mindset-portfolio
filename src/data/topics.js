@@ -16,9 +16,9 @@ export const initialTopics = [
     gameType: 'character-creation',
     gameConcept: 'Select Your Starting Stats',
     baselineStats: {
-      creativeConfidence: 28,
-      fearOfFailure: 86,
-      uncertaintyTolerance: 34
+      creativeConfidence: 6,
+      fearOfFailure: 8,
+      uncertaintyTolerance: 6
     },
     dayOneJournal: {
       title: 'Day 1 Baseline Journal: The Imposter in Room 204',

@@ -21,11 +21,21 @@ export default function Chapter1CharacterCreation({
   topic,
   onUpdateTopicData
 }) {
-  // Default baseline stats for Day 1
-  const baselineStats = topic.baselineStats || {
-    creativeConfidence: 25,
-    fearOfFailure: 85,
-    uncertaintyTolerance: 30
+  // Normalized baseline stats for Day 1 on a 1-10 scale
+  const rawStats = topic.baselineStats || {};
+  const baselineStats = {
+    creativeConfidence:
+      typeof rawStats.creativeConfidence === 'number' && rawStats.creativeConfidence <= 10
+        ? rawStats.creativeConfidence
+        : 6,
+    fearOfFailure:
+      typeof rawStats.fearOfFailure === 'number' && rawStats.fearOfFailure <= 10
+        ? rawStats.fearOfFailure
+        : 8,
+    uncertaintyTolerance:
+      typeof rawStats.uncertaintyTolerance === 'number' && rawStats.uncertaintyTolerance <= 10
+        ? rawStats.uncertaintyTolerance
+        : 6
   };
 
   const defaultJournal = topic.dayOneJournal || {
@@ -38,10 +48,10 @@ I looked around at thirty unfamiliar faces and immediately felt like an imposter
 When the professor asked us to pair up and pitch the weirdest idea we could imagine in 60 seconds, my mind froze. That moment exposed my baseline: I wasn't lacking imagination—I was paralyzed by the fear of being seen as wrong. My Day 1 quest was clear: unlearn perfectionism and build tolerance for messy beginnings.`
   };
 
-  // Guessing state
-  const [guessConfidence, setGuessConfidence] = useState(50);
-  const [guessFear, setGuessFear] = useState(50);
-  const [guessUncertainty, setGuessUncertainty] = useState(50);
+  // Guessing state (1-10 scale, midpoint 5)
+  const [guessConfidence, setGuessConfidence] = useState(5);
+  const [guessFear, setGuessFear] = useState(5);
+  const [guessUncertainty, setGuessUncertainty] = useState(5);
   const [revealed, setRevealed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -63,19 +73,19 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
 
   const handleResetGuess = () => {
     setRevealed(false);
-    setGuessConfidence(50);
-    setGuessFear(50);
-    setGuessUncertainty(50);
+    setGuessConfidence(5);
+    setGuessFear(5);
+    setGuessUncertainty(5);
     soundManager.playClick();
   };
 
-  // Calculate intuition/accuracy score
+  // Calculate intuition/accuracy score on 1-10 scale
   const diffConfidence = Math.abs(guessConfidence - actualConfidence);
   const diffFear = Math.abs(guessFear - actualFear);
   const diffUncertainty = Math.abs(guessUncertainty - actualUncertainty);
   const totalDiff = diffConfidence + diffFear + diffUncertainty;
-  // Maximum total diff could be 300, so score out of 100
-  const empathyScore = Math.max(0, Math.round(100 - (totalDiff / 2.2)));
+  // Maximum total diff on a 1-10 scale across 3 metrics is at most ~27.
+  const empathyScore = Math.max(0, Math.round(100 - (totalDiff * 6.5)));
 
   const handleSaveCustomBaseline = (e) => {
     e.preventDefault();
@@ -148,10 +158,10 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   <span className="stat-name">Creative Confidence</span>
                 </div>
                 <div className="stat-values-display">
-                  <span className="guess-val-tag">Guess: {guessConfidence}%</span>
+                  <span className="guess-val-tag">Guess: {guessConfidence} / 10</span>
                   {revealed && (
                     <span className="actual-val-tag actual-confidence">
-                      Reality: {actualConfidence}%
+                      Reality: {actualConfidence} / 10
                     </span>
                   )}
                 </div>
@@ -160,8 +170,9 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
               <div className="slider-wrapper">
                 <input
                   type="range"
-                  min="0"
-                  max="100"
+                  min="1"
+                  max="10"
+                  step="1"
                   value={guessConfidence}
                   disabled={revealed}
                   onChange={handleSliderChange(setGuessConfidence)}
@@ -173,16 +184,16 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                 <div className="stat-diff-bar">
                   <div
                     className="comparison-track"
-                    style={{ '--val-guess': `${guessConfidence}%`, '--val-actual': `${actualConfidence}%` }}
+                    style={{ '--val-guess': `${(guessConfidence / 10) * 100}%`, '--val-actual': `${(actualConfidence / 10) * 100}%` }}
                   >
-                    <div className="bar-layer actual-bar confidence-bg" style={{ width: `${actualConfidence}%` }} />
-                    <div className="bar-marker guess-marker" style={{ left: `${guessConfidence}%` }} title="Your Guess" />
+                    <div className="bar-layer actual-bar confidence-bg" style={{ width: `${(actualConfidence / 10) * 100}%` }} />
+                    <div className="bar-marker guess-marker" style={{ left: `${(guessConfidence / 10) * 100}%` }} title="Your Guess" />
                   </div>
                   <span className="diff-comment">
                     {guessConfidence > actualConfidence
-                      ? `Overestimated by ${guessConfidence - actualConfidence}% — I felt much more self-conscious than I looked!`
+                      ? `Overestimated by ${guessConfidence - actualConfidence} pt${guessConfidence - actualConfidence === 1 ? '' : 's'} — I felt much more self-conscious than I looked!`
                       : guessConfidence < actualConfidence
-                      ? `Underestimated by ${actualConfidence - guessConfidence}% — I had a tiny spark of hope!`
+                      ? `Underestimated by ${actualConfidence - guessConfidence} pt${actualConfidence - guessConfidence === 1 ? '' : 's'} — I had a solid starting baseline!`
                       : `🎯 Bullseye! Exact match!`}
                   </span>
                 </div>
@@ -197,10 +208,10 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   <span className="stat-name">Fear of Failure</span>
                 </div>
                 <div className="stat-values-display">
-                  <span className="guess-val-tag">Guess: {guessFear}%</span>
+                  <span className="guess-val-tag">Guess: {guessFear} / 10</span>
                   {revealed && (
                     <span className="actual-val-tag actual-fear">
-                      Reality: {actualFear}%
+                      Reality: {actualFear} / 10
                     </span>
                   )}
                 </div>
@@ -209,8 +220,9 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
               <div className="slider-wrapper">
                 <input
                   type="range"
-                  min="0"
-                  max="100"
+                  min="1"
+                  max="10"
+                  step="1"
                   value={guessFear}
                   disabled={revealed}
                   onChange={handleSliderChange(setGuessFear)}
@@ -221,14 +233,14 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
               {revealed && (
                 <div className="stat-diff-bar">
                   <div className="comparison-track">
-                    <div className="bar-layer actual-bar fear-bg" style={{ width: `${actualFear}%` }} />
-                    <div className="bar-marker guess-marker" style={{ left: `${guessFear}%` }} title="Your Guess" />
+                    <div className="bar-layer actual-bar fear-bg" style={{ width: `${(actualFear / 10) * 100}%` }} />
+                    <div className="bar-marker guess-marker" style={{ left: `${(guessFear / 10) * 100}%` }} title="Your Guess" />
                   </div>
                   <span className="diff-comment">
                     {guessFear < actualFear
-                      ? `Underestimated by ${actualFear - guessFear}% — Fear of looking foolish was through the roof!`
+                      ? `Underestimated by ${actualFear - guessFear} pt${actualFear - guessFear === 1 ? '' : 's'} — Fear of looking foolish was through the roof!`
                       : guessFear > actualFear
-                      ? `Overestimated by ${guessFear - actualFear}% — I was nervous, but ready to try.`
+                      ? `Overestimated by ${guessFear - actualFear} pt${guessFear - actualFear === 1 ? '' : 's'} — I was nervous, but ready to try.`
                       : `🎯 Exact match! Imposter syndrome was real.`}
                   </span>
                 </div>
@@ -243,10 +255,10 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   <span className="stat-name">Uncertainty Tolerance</span>
                 </div>
                 <div className="stat-values-display">
-                  <span className="guess-val-tag">Guess: {guessUncertainty}%</span>
+                  <span className="guess-val-tag">Guess: {guessUncertainty} / 10</span>
                   {revealed && (
                     <span className="actual-val-tag actual-uncertainty">
-                      Reality: {actualUncertainty}%
+                      Reality: {actualUncertainty} / 10
                     </span>
                   )}
                 </div>
@@ -255,8 +267,9 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
               <div className="slider-wrapper">
                 <input
                   type="range"
-                  min="0"
-                  max="100"
+                  min="1"
+                  max="10"
+                  step="1"
                   value={guessUncertainty}
                   disabled={revealed}
                   onChange={handleSliderChange(setGuessUncertainty)}
@@ -267,14 +280,14 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
               {revealed && (
                 <div className="stat-diff-bar">
                   <div className="comparison-track">
-                    <div className="bar-layer actual-bar uncertainty-bg" style={{ width: `${actualUncertainty}%` }} />
-                    <div className="bar-marker guess-marker" style={{ left: `${guessUncertainty}%` }} title="Your Guess" />
+                    <div className="bar-layer actual-bar uncertainty-bg" style={{ width: `${(actualUncertainty / 10) * 100}%` }} />
+                    <div className="bar-marker guess-marker" style={{ left: `${(guessUncertainty / 10) * 100}%` }} title="Your Guess" />
                   </div>
                   <span className="diff-comment">
                     {guessUncertainty > actualUncertainty
-                      ? `Overestimated by ${guessUncertainty - actualUncertainty}% — Without a strict rubric, I felt lost.`
+                      ? `Overestimated by ${guessUncertainty - actualUncertainty} pt${guessUncertainty - actualUncertainty === 1 ? '' : 's'} — Without a strict rubric, I felt lost.`
                       : guessUncertainty < actualUncertainty
-                      ? `Underestimated by ${actualUncertainty - guessUncertainty}% — I adapted slightly faster than expected.`
+                      ? `Underestimated by ${actualUncertainty - guessUncertainty} pt${actualUncertainty - guessUncertainty === 1 ? '' : 's'} — I handled ambiguity better than expected.`
                       : `🎯 Nailed it! Ambiguity felt uncomfortable on Day 1.`}
                   </span>
                 </div>
@@ -358,17 +371,17 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                 <div className="breakdown-pills">
                   <div className="breakdown-item">
                     <span className="item-label">Confidence</span>
-                    <span className="item-val confidence-txt">{actualConfidence}%</span>
+                    <span className="item-val confidence-txt">{actualConfidence} / 10</span>
                     <span className="item-desc">High imposter syndrome</span>
                   </div>
                   <div className="breakdown-item">
                     <span className="item-label">Fear of Failure</span>
-                    <span className="item-val fear-txt">{actualFear}%</span>
+                    <span className="item-val fear-txt">{actualFear} / 10</span>
                     <span className="item-desc">Anxiety of being judged</span>
                   </div>
                   <div className="breakdown-item">
                     <span className="item-label">Uncertainty</span>
-                    <span className="item-val uncertainty-txt">{actualUncertainty}%</span>
+                    <span className="item-val uncertainty-txt">{actualUncertainty} / 10</span>
                     <span className="item-desc">Craving structure</span>
                   </div>
                 </div>
@@ -390,31 +403,31 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   <h4>Edit Your Real Day 1 Stats & Memories:</h4>
                   <div className="form-row-stats">
                     <label>
-                      Confidence (%):
+                      Confidence (1-10):
                       <input
                         type="number"
-                        min="0"
-                        max="100"
+                        min="1"
+                        max="10"
                         value={actualConfidence}
                         onChange={(e) => setActualConfidence(Number(e.target.value))}
                       />
                     </label>
                     <label>
-                      Fear of Failure (%):
+                      Fear of Failure (1-10):
                       <input
                         type="number"
-                        min="0"
-                        max="100"
+                        min="1"
+                        max="10"
                         value={actualFear}
                         onChange={(e) => setActualFear(Number(e.target.value))}
                       />
                     </label>
                     <label>
-                      Uncertainty (%):
+                      Uncertainty (1-10):
                       <input
                         type="number"
-                        min="0"
-                        max="100"
+                        min="1"
+                        max="10"
                         value={actualUncertainty}
                         onChange={(e) => setActualUncertainty(Number(e.target.value))}
                       />
