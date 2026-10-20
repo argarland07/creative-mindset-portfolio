@@ -91,21 +91,6 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
             “Select Your Starting Stats” — Where did my creative mindset start on Day 1?
           </p>
         </div>
-
-        <div className="rpg-character-card">
-          <div className="character-avatar-box has-avatar-img">
-            <img
-              src={assetUrl('/topics/topic-1-first-day.jpg')}
-              alt="Andrew Garland"
-              className="character-avatar-photo"
-            />
-          </div>
-          <div className="character-meta">
-            <span className="character-player-name">ANDREW GARLAND</span>
-            <span className="character-class">CLASS: THE NOVICE EXPLORER</span>
-            <span className="character-lvl">LEVEL 1 • DAY ONE SPAWN</span>
-          </div>
-        </div>
       </div>
 
       {/* Main RPG Interactive Arena */}
@@ -132,10 +117,17 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   <span className="stat-name">Creative Confidence</span>
                 </div>
                 <div className="stat-values-display">
-                  <span className="guess-val-tag">Guess: {guessConfidence} / 10</span>
-                  {revealed && (
-                    <span className="actual-val-tag actual-confidence">
-                      Reality: {actualConfidence} / 10
+                  {!revealed ? (
+                    <span className="guess-val-tag">Guess: {guessConfidence} / 10</span>
+                  ) : guessConfidence === actualConfidence ? (
+                    <span className="result-chip chip-correct">✓ Correct!</span>
+                  ) : guessConfidence > actualConfidence ? (
+                    <span className="result-chip chip-over">
+                      Overestimated by {guessConfidence - actualConfidence} pt{guessConfidence - actualConfidence === 1 ? '' : 's'}
+                    </span>
+                  ) : (
+                    <span className="result-chip chip-under">
+                      Underestimated by {actualConfidence - guessConfidence} pt{actualConfidence - guessConfidence === 1 ? '' : 's'}
                     </span>
                   )}
                 </div>
@@ -195,10 +187,10 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   </div>
                   <span className="diff-comment">
                     {guessConfidence > actualConfidence
-                      ? `Overestimated by ${guessConfidence - actualConfidence} pt${guessConfidence - actualConfidence === 1 ? '' : 's'} — I felt much more self-conscious than I looked!`
+                      ? '“I felt much more self-conscious than I looked!”'
                       : guessConfidence < actualConfidence
-                      ? `Underestimated by ${actualConfidence - guessConfidence} pt${actualConfidence - guessConfidence === 1 ? '' : 's'} — I had a solid starting baseline!`
-                      : `🎯 Bullseye! Exact match!`}
+                      ? '“I had a solid starting baseline to build from.”'
+                      : '“🎯 Bullseye! Exact match on my Day 1 confidence.”'}
                   </span>
                 </div>
               )}
@@ -212,10 +204,17 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   <span className="stat-name">Fear of Failure</span>
                 </div>
                 <div className="stat-values-display">
-                  <span className="guess-val-tag">Guess: {guessFear} / 10</span>
-                  {revealed && (
-                    <span className="actual-val-tag actual-fear">
-                      Reality: {actualFear} / 10
+                  {!revealed ? (
+                    <span className="guess-val-tag">Guess: {guessFear} / 10</span>
+                  ) : guessFear === actualFear ? (
+                    <span className="result-chip chip-correct">✓ Correct!</span>
+                  ) : guessFear > actualFear ? (
+                    <span className="result-chip chip-over">
+                      Overestimated by {guessFear - actualFear} pt{guessFear - actualFear === 1 ? '' : 's'}
+                    </span>
+                  ) : (
+                    <span className="result-chip chip-under">
+                      Underestimated by {actualFear - guessFear} pt{actualFear - guessFear === 1 ? '' : 's'}
                     </span>
                   )}
                 </div>
@@ -275,10 +274,10 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   </div>
                   <span className="diff-comment">
                     {guessFear < actualFear
-                      ? `Underestimated by ${actualFear - guessFear} pt${actualFear - guessFear === 1 ? '' : 's'} — Fear of looking foolish was through the roof!`
+                      ? '“Fear of looking foolish was through the roof on Day 1!”'
                       : guessFear > actualFear
-                      ? `Overestimated by ${guessFear - actualFear} pt${guessFear - actualFear === 1 ? '' : 's'} — I was nervous, but ready to try.`
-                      : `🎯 Exact match! Imposter syndrome was real.`}
+                      ? '“I was nervous, but ready to try.”'
+                      : '“🎯 Exact match! Imposter syndrome was real.”'}
                   </span>
                 </div>
               )}
@@ -292,10 +291,17 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   <span className="stat-name">Uncertainty Tolerance</span>
                 </div>
                 <div className="stat-values-display">
-                  <span className="guess-val-tag">Guess: {guessUncertainty} / 10</span>
-                  {revealed && (
-                    <span className="actual-val-tag actual-uncertainty">
-                      Reality: {actualUncertainty} / 10
+                  {!revealed ? (
+                    <span className="guess-val-tag">Guess: {guessUncertainty} / 10</span>
+                  ) : guessUncertainty === actualUncertainty ? (
+                    <span className="result-chip chip-correct">✓ Correct!</span>
+                  ) : guessUncertainty > actualUncertainty ? (
+                    <span className="result-chip chip-over">
+                      Overestimated by {guessUncertainty - actualUncertainty} pt{guessUncertainty - actualUncertainty === 1 ? '' : 's'}
+                    </span>
+                  ) : (
+                    <span className="result-chip chip-under">
+                      Underestimated by {actualUncertainty - guessUncertainty} pt{actualUncertainty - guessUncertainty === 1 ? '' : 's'}
                     </span>
                   )}
                 </div>
@@ -355,10 +361,10 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
                   </div>
                   <span className="diff-comment">
                     {guessUncertainty > actualUncertainty
-                      ? `Overestimated by ${guessUncertainty - actualUncertainty} pt${guessUncertainty - actualUncertainty === 1 ? '' : 's'} — Without a strict rubric, I felt lost.`
+                      ? '“Without a strict rubric, I felt lost at first.”'
                       : guessUncertainty < actualUncertainty
-                      ? `Underestimated by ${actualUncertainty - guessUncertainty} pt${actualUncertainty - guessUncertainty === 1 ? '' : 's'} — I handled ambiguity better than expected.`
-                      : `🎯 Nailed it! Ambiguity felt uncomfortable on Day 1.`}
+                      ? '“I handled ambiguity better than expected.”'
+                      : '“🎯 Nailed it! Ambiguity was uncomfortable on Day 1.”'}
                   </span>
                 </div>
               )}
