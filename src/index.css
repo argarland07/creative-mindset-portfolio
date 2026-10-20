@@ -15,8 +15,11 @@
   --text-dim: #cccccc;
   --text-muted: #888888;
   
-  /* Windows 10 Metro Live Tile Accents */
+  /* Windows 10 Blue Palette */
   --metro-blue: #0078d7;
+  --metro-blue-light: #2b88d8;
+  --metro-blue-dark: #005a9e;
+  --metro-blue-deep: #004578;
   --metro-cyan: #00bcf2;
   --metro-teal: #008272;
   --metro-green: #107c10;
@@ -26,10 +29,10 @@
   --metro-purple: #68217a;
   --metro-magenta: #b4009e;
 
-  /* Classic Fluent Typography */
-  --font-heading: "Segoe UI", -apple-system, BlinkMacSystemFont, "Segoe UI Semibold", sans-serif;
-  --font-body: "Segoe UI", -apple-system, BlinkMacSystemFont, "Segoe UI Regular", Roboto, sans-serif;
-  --font-mono: "Consolas", "Courier New", monospace;
+  /* Proxima Nova & Classic Fluent Typography */
+  --font-heading: 'Proxima Nova', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Proxima Nova', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  --font-mono: 'Consolas', 'Courier New', monospace;
 
   --shadow-metro-tile: 0 4px 16px rgba(0, 0, 0, 0.4);
   --shadow-metro-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
@@ -45,16 +48,19 @@
   --bg-card-hover: #f8fafc;
   --bg-surface: #ffffff;
   
-  --border-subtle: rgba(0, 0, 0, 0.12);
-  --border-hover: rgba(0, 0, 0, 0.3);
+  --border-subtle: rgba(0, 0, 0, 0.15);
+  --border-hover: rgba(0, 0, 0, 0.35);
   --border-active: #0078d7;
   
   --text-main: #181818;
-  --text-dim: #444444;
-  --text-muted: #666666;
+  --text-dim: #333333;
+  --text-muted: #555555;
 
-  /* Windows 10 Metro Live Tile Accents */
+  /* Windows 10 Blue Palette */
   --metro-blue: #0078d7;
+  --metro-blue-light: #2b88d8;
+  --metro-blue-dark: #005a9e;
+  --metro-blue-deep: #004578;
   --metro-cyan: #0091b8;
   --metro-teal: #008272;
   --metro-green: #107c10;
@@ -64,8 +70,12 @@
   --metro-purple: #68217a;
   --metro-magenta: #b4009e;
 
-  --shadow-metro-tile: 0 4px 14px rgba(0, 0, 0, 0.1);
-  --shadow-metro-hover: 0 8px 24px rgba(0, 0, 0, 0.16);
+  --font-heading: 'Proxima Nova', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Proxima Nova', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  --font-mono: 'Consolas', 'Courier New', monospace;
+
+  --shadow-metro-tile: 0 2px 10px rgba(0, 0, 0, 0.08);
+  --shadow-metro-hover: 0 6px 18px rgba(0, 0, 0, 0.14);
 
   color-scheme: light;
 }
