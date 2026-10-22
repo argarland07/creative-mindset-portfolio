@@ -65,7 +65,8 @@ export const initialTopics = [
     story: 'Building our Rube Goldberg machine was pure chaotic joy. The objective was deceptively simple—trigger a final action through a ridiculous sequence of dominoes, marbles, gravity chutes, and pulleys. In practice, it was a masterclass in iteration. Step 3 would work 10 times in a row, only to fail the moment Step 4 was linked. We had to embrace micro-adjustments, test relentlessly, and laugh when a marble rolled off the table for the twentieth time. When the entire sequence finally ran without a hitch, the room exploded in celebration.',
     reflection: 'Collaborative play is one of the most powerful engines of creative problem-solving. Failure wasn\'t a setback; each failed run gave us immediate physical data on how to improve.',
     keyTakeaway: 'When you treat iteration as play rather than performance, frustration turns into momentum.',
-    tags: ['Hands-on Making', 'Chain Reactions', 'Teamwork', 'Iterative Testing']
+    tags: ['Hands-on Making', 'Chain Reactions', 'Teamwork', 'Iterative Testing'],
+    videoUrl: assetUrl('/topics/rube-goldberg-run.mp4')
   },
   {
     id: 'night-photos',

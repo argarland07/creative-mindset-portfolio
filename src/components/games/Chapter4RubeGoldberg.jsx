@@ -12,9 +12,13 @@ import {
   Volume2,
   Flame,
   Award,
-  Edit3
+  Edit3,
+  Film,
+  Upload,
+  Video
 } from 'lucide-react';
 import { soundManager } from '../../utils/audio';
+import { assetUrl } from '../../utils/assetUrl';
 
 export default function Chapter4RubeGoldberg({
   topic,
@@ -81,6 +85,34 @@ export default function Chapter4RubeGoldberg({
   const [isCompleted, setIsCompleted] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [confettiActive, setConfettiActive] = useState(false);
+
+  // Video feature state
+  const [activeTab, setActiveTab] = useState('simulation'); // 'simulation' | 'video'
+  const defaultVideoSrc = topic.videoUrl || assetUrl('/topics/rube-goldberg-run.mp4');
+  const [selectedVideoUrl, setSelectedVideoUrl] = useState(() => defaultVideoSrc);
+  const [videoError, setVideoError] = useState(false);
+  const [videoFileName, setVideoFileName] = useState('');
+  const videoRef = useRef(null);
+
+  const handleVideoFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setSelectedVideoUrl(url);
+      setVideoFileName(file.name);
+      setVideoError(false);
+      soundManager.playClick();
+      if (onCompleteSection) {
+        onCompleteSection(topic.id);
+      }
+    }
+  };
+
+  const handleVideoPlay = () => {
+    if (onCompleteSection) {
+      onCompleteSection(topic.id);
+    }
+  };
 
   const activeStep = steps[Math.max(0, currentStepIndex - 1)];
   const timerRef = useRef(null);
@@ -149,40 +181,74 @@ export default function Chapter4RubeGoldberg({
       {/* Top Machine Status Bar */}
       <div className="rube-header-bar">
         <div className="rube-title-group">
-          <span className="rube-badge">PHYSICS SIMULATION • CHAPTER 04</span>
+          <span className="rube-badge">PHYSICS SIMULATION & DOCUMENTATION • CHAPTER 04</span>
           <h2 className="rube-heading">Chain-Reaction Engine: "The Domino Effect"</h2>
           <p className="rube-subheading">
-            Click <strong>“Release Ball”</strong> to trigger the multi-stage machine. Each step pauses to spotlight a teammate's contribution and a real failure we overcame.
+            {activeTab === 'simulation'
+              ? 'Click “Release Ball” to trigger the multi-stage machine. Each step pauses to spotlight a teammate\'s contribution and a real failure we overcame.'
+              : 'Watch the live physical test run recorded in the studio, documenting our 5-stage mechanical chain reaction in real motion.'}
           </p>
         </div>
 
-        <div className="rube-machine-status">
-          <div className="run-counter-box">
-            <span className="counter-label">TEST ATTEMPTS</span>
-            <span className="counter-num">Run #20 (Success)</span>
-          </div>
+        {/* View Switcher: Simulation vs Real Video */}
+        <div className="rube-view-switcher">
+          <button
+            type="button"
+            className={`rube-tab-btn ${activeTab === 'simulation' ? 'active' : ''}`}
+            onClick={() => {
+              soundManager.playClick();
+              setActiveTab('simulation');
+            }}
+          >
+            <Wrench size={14} />
+            <span>Blueprint Simulation</span>
+          </button>
 
           <button
-            className={`release-ball-btn ${isRunning ? 'running' : ''}`}
-            onClick={currentStepIndex === 0 ? handleStartChainReaction : handleResetMachine}
+            type="button"
+            className={`rube-tab-btn ${activeTab === 'video' ? 'active' : ''}`}
+            onClick={() => {
+              soundManager.playClick();
+              setActiveTab('video');
+            }}
           >
-            {currentStepIndex === 0 ? (
-              <>
-                <Play size={16} fill="currentColor" />
-                <span>RELEASE BALL</span>
-              </>
-            ) : (
-              <>
-                <RotateCcw size={16} />
-                <span>RESET MACHINE</span>
-              </>
-            )}
+            <Film size={14} />
+            <span>Real Machine Run Video</span>
+            <span className="tab-pill-badge">Video</span>
           </button>
         </div>
+
+        {activeTab === 'simulation' && (
+          <div className="rube-machine-status">
+            <div className="run-counter-box">
+              <span className="counter-label">TEST ATTEMPTS</span>
+              <span className="counter-num">Run #20 (Success)</span>
+            </div>
+
+            <button
+              className={`release-ball-btn ${isRunning ? 'running' : ''}`}
+              onClick={currentStepIndex === 0 ? handleStartChainReaction : handleResetMachine}
+            >
+              {currentStepIndex === 0 ? (
+                <>
+                  <Play size={16} fill="currentColor" />
+                  <span>RELEASE BALL</span>
+                </>
+              ) : (
+                <>
+                  <RotateCcw size={16} />
+                  <span>RESET MACHINE</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Main Machine Grid: Visual Cascade on Left, Technical Spotlight on Right */}
-      <div className="rube-arena-grid">
+      {activeTab === 'simulation' ? (
+        <>
+          <div className="rube-arena-grid">
         {/* Left Column: Interactive Visual Physics Canvas */}
         <div className="rube-visual-canvas">
           <div className="machine-blueprint-frame">
@@ -410,6 +476,99 @@ export default function Chapter4RubeGoldberg({
           )}
         </div>
       </div>
+
+      {/* Quick link banner to switch to video */}
+      <div className="rube-video-callout-strip" onClick={() => setActiveTab('video')}>
+        <div className="callout-left">
+          <div className="callout-icon-circle">
+            <Film size={20} />
+          </div>
+          <div className="callout-text">
+            <h4 className="callout-heading">Recorded Live Video Documentation</h4>
+            <p className="callout-desc">
+              Switch to Video Mode to watch Maya, Leo, Jordan, and Sam's actual physical machine in motion.
+            </p>
+          </div>
+        </div>
+        <button className="btn-go-video">
+          <span>Watch Live Video</span>
+          <ChevronRight size={16} />
+        </button>
+      </div>
+    </>
+  ) : (
+    /* Mode 2: Real Machine Run Video Theater */
+    <div className="rube-video-theater">
+      <div className="video-player-container">
+        {!videoError ? (
+          <video
+            ref={videoRef}
+            src={selectedVideoUrl}
+            controls
+            playsInline
+            className="rube-run-video-player"
+            onPlay={handleVideoPlay}
+            onError={() => setVideoError(true)}
+          />
+        ) : (
+          <div className="video-placeholder-card">
+            <div className="placeholder-icon-wrap">
+              <Film size={48} className="film-icon" />
+            </div>
+            <h3 className="placeholder-heading">Rube Goldberg Video Theater</h3>
+            <p className="placeholder-instruction">
+              To automatically play your video, place your file at:
+              <br />
+              <code className="placeholder-path-code">public/topics/rube-goldberg-run.mp4</code>
+            </p>
+            <p className="placeholder-sub">
+              Or select any local video file (MP4, WebM, MOV) from your computer right now to watch immediately:
+            </p>
+            <label className="btn-browse-file-cta">
+              <Upload size={17} />
+              <span>Choose Video File from Computer</span>
+              <input
+                type="file"
+                accept="video/*"
+                onChange={handleVideoFileChange}
+                hidden
+              />
+            </label>
+          </div>
+        )}
+      </div>
+
+      {/* Video Metadata & Controls Bar */}
+      <div className="video-meta-bar">
+        <div className="video-info-left">
+          <div className="video-badge-row">
+            <span className="video-tag-badge">RUN #20 FINAL SUCCESS</span>
+            <span className="video-length-badge">Studio Physical Test</span>
+          </div>
+          <h4 className="video-title-text">
+            Live Studio Run: Zero-Failure Synchronization
+          </h4>
+          <p className="video-desc-text">
+            Live documentation recording Maya, Leo, Jordan, and Sam's 5-stage mechanical contraption running from start to finish.
+            {videoFileName && <span className="active-file-indicator"> • Playing file: {videoFileName}</span>}
+          </p>
+        </div>
+
+        <div className="video-actions-right">
+          <label className="btn-change-video-btn" title="Choose or replace the current video file">
+            <Upload size={14} />
+            <span>{selectedVideoUrl && !videoError ? 'Change Video File' : 'Select Video File'}</span>
+            <input
+              type="file"
+              accept="video/*"
+              onChange={handleVideoFileChange}
+              hidden
+            />
+          </label>
+        </div>
+      </div>
     </div>
+  )}
+</div>
   );
 }
