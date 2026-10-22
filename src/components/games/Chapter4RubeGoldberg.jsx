@@ -86,32 +86,141 @@ export default function Chapter4RubeGoldberg({
   const [isEditing, setIsEditing] = useState(false);
   const [confettiActive, setConfettiActive] = useState(false);
 
-  // Video feature state
+  // Multi-clip video iteration state
+  const defaultClips = [
+    {
+      id: 1,
+      title: 'Attempt #1: The Incline & Marble Release',
+      stageName: 'Stage 1-2 Calibration',
+      src: assetUrl('/topics/rube-goldberg/clip-1.mp4'),
+      fileName: 'clip-1.mp4',
+      failureNote: 'The marble gained excessive momentum and jumped off the curve.'
+    },
+    {
+      id: 2,
+      title: 'Attempt #2: Domino Cascade & Friction Test',
+      stageName: 'Stage 3 Calibration',
+      src: assetUrl('/topics/rube-goldberg/clip-2.mp4'),
+      fileName: 'clip-2.mp4',
+      failureNote: 'Domino #3 slipped backward on the slick tabletop rather than toppling forward.'
+    },
+    {
+      id: 3,
+      title: 'Attempt #3: Pulley & Counterweight Tension',
+      stageName: 'Stage 4 Calibration',
+      src: assetUrl('/topics/rube-goldberg/clip-3.mp4'),
+      fileName: 'clip-3.mp4',
+      failureNote: 'Friction in the nylon cord stalled the counterweight halfway.'
+    },
+    {
+      id: 4,
+      title: 'Run #20: Full 5-Stage Synchronization (Finale)',
+      stageName: 'Complete 5-Stage Chain Reaction',
+      src: assetUrl('/topics/rube-goldberg/clip-4.mp4'),
+      fileName: 'clip-4.mp4',
+      isFinal: true
+    }
+  ];
+
   const [activeTab, setActiveTab] = useState('simulation'); // 'simulation' | 'video'
-  const defaultVideoSrc = topic.videoUrl || assetUrl('/topics/rube-goldberg-run.mp4');
-  const [selectedVideoUrl, setSelectedVideoUrl] = useState(() => defaultVideoSrc);
-  const [videoError, setVideoError] = useState(false);
-  const [videoFileName, setVideoFileName] = useState('');
+  const [clips, setClips] = useState(defaultClips);
+  const [currentClipIndex, setCurrentClipIndex] = useState(0);
+  const [clipEnded, setClipEnded] = useState(false);
+  const [videoErrors, setVideoErrors] = useState({});
+  const [hasFinishedAllClips, setHasFinishedAllClips] = useState(false);
   const videoRef = useRef(null);
 
-  const handleVideoFileChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setSelectedVideoUrl(url);
-      setVideoFileName(file.name);
-      setVideoError(false);
-      soundManager.playClick();
+  const currentClip = clips[currentClipIndex] || clips[0];
+  const isLastClip = currentClipIndex === clips.length - 1;
+
+  const handleClipEnded = () => {
+    setClipEnded(true);
+    soundManager.playClick();
+    if (isLastClip) {
+      setHasFinishedAllClips(true);
+      soundManager.playLevelUp();
       if (onCompleteSection) {
         onCompleteSection(topic.id);
       }
     }
   };
 
-  const handleVideoPlay = () => {
-    if (onCompleteSection) {
-      onCompleteSection(topic.id);
+  const handleReadjustAndTryAgain = () => {
+    soundManager.playClick();
+    if (currentClipIndex < clips.length - 1) {
+      const nextIdx = currentClipIndex + 1;
+      setCurrentClipIndex(nextIdx);
+      setClipEnded(false);
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.currentTime = 0;
+          videoRef.current.play().catch(() => {});
+        }
+      }, 150);
+    } else {
+      setHasFinishedAllClips(true);
+      if (onCompleteSection) {
+        onCompleteSection(topic.id);
+      }
     }
+  };
+
+  const handleRestartClips = () => {
+    soundManager.playClick();
+    setCurrentClipIndex(0);
+    setClipEnded(false);
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(() => {});
+      }
+    }, 150);
+  };
+
+  const handleSelectClip = (idx) => {
+    soundManager.playClick();
+    setCurrentClipIndex(idx);
+    setClipEnded(false);
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(() => {});
+      }
+    }, 150);
+  };
+
+  const handleUploadClips = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      soundManager.playClick();
+      const newClips = files.map((file, idx) => ({
+        id: idx + 1,
+        title: idx === files.length - 1 ? `Run #${idx + 1}: Final Run` : `Attempt #${idx + 1}: Test Clip`,
+        stageName: `Clip ${idx + 1}`,
+        src: URL.createObjectURL(file),
+        fileName: file.name,
+        isFinal: idx === files.length - 1,
+        failureNote: idx === files.length - 1 ? null : `Attempt #${idx + 1} test complete. Calibrating mechanisms...`
+      }));
+      setClips(newClips);
+      setCurrentClipIndex(0);
+      setClipEnded(false);
+      setHasFinishedAllClips(false);
+      setVideoErrors({});
+      if (onCompleteSection) {
+        onCompleteSection(topic.id);
+      }
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.currentTime = 0;
+          videoRef.current.play().catch(() => {});
+        }
+      }, 150);
+    }
+  };
+
+  const handleVideoError = (clipId) => {
+    setVideoErrors((prev) => ({ ...prev, [clipId]: true }));
   };
 
   const activeStep = steps[Math.max(0, currentStepIndex - 1)];
@@ -497,43 +606,152 @@ export default function Chapter4RubeGoldberg({
       </div>
     </>
   ) : (
-    /* Mode 2: Real Machine Run Video Theater */
+    /* Mode 2: Multi-Clip Iterative Test Run Video Theater */
     <div className="rube-video-theater">
+      {/* Clip Stepper Header */}
+      <div className="clip-stepper-header">
+        <div className="stepper-meta-left">
+          <span className="stepper-title">ITERATIVE ATTEMPTS SEQUENCE:</span>
+          <span className="stepper-status-chip">
+            Clip {currentClipIndex + 1} of {clips.length}
+          </span>
+        </div>
+        <div className="clip-chips-list">
+          {clips.map((clip, idx) => {
+            const isFinished = idx < currentClipIndex || hasFinishedAllClips;
+            const isActive = idx === currentClipIndex;
+
+            return (
+              <button
+                key={clip.id}
+                type="button"
+                className={`clip-chip ${isActive ? 'active' : ''} ${isFinished ? 'completed' : ''}`}
+                onClick={() => handleSelectClip(idx)}
+                title={`Jump to ${clip.title}`}
+              >
+                <span className="chip-step-num">
+                  {isFinished ? <CheckCircle2 size={12} /> : `0${idx + 1}`}
+                </span>
+                <span className="chip-step-name">
+                  {clip.isFinal ? 'Finale (Run #20)' : `Attempt #${idx + 1}`}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="video-player-container">
-        {!videoError ? (
+        {!videoErrors[currentClip.id] ? (
           <video
+            key={currentClip.src}
             ref={videoRef}
-            src={selectedVideoUrl}
+            src={currentClip.src}
             controls
             playsInline
+            autoPlay
             className="rube-run-video-player"
-            onPlay={handleVideoPlay}
-            onError={() => setVideoError(true)}
+            onPlay={() => {
+              if (onCompleteSection) onCompleteSection(topic.id);
+            }}
+            onEnded={handleClipEnded}
+            onError={() => handleVideoError(currentClip.id)}
           />
         ) : (
           <div className="video-placeholder-card">
             <div className="placeholder-icon-wrap">
-              <Film size={48} className="film-icon" />
+              <Film size={44} className="film-icon" />
             </div>
-            <h3 className="placeholder-heading">Rube Goldberg Video Theater</h3>
+            <h3 className="placeholder-heading">
+              {currentClip.title}
+            </h3>
             <p className="placeholder-instruction">
-              To automatically play your video, place your file at:
+              Place this video clip in your project at:
               <br />
-              <code className="placeholder-path-code">public/topics/rube-goldberg-run.mp4</code>
+              <code className="placeholder-path-code">
+                public/topics/rube-goldberg/clip-{currentClip.id}.mp4
+              </code>
             </p>
             <p className="placeholder-sub">
-              Or select any local video file (MP4, WebM, MOV) from your computer right now to watch immediately:
+              Or pick your local video clip files from your computer to test right now:
             </p>
-            <label className="btn-browse-file-cta">
-              <Upload size={17} />
-              <span>Choose Video File from Computer</span>
-              <input
-                type="file"
-                accept="video/*"
-                onChange={handleVideoFileChange}
-                hidden
-              />
-            </label>
+            <div className="placeholder-btn-group">
+              <label className="btn-browse-file-cta">
+                <Upload size={16} />
+                <span>Select Video File(s) from Computer</span>
+                <input
+                  type="file"
+                  accept="video/*"
+                  multiple
+                  onChange={handleUploadClips}
+                  hidden
+                />
+              </label>
+              <button
+                type="button"
+                className="btn-simulate-next"
+                onClick={handleClipEnded}
+                title="Test the 'readjust and try again' button"
+              >
+                Simulate Clip Ended ➔
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Readjust and Try Again Overlay when Clip Ends */}
+        {clipEnded && (
+          <div className="clip-ended-overlay">
+            {!isLastClip ? (
+              <div className="readjust-modal-card">
+                <div className="readjust-icon-wrap">
+                  <Wrench size={32} className="readjust-wrench-icon" />
+                </div>
+                <span className="readjust-status-tag">
+                  ATTEMPT #{currentClipIndex + 1} FINISHED
+                </span>
+                <h3 className="readjust-title">
+                  {currentClip.failureNote || 'Mechanism slipped — learning from this attempt!'}
+                </h3>
+                <p className="readjust-instruction">
+                  Every failure gave our team physical data on how to calibrate the next stage.
+                </p>
+                <button
+                  type="button"
+                  className="btn-readjust-action"
+                  onClick={handleReadjustAndTryAgain}
+                >
+                  <RotateCcw size={16} />
+                  <span>readjust and try again</span>
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            ) : (
+              <div className="readjust-modal-card finale-card">
+                <div className="readjust-icon-wrap victory">
+                  <Award size={36} className="readjust-award-icon" />
+                </div>
+                <span className="readjust-status-tag success">
+                  FLAWLESS SYNCHRONIZATION ACHIEVED!
+                </span>
+                <h3 className="readjust-title">
+                  Run #20 Complete — 100% Success!
+                </h3>
+                <p className="readjust-instruction">
+                  All 5 stages linked and synchronized without a single stall. Balloon popped and victory achieved!
+                </p>
+                <div className="finale-buttons-row">
+                  <button
+                    type="button"
+                    className="btn-replay-sequence"
+                    onClick={handleRestartClips}
+                  >
+                    <RotateCcw size={15} />
+                    <span>Replay From Attempt #1</span>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -542,26 +760,27 @@ export default function Chapter4RubeGoldberg({
       <div className="video-meta-bar">
         <div className="video-info-left">
           <div className="video-badge-row">
-            <span className="video-tag-badge">RUN #20 FINAL SUCCESS</span>
-            <span className="video-length-badge">Studio Physical Test</span>
+            <span className="video-tag-badge">
+              CLIP {currentClipIndex + 1} OF {clips.length}
+            </span>
+            <span className="video-length-badge">{currentClip.stageName}</span>
           </div>
-          <h4 className="video-title-text">
-            Live Studio Run: Zero-Failure Synchronization
-          </h4>
+          <h4 className="video-title-text">{currentClip.title}</h4>
           <p className="video-desc-text">
-            Live documentation recording Maya, Leo, Jordan, and Sam's 5-stage mechanical contraption running from start to finish.
-            {videoFileName && <span className="active-file-indicator"> • Playing file: {videoFileName}</span>}
+            {currentClip.subtitle}
+            <span className="active-file-indicator"> • Path: public/topics/rube-goldberg/clip-{currentClip.id}.mp4</span>
           </p>
         </div>
 
         <div className="video-actions-right">
-          <label className="btn-change-video-btn" title="Choose or replace the current video file">
+          <label className="btn-change-video-btn" title="Choose local video clips from computer">
             <Upload size={14} />
-            <span>{selectedVideoUrl && !videoError ? 'Change Video File' : 'Select Video File'}</span>
+            <span>Select Local Video Clips</span>
             <input
               type="file"
               accept="video/*"
-              onChange={handleVideoFileChange}
+              multiple
+              onChange={handleUploadClips}
               hidden
             />
           </label>
