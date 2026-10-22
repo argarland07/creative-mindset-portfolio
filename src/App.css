@@ -4344,6 +4344,9 @@
   flex-direction: column;
   gap: 20px;
   text-align: left;
+  max-width: 1700px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* Header Bar */
@@ -4451,13 +4454,54 @@
 .darkroom-canvas-arena {
   position: relative;
   width: 100%;
-  height: 520px;
-  border-radius: 24px;
+  min-height: 720px;
+  height: clamp(700px, 80vh, 940px);
+  border-radius: 28px;
   background: #040508;
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
   overflow: hidden;
   cursor: crosshair;
-  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.95);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.95);
+}
+
+.beam-size-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.beam-adj-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.beam-adj-btn:hover {
+  background: var(--md-primary);
+  border-color: var(--md-primary);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.beam-size-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  min-width: 80px;
+  text-align: center;
 }
 
 /* The Blackout Shroud with Radial Cutout */
@@ -4541,7 +4585,7 @@
 /* Hidden Photo Frame */
 .hidden-photo-frame {
   position: absolute;
-  width: 250px;
+  width: clamp(280px, 22vw, 360px);
   aspect-ratio: 16 / 10;
   transform: translate(-50%, -50%);
   cursor: pointer;
@@ -4672,8 +4716,8 @@
 .flip-card-stage {
   position: relative;
   width: 100%;
-  max-width: 760px;
-  min-height: 520px;
+  max-width: 920px;
+  min-height: 600px;
   perspective: 1400px;
   transform-style: preserve-3d;
   transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);

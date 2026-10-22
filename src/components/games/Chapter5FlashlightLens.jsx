@@ -12,7 +12,9 @@ import {
   CheckCircle2,
   Award,
   Layers,
-  HelpCircle
+  HelpCircle,
+  ZoomIn,
+  ZoomOut
 } from 'lucide-react';
 import { soundManager } from '../../utils/audio';
 import { assetUrl } from '../../utils/assetUrl';
@@ -109,7 +111,7 @@ export default function Chapter5FlashlightLens({
 
   const containerRef = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 300, y: 200 });
-  const [beamRadius, setBeamRadius] = useState(170); // pixels
+  const [beamRadius, setBeamRadius] = useState(280); // pixels
   const [lampMode, setLampMode] = useState('flashlight'); // 'flashlight' | 'darkroom-red' | 'floodlight'
   const [viewingShot, setViewingShot] = useState(null);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -152,9 +154,9 @@ export default function Chapter5FlashlightLens({
   const handleToggleLampMode = (mode) => {
     soundManager.playFlashlightSwitch();
     setLampMode(mode);
-    if (mode === 'floodlight') setBeamRadius(320);
-    else if (mode === 'darkroom-red') setBeamRadius(200);
-    else setBeamRadius(170);
+    if (mode === 'floodlight') setBeamRadius(480);
+    else if (mode === 'darkroom-red') setBeamRadius(360);
+    else setBeamRadius(280);
   };
 
   return (
@@ -203,6 +205,33 @@ export default function Chapter5FlashlightLens({
             >
               <Sparkles size={13} />
               <span>Floodlight</span>
+            </button>
+          </div>
+
+          {/* Direct Beam Size Adjuster */}
+          <div className="beam-size-control">
+            <button
+              type="button"
+              className="beam-adj-btn"
+              onClick={() => {
+                soundManager.playSliderTick();
+                setBeamRadius((prev) => Math.max(180, prev - 40));
+              }}
+              title="Narrow Flashlight Beam"
+            >
+              <ZoomOut size={13} />
+            </button>
+            <span className="beam-size-label">Beam: {beamRadius}px</span>
+            <button
+              type="button"
+              className="beam-adj-btn"
+              onClick={() => {
+                soundManager.playSliderTick();
+                setBeamRadius((prev) => Math.min(600, prev + 40));
+              }}
+              title="Widen Flashlight Beam"
+            >
+              <ZoomIn size={13} />
             </button>
           </div>
         </div>
