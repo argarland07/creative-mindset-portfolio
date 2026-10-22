@@ -196,7 +196,7 @@ function App() {
         />
       )}
 
-      <main className="story-main">
+      <main className={`story-main ${viewMode === 'story' ? 'story-immersive' : ''}`}>
         {viewMode === 'story' ? (
           <StoryChapterView
             topics={topics}

@@ -19,7 +19,8 @@ import { assetUrl } from '../../utils/assetUrl';
 
 export default function Chapter5FlashlightLens({
   topic,
-  onUpdateTopicData
+  onUpdateTopicData,
+  onCompleteSection
 }) {
   const defaultShots = [
     {
@@ -135,6 +136,10 @@ export default function Chapter5FlashlightLens({
 
     if (!discoveredIds.includes(shot.id)) {
       setDiscoveredIds((prev) => [...prev, shot.id]);
+    }
+
+    if (onCompleteSection) {
+      onCompleteSection(topic.id);
     }
   };
 

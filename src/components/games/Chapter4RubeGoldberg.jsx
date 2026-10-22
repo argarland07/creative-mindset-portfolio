@@ -18,7 +18,8 @@ import { soundManager } from '../../utils/audio';
 
 export default function Chapter4RubeGoldberg({
   topic,
-  onUpdateTopicData
+  onUpdateTopicData,
+  onCompleteSection
 }) {
   const defaultSteps = [
     {
@@ -118,6 +119,9 @@ export default function Chapter4RubeGoldberg({
     } else if (currentStepIndex >= steps.length) {
       setIsRunning(false);
       setIsCompleted(true);
+      if (onCompleteSection) {
+        onCompleteSection(topic.id);
+      }
     }
 
     return () => clearTimeout(timerRef.current);

@@ -18,7 +18,9 @@ import { assetUrl } from '../../utils/assetUrl';
 
 export default function Chapter1CharacterCreation({
   topic,
-  onUpdateTopicData
+  onUpdateTopicData,
+  onCompleteSection,
+  isCompleted
 }) {
   // Normalized baseline stats for Day 1 on a 1-10 scale
   const rawStats = topic.baselineStats || {};
@@ -46,7 +48,7 @@ export default function Chapter1CharacterCreation({
   const [guessConfidence, setGuessConfidence] = useState(5);
   const [guessFear, setGuessFear] = useState(5);
   const [guessUncertainty, setGuessUncertainty] = useState(5);
-  const [revealed, setRevealed] = useState(false);
+  const [revealed, setRevealed] = useState(() => Boolean(isCompleted));
 
   // Baseline stats (fixed to real numbers)
   const actualConfidence = baselineStats.creativeConfidence;
@@ -62,6 +64,9 @@ export default function Chapter1CharacterCreation({
   const handleReveal = () => {
     setRevealed(true);
     soundManager.playLevelUp();
+    if (onCompleteSection) {
+      onCompleteSection(topic.id);
+    }
   };
 
   // Convert 1-10 to percentage along the slider track (1 -> 0%, 10 -> 100%)

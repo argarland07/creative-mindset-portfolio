@@ -26,7 +26,8 @@ import { assetUrl } from '../../utils/assetUrl';
 
 export default function Chapter3MentorInterview({
   topic,
-  onUpdateTopicData
+  onUpdateTopicData,
+  onCompleteSection
 }) {
   // Questions and responses dataset
   const defaultQuestions = [
@@ -109,6 +110,10 @@ export default function Chapter3MentorInterview({
       setTimeout(() => {
         soundManager.playInsightUnlocked();
       }, 350);
+    }
+
+    if (onCompleteSection) {
+      onCompleteSection(topic.id);
     }
   };
 

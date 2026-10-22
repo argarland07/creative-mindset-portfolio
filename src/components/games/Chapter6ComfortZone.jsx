@@ -22,7 +22,11 @@ import {
 import { soundManager } from '../../utils/audio';
 import { assetUrl } from '../../utils/assetUrl';
 
-export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
+export default function Chapter6ComfortZone({
+  topic,
+  onUpdateTopicData,
+  onCompleteSection
+}) {
   const defaultStrangers = [
     {
       id: 'colten',
@@ -352,6 +356,9 @@ export default function Chapter6ComfortZone({ topic, onUpdateTopicData }) {
           setPhase('unlocked');
           soundManager.playComfortExpansion();
           soundManager.playLevelUp();
+          if (onCompleteSection) {
+            onCompleteSection(topic.id);
+          }
         }, 300);
       } else {
         setApproachProgress(prog);
