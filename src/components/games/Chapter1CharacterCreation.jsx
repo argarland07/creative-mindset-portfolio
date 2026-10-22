@@ -26,7 +26,7 @@ export default function Chapter1CharacterCreation({
     creativeConfidence:
       typeof rawStats.creativeConfidence === 'number' && rawStats.creativeConfidence <= 10
         ? rawStats.creativeConfidence
-        : 6,
+        : 5,
     fearOfFailure:
       typeof rawStats.fearOfFailure === 'number' && rawStats.fearOfFailure <= 10
         ? rawStats.fearOfFailure
@@ -38,13 +38,8 @@ export default function Chapter1CharacterCreation({
   };
 
   const defaultJournal = topic.dayOneJournal || {
-    title: 'Day 1 Baseline Journal: The Imposter in Room 204',
-    timestamp: 'First Class Session • Studio Hall',
-    entry: `Walking into studio today, I had a physical knot in my stomach. The blackboard had no formulas or deadlines—just open, provocative prompts: "What does creative inquiry mean to you? How do ideas take shape?" 
-
-I looked around at thirty unfamiliar faces and immediately felt like an imposter. In my standard classes, success was linear: memorize the formula, follow the rubric, get the grade. Here, ambiguity was the explicit assignment. My default reflex was to shrink into the third row, take diligent notes, and avoid saying anything "foolish."
-
-When the professor asked us to pair up and pitch the weirdest idea we could imagine in 60 seconds, my mind froze. That moment exposed my baseline: I wasn't lacking imagination—I was paralyzed by the fear of being seen as wrong. My Day 1 quest was clear: unlearn perfectionism and build tolerance for messy beginnings.`
+    title: 'ESP103 Day 1',
+    entry: `In the past, I never considered myself a highly creative person. I identified three important metrics that we have worked on in this class, and rated myself on where I started. My creative confidence was okay, about a 5. Sometimes I was proud of my creative efforts, and other times I was not confident in them. My Fear of Failure was definitely high (and still is). I was afriad of not completing a goal or a task, and how that would hurt me. My Uncertainty Tolerance was acctually fairly high. I worked through many assignments in school where I did not have as much direction as I would have liked, and I learned to adapt and use my creative skills.`
   };
 
   // Guessing state (1-10 scale, midpoint 5)
@@ -85,10 +80,9 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
       {/* RPG Top Banner */}
       <div className="rpg-screen-header">
         <div className="rpg-header-left">
-          <span className="rpg-mode-tag">GAME CONCEPT • CHAPTER 01</span>
-          <h2 className="rpg-game-title">The Character Creation Screen</h2>
+          <h2 className="rpg-game-title">Select Your Stats</h2>
           <p className="rpg-instruction">
-            “Select Your Starting Stats” — Where did my creative mindset start on Day 1?
+            Can you guess my feelings towards creativity on the 1st day of class?
           </p>
         </div>
       </div>
@@ -105,7 +99,7 @@ When the professor asked us to pair up and pitch the weirdest idea we could imag
           <p className="panel-helper-text">
             {revealed
               ? 'Here is how your intuition compared against my actual Day 1 reality:'
-              : 'Professor or guest: Drag the sliders to predict where you think I started, then hit Reveal Reality.'}
+              : 'Drag the sliders to predict where I started on the first day of class, then hit Reveal Reality.'}
           </p>
 
           <div className="stat-slider-list">

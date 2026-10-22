@@ -54,36 +54,36 @@ export default function CardsOverview({ topics, onSelectTopic }) {
   };
 
   return (
-    <section className="metro-start-screen">
-      {/* Metro Start Screen Header with Primary Start Story Button */}
-      <div className="metro-start-header">
-        <div className="metro-start-hero-bar">
+    <section className="metro-start-screen md-overview-screen">
+      {/* Material Hero Bar with Start Walkthrough Button */}
+      <div className="metro-start-header md-overview-header">
+        <div className="metro-start-hero-bar md-hero-bar">
           <div className="metro-start-title-col">
             <div className="metro-start-title-row">
-              <h1 className="metro-start-title">Start</h1>
-              <span className="metro-start-subtitle">
-                Andrew Garland // Creativity Portfolio
+              <h1 className="metro-start-title md-title">Creative Portfolio</h1>
+              <span className="metro-start-subtitle md-subtitle">
+                Andrew Garland • ESP103
               </span>
             </div>
-            <p className="metro-start-hint">
-              Semester Walkthrough in 8 Chapters. Click <strong>Start Story</strong> to begin from Chapter 1, or click any Live Tile to jump directly into an interactive experiment.
+            <p className="metro-start-hint md-hint">
+              Semester journey across 8 chapters. Click <strong>Start Walkthrough</strong> to begin from Chapter 1, or select any chapter card to jump directly into an interactive experiment.
             </p>
           </div>
 
-          {/* Very Top Primary "START STORY" Button */}
+          {/* Primary Material Extended Button */}
           <button
-            className="btn-start-story-hero"
+            className="btn-start-story-hero md-hero-btn"
             onClick={() => {
               soundManager.playSlideTransition();
               onSelectTopic(0);
             }}
             title="Launch the story walkthrough from Chapter 1"
           >
-            <div className="start-icon-square">
+            <div className="start-icon-square md-start-icon">
               <Play size={20} fill="currentColor" />
             </div>
             <div className="start-btn-texts">
-              <span className="start-btn-main">START STORY</span>
+              <span className="start-btn-main">START WALKTHROUGH</span>
               <span className="start-btn-sub">Begin Chapter 01: 1st Day of Class</span>
             </div>
             <ArrowRight size={20} className="start-arrow-icon" />
@@ -91,10 +91,10 @@ export default function CardsOverview({ topics, onSelectTopic }) {
         </div>
       </div>
 
-      {/* Group 1: Core Creative Chapters (Live Tile Grid) */}
-      <div className="metro-tile-group">
+      {/* Group 1: Core Creative Chapters */}
+      <div className="metro-tile-group md-card-group">
         <div className="metro-group-header">
-          <span className="group-title-text">CHAPTERS // THE CREATIVE JOURNEY</span>
+          <span className="group-title-text">CHAPTERS • INTERACTIVE EXPERIENCES</span>
           <div className="group-header-line" />
         </div>
 
@@ -175,9 +175,9 @@ export default function CardsOverview({ topics, onSelectTopic }) {
       </div>
 
       {/* Group 2: System Quick Info Tiles */}
-      <div className="metro-tile-group secondary-group">
+      <div className="metro-tile-group secondary-group md-card-group">
         <div className="metro-group-header">
-          <span className="group-title-text">SYSTEM METRICS // CREATIVE EVOLUTION</span>
+          <span className="group-title-text">HIGHLIGHTS • CREATIVE EVOLUTION</span>
           <div className="group-header-line" />
         </div>
 

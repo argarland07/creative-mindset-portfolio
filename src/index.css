@@ -1,81 +1,143 @@
 :root,
 [data-theme="dark"] {
-  /* Windows 10 Metro & Fluent Design System Tokens (Dark Mode) */
-  --bg-dark: #101010;
-  --bg-acrylic: rgba(24, 24, 24, 0.92);
-  --bg-card: rgba(30, 30, 30, 0.88);
-  --bg-card-hover: rgba(45, 45, 45, 0.95);
-  --bg-surface: #1e1e1e;
-  
-  --border-subtle: rgba(255, 255, 255, 0.12);
-  --border-hover: rgba(255, 255, 255, 0.35);
-  --border-active: #0078d7;
-  
-  --text-main: #ffffff;
-  --text-dim: #cccccc;
-  --text-muted: #888888;
-  
-  /* Windows 10 Blue Palette */
-  --metro-blue: #0078d7;
-  --metro-blue-light: #2b88d8;
-  --metro-blue-dark: #005a9e;
-  --metro-blue-deep: #004578;
-  --metro-cyan: #00bcf2;
-  --metro-teal: #008272;
-  --metro-green: #107c10;
-  --metro-gold: #ffb900;
-  --metro-orange: #d83b01;
-  --metro-red: #e81123;
-  --metro-purple: #68217a;
-  --metro-magenta: #b4009e;
+  /* Material Design 3 Tokens (Dark Theme) */
+  --bg-dark: #0f1117;
+  --bg-acrylic: rgba(20, 23, 31, 0.92);
+  --bg-card: #181b24;
+  --bg-card-hover: #222634;
+  --bg-surface: #13151c;
+  --bg-surface-container: #1e222d;
+  --bg-surface-container-high: #272c3a;
 
-  /* Proxima Nova & Classic Fluent Typography */
-  --font-heading: 'Proxima Nova', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Proxima Nova', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-  --font-mono: 'Consolas', 'Courier New', monospace;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.2);
+  --border-active: #8ab4f8;
 
-  --shadow-metro-tile: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-metro-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --text-main: #f1f3f9;
+  --text-dim: #c4c7d5;
+  --text-muted: #8e92a4;
+
+  /* Material 3 Dynamic Tonal Palette */
+  --md-primary: #8ab4f8;
+  --md-primary-hover: #aecbfa;
+  --md-on-primary: #041e49;
+  --md-primary-container: #17325c;
+  --md-on-primary-container: #d3e3fd;
+
+  --md-secondary: #a8c7fa;
+  --md-secondary-container: #004a77;
+  --md-tertiary: #a7c8ff;
+
+  --md-success: #81c995;
+  --md-warning: #fdd663;
+  --md-error: #f28b82;
+
+  /* Material Accents */
+  --metro-blue: #8ab4f8;
+  --metro-blue-light: #aecbfa;
+  --metro-blue-dark: #669df6;
+  --metro-blue-deep: #1a73e8;
+  --metro-cyan: #78d9ec;
+  --metro-teal: #80cbc4;
+  --metro-green: #81c995;
+  --metro-gold: #fdd663;
+  --metro-orange: #fcad70;
+  --metro-red: #f28b82;
+  --metro-purple: #c58af9;
+  --metro-magenta: #ff8bcb;
+
+  /* Material Typography */
+  --font-heading: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Plus Jakarta Sans', Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+
+  /* Material Shapes */
+  --md-shape-xs: 4px;
+  --md-shape-sm: 8px;
+  --md-shape-md: 12px;
+  --md-shape-lg: 16px;
+  --md-shape-xl: 24px;
+  --md-shape-full: 9999px;
+
+  /* Material Elevations */
+  --md-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --md-elevation-2: 0 4px 10px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --md-elevation-3: 0 10px 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.35);
+  --md-elevation-4: 0 16px 36px rgba(0, 0, 0, 0.6), 0 6px 14px rgba(0, 0, 0, 0.4);
+
+  --shadow-metro-tile: var(--md-elevation-2);
+  --shadow-metro-hover: var(--md-elevation-3);
 
   color-scheme: dark;
 }
 
 [data-theme="light"] {
-  /* Windows 10 Metro & Fluent Design System Tokens (Light Mode) */
-  --bg-dark: #f0f2f5;
-  --bg-acrylic: rgba(255, 255, 255, 0.94);
+  /* Material Design 3 Tokens (Light Theme) */
+  --bg-dark: #f8fafd;
+  --bg-acrylic: rgba(255, 255, 255, 0.92);
   --bg-card: #ffffff;
-  --bg-card-hover: #f8fafc;
+  --bg-card-hover: #f1f5fa;
   --bg-surface: #ffffff;
-  
-  --border-subtle: rgba(0, 0, 0, 0.15);
-  --border-hover: rgba(0, 0, 0, 0.35);
-  --border-active: #0078d7;
-  
-  --text-main: #181818;
-  --text-dim: #333333;
-  --text-muted: #555555;
+  --bg-surface-container: #f0f4f9;
+  --bg-surface-container-high: #e9eef6;
 
-  /* Windows 10 Blue Palette */
-  --metro-blue: #0078d7;
-  --metro-blue-light: #2b88d8;
-  --metro-blue-dark: #005a9e;
-  --metro-blue-deep: #004578;
-  --metro-cyan: #0091b8;
-  --metro-teal: #008272;
-  --metro-green: #107c10;
-  --metro-gold: #d97706;
-  --metro-orange: #d83b01;
-  --metro-red: #d13438;
-  --metro-purple: #68217a;
-  --metro-magenta: #b4009e;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.18);
+  --border-active: #1a73e8;
 
-  --font-heading: 'Proxima Nova', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Proxima Nova', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-  --font-mono: 'Consolas', 'Courier New', monospace;
+  --text-main: #1f2328;
+  --text-dim: #44474f;
+  --text-muted: #74777f;
 
-  --shadow-metro-tile: 0 2px 10px rgba(0, 0, 0, 0.08);
-  --shadow-metro-hover: 0 6px 18px rgba(0, 0, 0, 0.14);
+  /* Material 3 Dynamic Tonal Palette */
+  --md-primary: #1a73e8;
+  --md-primary-hover: #1557b0;
+  --md-on-primary: #ffffff;
+  --md-primary-container: #e8f0fe;
+  --md-on-primary-container: #041e49;
+
+  --md-secondary: #00639b;
+  --md-secondary-container: #c2e7ff;
+  --md-tertiary: #006874;
+
+  --md-success: #1e8e3e;
+  --md-warning: #ea8600;
+  --md-error: #d93025;
+
+  /* Material Accents */
+  --metro-blue: #1a73e8;
+  --metro-blue-light: #4285f4;
+  --metro-blue-dark: #1557b0;
+  --metro-blue-deep: #0d47a1;
+  --metro-cyan: #0097a7;
+  --metro-teal: #00897b;
+  --metro-green: #1e8e3e;
+  --metro-gold: #f9ab00;
+  --metro-orange: #e8710a;
+  --metro-red: #d93025;
+  --metro-purple: #9334e6;
+  --metro-magenta: #c2185b;
+
+  --font-heading: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Plus Jakarta Sans', Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+
+  /* Material Shapes */
+  --md-shape-xs: 4px;
+  --md-shape-sm: 8px;
+  --md-shape-md: 12px;
+  --md-shape-lg: 16px;
+  --md-shape-xl: 24px;
+  --md-shape-full: 9999px;
+
+  /* Material Elevations */
+  --md-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --md-elevation-2: 0 3px 6px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --md-elevation-3: 0 10px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+  --md-elevation-4: 0 16px 36px rgba(0, 0, 0, 0.12), 0 6px 12px rgba(0, 0, 0, 0.06);
+
+  --shadow-metro-tile: var(--md-elevation-2);
+  --shadow-metro-hover: var(--md-elevation-3);
 
   color-scheme: light;
 }
@@ -111,23 +173,23 @@ body {
   flex-direction: column;
 }
 
-/* Windows 10 Flat Square Scrollbar */
+/* Material Design Pill Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-dark);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--border-subtle);
-  border-radius: 0px;
+  border-radius: var(--md-shape-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--metro-blue);
+  background: var(--md-primary);
 }
 
 button {
@@ -137,7 +199,7 @@ button {
   background: none;
   color: inherit;
   outline: none;
-  transition: all 0.15s cubic-bezier(0.1, 0.9, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
 }
 
 a {

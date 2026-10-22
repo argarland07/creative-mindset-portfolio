@@ -9,7 +9,8 @@ import {
   Compass,
   Monitor,
   Sun,
-  Moon
+  Moon,
+  Sparkles
 } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
@@ -27,7 +28,7 @@ export default function StoryNavbar({
   const [isMuted, setIsMuted] = useState(soundManager.isMuted);
   const [currentTime, setCurrentTime] = useState('');
 
-  // Live Windows 10 style system clock
+  // Live clock
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -46,61 +47,56 @@ export default function StoryNavbar({
   };
 
   return (
-    <header className="metro-navbar">
-      <div className="metro-navbar-inner">
-        {/* Windows 10 Brand Section (Clickable Home) */}
+    <header className="metro-navbar md-navbar">
+      <div className="metro-navbar-inner md-navbar-inner">
+        {/* Brand Section */}
         <div
-          className="metro-brand-cluster clickable-brand"
+          className="metro-brand-cluster md-brand-cluster clickable-brand"
           onClick={() => {
             soundManager.playClick();
             setViewMode('grid');
           }}
-          title="Return to Start Screen (Home)"
+          title="Return to Chapter Overview"
         >
-          {/* Windows 4-Square Flat Logo */}
-          <div className="windows-metro-logo" title="Windows 10 Start">
-            <span className="win-tile wt-1" />
-            <span className="win-tile wt-2" />
-            <span className="win-tile wt-3" />
-            <span className="win-tile wt-4" />
+          {/* Material Brand Icon */}
+          <div className="md-brand-icon" title="Creative Mindset">
+            <Sparkles size={18} className="brand-sparkle-icon" />
           </div>
 
-          <div className="metro-brand-text">
-            <div className="metro-user-title">
-              <span className="metro-author">ANDREW GARLAND</span>
-              <span className="metro-slash">//</span>
-              <span className="metro-app-name">CREATIVITY PORTFOLIO</span>
+          <div className="metro-brand-text md-brand-text">
+            <div className="metro-user-title md-user-title">
+              <span className="metro-author md-author">ANDREW GARLAND</span>
+              <span className="md-dot">•</span>
+              <span className="metro-app-name md-app-name">CREATIVE MINDSET</span>
             </div>
-            <span className="metro-sub-status">
-              Windows 10 Modern UI • 8 Semester Chapters
+            <span className="metro-sub-status md-sub-status">
+              Material Design Showcase • 8 Chapters
             </span>
           </div>
         </div>
 
-        {/* Windows 10 Pivot / Tab Switcher */}
-        <div className="metro-pivot-bar">
+        {/* Material 3 Segmented Pill Switcher */}
+        <div className="metro-pivot-bar md-segmented-pills">
           <button
-            className={`metro-pivot-tab ${viewMode === 'grid' ? 'active' : ''}`}
+            className={`metro-pivot-tab md-pill-tab ${viewMode === 'grid' ? 'active' : ''}`}
             onClick={() => {
               soundManager.playClick();
               setViewMode('grid');
             }}
           >
-            <LayoutGrid size={14} />
-            <span>Start (Home)</span>
-            {viewMode === 'grid' && <span className="pivot-active-bar" />}
+            <LayoutGrid size={15} />
+            <span>Chapters</span>
           </button>
 
           <button
-            className={`metro-pivot-tab ${viewMode === 'story' ? 'active' : ''}`}
+            className={`metro-pivot-tab md-pill-tab ${viewMode === 'story' ? 'active' : ''}`}
             onClick={() => {
               soundManager.playSlideTransition();
               setViewMode('story');
             }}
           >
-            <BookOpen size={14} />
-            <span>Story Walkthrough</span>
-            {viewMode === 'story' && <span className="pivot-active-bar" />}
+            <BookOpen size={15} />
+            <span>Walkthrough</span>
           </button>
         </div>
 
