@@ -14,7 +14,6 @@ import {
   Award,
   Edit3,
   Film,
-  Upload,
   Video
 } from 'lucide-react';
 import { soundManager } from '../../utils/audio';
@@ -86,38 +85,54 @@ export default function Chapter4RubeGoldberg({
   const [isEditing, setIsEditing] = useState(false);
   const [confettiActive, setConfettiActive] = useState(false);
 
-  // Multi-clip video iteration state
+  // Multi-clip video iteration state (6 recorded clips)
   const defaultClips = [
     {
       id: 1,
-      title: 'Attempt #1: The Incline & Marble Release',
+      title: 'Attempt #1: The Incline & Release',
       stageName: 'Stage 1-2 Calibration',
       src: assetUrl('/topics/rube-goldberg/clip-1.mp4'),
       fileName: 'clip-1.mp4',
-      failureNote: 'The marble gained excessive momentum and jumped off the curve.'
+      failureNote: 'Excessive momentum derailed the marble on the curve.'
     },
     {
       id: 2,
-      title: 'Attempt #2: Domino Cascade & Friction Test',
-      stageName: 'Stage 3 Calibration',
+      title: 'Attempt #2: Domino Momentum Cascade',
+      stageName: 'Stage 2-3 Calibration',
       src: assetUrl('/topics/rube-goldberg/clip-2.mp4'),
       fileName: 'clip-2.mp4',
-      failureNote: 'Domino #3 slipped backward on the slick tabletop rather than toppling forward.'
+      failureNote: 'Domino #3 slipped on the tabletop rather than transferring kinetic force forward.'
     },
     {
       id: 3,
-      title: 'Attempt #3: Pulley & Counterweight Tension',
-      stageName: 'Stage 4 Calibration',
+      title: 'Attempt #3: Pulley & Counterweight Hoist',
+      stageName: 'Stage 3 Calibration',
       src: assetUrl('/topics/rube-goldberg/clip-3.mp4'),
       fileName: 'clip-3.mp4',
-      failureNote: 'Friction in the nylon cord stalled the counterweight halfway.'
+      failureNote: 'Friction along the tension cord stalled the counterweight halfway.'
     },
     {
       id: 4,
-      title: 'Run #20: Full 5-Stage Synchronization (Finale)',
-      stageName: 'Complete 5-Stage Chain Reaction',
+      title: 'Attempt #4: Seesaw Lever Strike',
+      stageName: 'Stage 4 Calibration',
       src: assetUrl('/topics/rube-goldberg/clip-4.mp4'),
       fileName: 'clip-4.mp4',
+      failureNote: 'The fulcrum pivot absorbed too much impact shock, dampening striker velocity.'
+    },
+    {
+      id: 5,
+      title: 'Attempt #5: Penultimate Trial Run',
+      stageName: 'Stage 4-5 Calibration',
+      src: assetUrl('/topics/rube-goldberg/clip-5.mp4'),
+      fileName: 'clip-5.mp4',
+      failureNote: 'Nearly synchronized! Needle grazed the target balloon without puncturing.'
+    },
+    {
+      id: 6,
+      title: 'Run #20: Full 5-Stage Synchronization (Finale)',
+      stageName: 'Complete 5-Stage Chain Reaction',
+      src: assetUrl('/topics/rube-goldberg/clip-6.mp4'),
+      fileName: 'clip-6.mp4',
       isFinal: true
     }
   ];
@@ -187,36 +202,6 @@ export default function Chapter4RubeGoldberg({
         videoRef.current.play().catch(() => {});
       }
     }, 150);
-  };
-
-  const handleUploadClips = (e) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length > 0) {
-      soundManager.playClick();
-      const newClips = files.map((file, idx) => ({
-        id: idx + 1,
-        title: idx === files.length - 1 ? `Run #${idx + 1}: Final Run` : `Attempt #${idx + 1}: Test Clip`,
-        stageName: `Clip ${idx + 1}`,
-        src: URL.createObjectURL(file),
-        fileName: file.name,
-        isFinal: idx === files.length - 1,
-        failureNote: idx === files.length - 1 ? null : `Attempt #${idx + 1} test complete. Calibrating mechanisms...`
-      }));
-      setClips(newClips);
-      setCurrentClipIndex(0);
-      setClipEnded(false);
-      setHasFinishedAllClips(false);
-      setVideoErrors({});
-      if (onCompleteSection) {
-        onCompleteSection(topic.id);
-      }
-      setTimeout(() => {
-        if (videoRef.current) {
-          videoRef.current.currentTime = 0;
-          videoRef.current.play().catch(() => {});
-        }
-      }, 150);
-    }
   };
 
   const handleVideoError = (clipId) => {
@@ -666,27 +651,13 @@ export default function Chapter4RubeGoldberg({
               {currentClip.title}
             </h3>
             <p className="placeholder-instruction">
-              Place this video clip in your project at:
+              Video source file:
               <br />
               <code className="placeholder-path-code">
                 public/topics/rube-goldberg/clip-{currentClip.id}.mp4
               </code>
             </p>
-            <p className="placeholder-sub">
-              Or pick your local video clip files from your computer to test right now:
-            </p>
             <div className="placeholder-btn-group">
-              <label className="btn-browse-file-cta">
-                <Upload size={16} />
-                <span>Select Video File(s) from Computer</span>
-                <input
-                  type="file"
-                  accept="video/*"
-                  multiple
-                  onChange={handleUploadClips}
-                  hidden
-                />
-              </label>
               <button
                 type="button"
                 className="btn-simulate-next"
@@ -767,23 +738,8 @@ export default function Chapter4RubeGoldberg({
           </div>
           <h4 className="video-title-text">{currentClip.title}</h4>
           <p className="video-desc-text">
-            {currentClip.subtitle}
-            <span className="active-file-indicator"> • Path: public/topics/rube-goldberg/clip-{currentClip.id}.mp4</span>
+            {currentClip.failureNote || (currentClip.isFinal ? 'Flawless synchronization achieved across all 5 stages!' : '')}
           </p>
-        </div>
-
-        <div className="video-actions-right">
-          <label className="btn-change-video-btn" title="Choose local video clips from computer">
-            <Upload size={14} />
-            <span>Select Local Video Clips</span>
-            <input
-              type="file"
-              accept="video/*"
-              multiple
-              onChange={handleUploadClips}
-              hidden
-            />
-          </label>
         </div>
       </div>
     </div>
