@@ -181,22 +181,7 @@ function App() {
 
   return (
     <div className="story-app">
-      {/* Windows 10 Metro Navigation Bar - shown on Start Screen */}
-      {viewMode === 'grid' && (
-        <StoryNavbar
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-          isAutoPlaying={isAutoPlaying}
-          setIsAutoPlaying={setIsAutoPlaying}
-          currentChapter={currentIndex + 1}
-          totalChapters={topics.length}
-          themeMode={themeMode}
-          effectiveTheme={effectiveTheme}
-          onToggleTheme={handleToggleTheme}
-        />
-      )}
-
-      <main className={`story-main ${viewMode === 'story' ? 'story-immersive' : ''}`}>
+      <main className={`story-main ${viewMode === 'story' ? 'story-immersive' : 'story-homepage'}`}>
         {viewMode === 'story' ? (
           <StoryChapterView
             topics={topics}

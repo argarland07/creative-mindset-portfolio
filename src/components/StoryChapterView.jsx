@@ -161,7 +161,7 @@ export default function StoryChapterView({
         title="Exit Full Screen View & Return to Overview (Home)"
       >
         <ArrowLeft size={16} />
-        <span className="hud-exit-label">Exit Full Screen</span>
+        <span className="hud-exit-label">Home</span>
       </button>
 
       {/* Floating Minimal Top-Right HUD Controls Cluster */}
