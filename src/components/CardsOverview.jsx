@@ -18,7 +18,6 @@ export default function CardsOverview({ onSelectTopic }) {
         role="img"
         aria-label="Miami University illuminated gate background"
       />
-      <div className="homepage-hero-overlay" />
 
       <div className="homepage-hero-content">
         <h1 className="homepage-hero-title">
