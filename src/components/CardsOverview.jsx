@@ -32,6 +32,11 @@ export default function CardsOverview({ onSelectTopic }) {
           <ArrowRight size={17} className="homepage-btn-arrow" />
         </button>
       </div>
+
+      {/* Author & Photo Credit */}
+      <div className="homepage-hero-credit">
+        <span className="credit-name">Andrew Garland</span>
+      </div>
     </section>
   );
 }
