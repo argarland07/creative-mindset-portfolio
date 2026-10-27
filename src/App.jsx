@@ -29,6 +29,7 @@ function App() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [autoPlayProgress, setAutoPlayProgress] = useState(0);
   const [editingTopic, setEditingTopic] = useState(null);
+  const [wipeState, setWipeState] = useState('idle'); // 'idle' | 'wiping-in' | 'wiping-out'
 
   // Automatic Light / Dark Mode System
   const [themeMode, setThemeMode] = useState(() => {
@@ -159,9 +160,31 @@ function App() {
   };
 
   const handleSelectIndex = (idx) => {
-    setAutoPlayProgress(0);
-    setCurrentIndex(idx);
-    setViewMode('story');
+    if (wipeState !== 'idle') return;
+    soundManager.playSlideTransition();
+    setWipeState('wiping-in');
+    setTimeout(() => {
+      setAutoPlayProgress(0);
+      setCurrentIndex(idx);
+      setViewMode('story');
+      setWipeState('wiping-out');
+      setTimeout(() => {
+        setWipeState('idle');
+      }, 550);
+    }, 450);
+  };
+
+  const handleBackToStart = () => {
+    if (wipeState !== 'idle') return;
+    soundManager.playClick();
+    setWipeState('wiping-in');
+    setTimeout(() => {
+      setViewMode('grid');
+      setWipeState('wiping-out');
+      setTimeout(() => {
+        setWipeState('idle');
+      }, 550);
+    }, 450);
   };
 
   const handleSaveTopicNotes = (topicId, updatedFields) => {
@@ -181,6 +204,13 @@ function App() {
 
   return (
     <div className="story-app">
+      {/* Cinematic Screen Wipe Curtain */}
+      {wipeState !== 'idle' && (
+        <div className={`screen-wipe-curtain ${wipeState}`}>
+          <div className="wipe-edge-glow" />
+        </div>
+      )}
+
       <main className={`story-main ${viewMode === 'story' ? 'story-immersive' : 'story-homepage'}`}>
         {viewMode === 'story' ? (
           <StoryChapterView
@@ -194,7 +224,7 @@ function App() {
             isAutoPlaying={isAutoPlaying}
             setIsAutoPlaying={setIsAutoPlaying}
             autoPlayProgress={autoPlayProgress}
-            onBackToStart={() => setViewMode('grid')}
+            onBackToStart={handleBackToStart}
             themeMode={themeMode}
             onToggleTheme={handleToggleTheme}
           />

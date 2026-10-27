@@ -21,7 +21,7 @@ export default function CardsOverview({ onSelectTopic }) {
 
       <div className="homepage-hero-content">
         <h1 className="homepage-hero-title">
-          Welcome to my creative journey so far this semester
+          Welcome to my creative journey so far this semester :)
         </h1>
         <button
           type="button"
@@ -29,7 +29,7 @@ export default function CardsOverview({ onSelectTopic }) {
           onClick={handleBegin}
         >
           <span>Begin Journey</span>
-          <ArrowRight size={20} className="homepage-btn-arrow" />
+          <ArrowRight size={17} className="homepage-btn-arrow" />
         </button>
       </div>
     </section>
