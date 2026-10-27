@@ -28,7 +28,7 @@ export default function CardsOverview({ onSelectTopic }) {
           className="homepage-hero-btn"
           onClick={handleBegin}
         >
-          <span>begin journey</span>
+          <span>Begin Journey</span>
           <ArrowRight size={20} className="homepage-btn-arrow" />
         </button>
       </div>
