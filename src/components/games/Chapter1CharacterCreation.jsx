@@ -3,7 +3,6 @@ import {
   Zap,
   AlertTriangle,
   HelpCircle,
-  Sparkles,
   Sliders,
   Eye,
   EyeOff,
@@ -320,7 +319,6 @@ export default function Chapter1CharacterCreation({
                 <>
                   <Eye size={16} />
                   <span>REVEAL REAL ANSWERS</span>
-                  <Sparkles size={16} />
                 </>
               )}
             </button>
