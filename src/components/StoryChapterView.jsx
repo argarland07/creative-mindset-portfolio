@@ -146,8 +146,57 @@ export default function StoryChapterView({
   const isChapter5 = current.id === 'night-photos';
   const isChapter6 = current.id === 'social-curiosity';
 
+  // Chapter 1 multi-step phase ('attributes' | 'reflection')
+  const [chapter1Phase, setChapter1Phase] = useState('attributes');
+  const [isChapter1Transitioning, setIsChapter1Transitioning] = useState(false);
+
+  useEffect(() => {
+    if (!isChapter1) {
+      setChapter1Phase('attributes');
+      setIsChapter1Transitioning(false);
+    }
+  }, [isChapter1]);
+
+  const handleChapter1Next = () => {
+    if (isChapter1Transitioning) return;
+    setIsChapter1Transitioning(true);
+    soundManager.playLevelUp();
+    setTimeout(() => {
+      setChapter1Phase('reflection');
+      setIsChapter1Transitioning(false);
+      handleCompleteSection(current.id);
+    }, 380);
+  };
+
+  const handleChapter1Prev = () => {
+    if (isChapter1Transitioning) return;
+    setIsChapter1Transitioning(true);
+    soundManager.playSlideTransition();
+    setTimeout(() => {
+      setChapter1Phase('attributes');
+      setIsChapter1Transitioning(false);
+    }, 300);
+  };
+
+  // Intercept ArrowRight / ArrowLeft in Chapter 1 so right arrow triggers reflection first
+  useEffect(() => {
+    if (!isChapter1) return;
+    const handleChapter1Key = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' && chapter1Phase === 'attributes') {
+        e.stopPropagation();
+        handleChapter1Next();
+      } else if (e.key === 'ArrowLeft' && chapter1Phase === 'reflection') {
+        e.stopPropagation();
+        handleChapter1Prev();
+      }
+    };
+    window.addEventListener('keydown', handleChapter1Key, true);
+    return () => window.removeEventListener('keydown', handleChapter1Key, true);
+  }, [isChapter1, chapter1Phase, isChapter1Transitioning]);
+
   const isCurrentCompleted = completedSections.includes(current.id);
-  const canAdvance = alwaysShowNext || isCurrentCompleted;
+  const canAdvance = alwaysShowNext || isCurrentCompleted || isChapter1;
 
   return (
     <div className="story-container story-fullscreen-view">
@@ -236,6 +285,11 @@ export default function StoryChapterView({
             onUpdateTopicData={onUpdateTopicData}
             onCompleteSection={handleCompleteSection}
             isCompleted={isCurrentCompleted}
+            phase={chapter1Phase}
+            isTransitioning={isChapter1Transitioning}
+            onGoToReflection={handleChapter1Next}
+            onGoToAttributes={handleChapter1Prev}
+            onProceedToNextChapter={onNext}
           />
         ) : isChapter3 ? (
           <Chapter3MentorInterview
@@ -409,9 +463,13 @@ export default function StoryChapterView({
           {/* Previous Button */}
           <button
             className="story-nav-btn prev-btn"
-            onClick={onPrev}
-            disabled={currentIndex === 0}
-            title="Previous Chapter (Left Arrow)"
+            onClick={isChapter1 && chapter1Phase === 'reflection' ? handleChapter1Prev : onPrev}
+            disabled={currentIndex === 0 && !(isChapter1 && chapter1Phase === 'reflection')}
+            title={
+              isChapter1 && chapter1Phase === 'reflection'
+                ? 'Return to Character Attributes (Left Arrow)'
+                : 'Previous Chapter (Left Arrow)'
+            }
           >
             <ChevronLeft size={18} />
             <span>Previous</span>
@@ -433,7 +491,9 @@ export default function StoryChapterView({
 
             <div className="immersive-chapter-indicator">
               <span className="immersive-crumb">
-                Chapter {currentIndex + 1} of {topics.length}
+                {isChapter1 && chapter1Phase === 'reflection'
+                  ? `Chapter ${currentIndex + 1} of ${topics.length} • Reflection`
+                  : `Chapter ${currentIndex + 1} of ${topics.length}`}
               </span>
               {isCurrentCompleted ? (
                 <span className="status-badge-chip completed">
@@ -451,14 +511,26 @@ export default function StoryChapterView({
           {canAdvance ? (
             <button
               className="story-nav-btn next-btn unlocked-pulse"
-              onClick={onNext}
+              onClick={isChapter1 && chapter1Phase === 'attributes' ? handleChapter1Next : onNext}
               style={{
                 background: `linear-gradient(135deg, ${current.accentColor}, #6366f1)`,
                 boxShadow: `0 0 20px -3px ${current.accentColor}60`
               }}
-              title={currentIndex === topics.length - 1 ? 'Start Over' : 'Next Chapter (Right Arrow)'}
+              title={
+                isChapter1 && chapter1Phase === 'attributes'
+                  ? 'Proceed to Day 1 Reflection (Right Arrow)'
+                  : currentIndex === topics.length - 1
+                  ? 'Start Over'
+                  : 'Next Chapter (Right Arrow)'
+              }
             >
-              <span>{currentIndex === topics.length - 1 ? 'Restart Story' : 'Next Chapter'}</span>
+              <span>
+                {isChapter1 && chapter1Phase === 'attributes'
+                  ? 'Next'
+                  : currentIndex === topics.length - 1
+                  ? 'Restart Story'
+                  : 'Next Chapter'}
+              </span>
               <ChevronRight size={18} />
             </button>
           ) : (

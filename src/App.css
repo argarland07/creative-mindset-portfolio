@@ -2475,6 +2475,7 @@
 .attributes-footer {
   display: flex;
   align-items: center;
+  gap: 12px;
   justify-content: center;
   padding-top: 6px;
 }
@@ -2484,6 +2485,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  flex: 1;
   width: 100%;
   padding: 12px 24px;
   border-radius: var(--md-shape-full, 9999px);
@@ -2521,6 +2523,325 @@
 .btn-reveal-reality.active-revealed:hover {
   background: rgba(255, 255, 255, 0.14);
   color: #ffffff;
+}
+
+/* Secondary Button in Attributes Footer */
+.btn-step-next-reflection {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 18px;
+  border-radius: var(--md-shape-full, 9999px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-family: var(--font-heading, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.btn-step-next-reflection:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #38bdf8;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   CHAPTER 1: REFLECTION VIEW & TRANSITION ANIMATIONS
+   ========================================================= */
+
+/* Aura & Nametag Reflection Mode */
+.character-aura-glow.reflection-aura {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.5) 0%, rgba(56, 189, 248, 0.25) 45%, transparent 75%);
+  filter: blur(34px);
+  transition: all 0.5s ease;
+}
+
+.nametag-status-dot.reflection-dot {
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8, 0 0 16px rgba(56, 189, 248, 0.6);
+}
+
+/* Transition Holographic Burst Ring */
+.transition-energy-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 92%;
+  height: 92%;
+  transform: translate(-50%, -50%);
+  border-radius: 28px;
+  border: 2px solid rgba(56, 189, 248, 0.7);
+  box-shadow: 0 0 45px rgba(56, 189, 248, 0.5), inset 0 0 35px rgba(56, 189, 248, 0.35);
+  pointer-events: none;
+  z-index: 20;
+  animation: energyRingPulse 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes energyRingPulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+/* Exit & Enter Animation Classes */
+.anim-attributes-exit {
+  animation: attributesExit 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.anim-attributes-enter {
+  animation: attributesEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-reflection-enter {
+  animation: reflectionEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-reflection-exit {
+  animation: reflectionExit 0.32s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes attributesExit {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(36px) scale(0.94);
+    filter: blur(10px);
+  }
+}
+
+@keyframes attributesEnter {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.95);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes reflectionEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    filter: blur(10px);
+  }
+  65% {
+    transform: translateY(-3px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes reflectionExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.96);
+    filter: blur(8px);
+  }
+}
+
+/* Right Column: Reflection Container */
+.character-reflection-column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.reflection-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reflection-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.reflection-title {
+  font-family: var(--font-heading, sans-serif);
+  font-size: 21px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* Glassmorphic Reflection Narrative Card */
+.reflection-narrative-card {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.72) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(56, 189, 248, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.reflection-quote-icon-wrap {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 2px;
+  flex-shrink: 0;
+  color: #38bdf8;
+  opacity: 0.85;
+}
+
+.reflection-text-paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reflection-text-paragraphs p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.reflection-text-paragraphs p:first-child {
+  font-weight: 500;
+  color: #f1f5f9;
+}
+
+/* Metric Baseline Takeaway Pills */
+.reflection-stats-summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.reflection-stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.reflection-stat-chip.chip-confidence {
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
+.reflection-stat-chip.chip-fear {
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.reflection-stat-chip.chip-uncertainty {
+  border-color: rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+}
+
+.reflection-stat-chip .stat-name {
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.reflection-stat-chip .stat-val {
+  font-weight: 700;
+  margin-left: auto;
+}
+
+/* Reflection Footer Action Buttons */
+.reflection-actions-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 2px;
+}
+
+.btn-back-to-attributes {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-radius: var(--md-shape-full, 9999px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #cbd5e1;
+  font-family: var(--font-heading, sans-serif);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-back-to-attributes:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-proceed-next-chapter {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 20px;
+  border-radius: var(--md-shape-full, 9999px);
+  background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-family: var(--font-heading, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(2, 132, 199, 0.45);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-proceed-next-chapter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55);
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 /* Comparison Chips when Revealed */
