@@ -3,10 +3,11 @@ import {
   Zap,
   AlertTriangle,
   HelpCircle,
-  RotateCcw,
   Sparkles,
   Sliders,
-  UserCheck
+  Eye,
+  EyeOff,
+  CheckCircle2
 } from 'lucide-react';
 import { soundManager } from '../../utils/audio';
 import { assetUrl } from '../../utils/assetUrl';
@@ -16,25 +17,27 @@ export default function Chapter1CharacterCreation({
   onUpdateTopicData,
   onCompleteSection
 }) {
-  // Baseline stats default to Andrew's Day 1 values: 6, 8, 6
-  const defaultConfidence = 6;
-  const defaultFear = 8;
-  const defaultUncertainty = 6;
+  // Andrew's real Day 1 baseline values
+  const realConfidence = 6;
+  const realFear = 8;
+  const realUncertainty = 6;
 
   const [confidence, setConfidence] = useState(() => {
     const saved = topic.baselineStats?.creativeConfidence;
-    return typeof saved === 'number' && saved >= 1 && saved <= 10 ? saved : defaultConfidence;
+    return typeof saved === 'number' && saved >= 1 && saved <= 10 ? saved : 5;
   });
 
   const [fear, setFear] = useState(() => {
     const saved = topic.baselineStats?.fearOfFailure;
-    return typeof saved === 'number' && saved >= 1 && saved <= 10 ? saved : defaultFear;
+    return typeof saved === 'number' && saved >= 1 && saved <= 10 ? saved : 5;
   });
 
   const [uncertainty, setUncertainty] = useState(() => {
     const saved = topic.baselineStats?.uncertaintyTolerance;
-    return typeof saved === 'number' && saved >= 1 && saved <= 10 ? saved : defaultUncertainty;
+    return typeof saved === 'number' && saved >= 1 && saved <= 10 ? saved : 5;
   });
+
+  const [revealed, setRevealed] = useState(false);
 
   // Mark section complete immediately so next button is available
   useEffect(() => {
@@ -63,24 +66,51 @@ export default function Chapter1CharacterCreation({
     }
   };
 
-  const handleReset = () => {
-    soundManager.playClick();
-    setConfidence(defaultConfidence);
-    setFear(defaultFear);
-    setUncertainty(defaultUncertainty);
-    if (onUpdateTopicData) {
-      onUpdateTopicData(topic.id, {
-        baselineStats: {
-          creativeConfidence: defaultConfidence,
-          fearOfFailure: defaultFear,
-          uncertaintyTolerance: defaultUncertainty
-        }
-      });
+  const handleToggleReveal = () => {
+    if (!revealed) {
+      soundManager.playLevelUp();
+    } else {
+      soundManager.playClick();
     }
+    setRevealed((prev) => !prev);
   };
 
   // Convert 1-10 to percentage along the slider track (1 -> 0%, 10 -> 100%)
   const toTrackPct = (val) => `${((val - 1) / 9) * 100}%`;
+
+  const renderComparisonChip = (guess, actual, pillClass) => {
+    if (!revealed) {
+      return (
+        <div className={`attribute-value-pill ${pillClass}`}>
+          <span>{guess}</span>
+          <span className="val-max">/ 10</span>
+        </div>
+      );
+    }
+
+    if (guess === actual) {
+      return (
+        <div className="attribute-result-chip chip-correct">
+          <CheckCircle2 size={13} />
+          <span>Correct! ({actual})</span>
+        </div>
+      );
+    }
+
+    if (guess > actual) {
+      return (
+        <div className="attribute-result-chip chip-over">
+          <span>Over by +{guess - actual} (Real: {actual})</span>
+        </div>
+      );
+    }
+
+    return (
+      <div className="attribute-result-chip chip-under">
+        <span>Under by -{actual - guess} (Real: {actual})</span>
+      </div>
+    );
+  };
 
   return (
     <div className="character-creator-screen">
@@ -88,7 +118,7 @@ export default function Chapter1CharacterCreation({
         {/* Left Column: The Character Model */}
         <div className="character-stage-column">
           <div className="character-model-wrapper">
-            {/* Background Aura Glow based on stats */}
+            {/* Background Aura Glow based on confidence */}
             <div
               className="character-aura-glow"
               style={{
@@ -126,13 +156,13 @@ export default function Chapter1CharacterCreation({
               <span>CHARACTER ATTRIBUTES</span>
             </div>
             <p className="attributes-subtitle">
-              Adjust the movable bars below to configure my Day 1 mindset stats (1 – 10).
+              Drag the movable bars to configure my Day 1 stats, then hit <strong>Reveal Real Answers</strong>!
             </p>
           </div>
 
           <div className="attributes-slider-list">
             {/* Stat 1: Creative Confidence */}
-            <div className="attribute-card confidence-card">
+            <div className={`attribute-card confidence-card ${revealed && confidence === realConfidence ? 'card-matched' : ''}`}>
               <div className="attribute-header-row">
                 <div className="attribute-title-wrap">
                   <div className="attribute-icon-bubble confidence-bubble">
@@ -143,10 +173,7 @@ export default function Chapter1CharacterCreation({
                     <span className="attribute-sublabel">Self-belief in original ideas</span>
                   </div>
                 </div>
-                <div className="attribute-value-pill confidence-pill">
-                  <span>{confidence}</span>
-                  <span className="val-max">/ 10</span>
-                </div>
+                {renderComparisonChip(confidence, realConfidence, 'confidence-pill')}
               </div>
 
               <div className="attribute-slider-track-wrap">
@@ -160,6 +187,18 @@ export default function Chapter1CharacterCreation({
                   className="attribute-slider-input confidence-input"
                   aria-label="Creative Confidence Slider"
                 />
+
+                {/* Target Reality Marker Pin when Revealed */}
+                {revealed && (
+                  <div
+                    className="real-target-pin reality-pin-confidence"
+                    style={{ left: toTrackPct(realConfidence) }}
+                    title={`Real Answer: ${realConfidence}`}
+                  >
+                    <span className="pin-flag">Real: {realConfidence}</span>
+                    <div className="pin-needle" />
+                  </div>
+                )}
               </div>
 
               <div className="attribute-scale-labels">
@@ -170,7 +209,7 @@ export default function Chapter1CharacterCreation({
             </div>
 
             {/* Stat 2: Fear of Failure */}
-            <div className="attribute-card fear-card">
+            <div className={`attribute-card fear-card ${revealed && fear === realFear ? 'card-matched' : ''}`}>
               <div className="attribute-header-row">
                 <div className="attribute-title-wrap">
                   <div className="attribute-icon-bubble fear-bubble">
@@ -181,10 +220,7 @@ export default function Chapter1CharacterCreation({
                     <span className="attribute-sublabel">Anxiety of being wrong or judged</span>
                   </div>
                 </div>
-                <div className="attribute-value-pill fear-pill">
-                  <span>{fear}</span>
-                  <span className="val-max">/ 10</span>
-                </div>
+                {renderComparisonChip(fear, realFear, 'fear-pill')}
               </div>
 
               <div className="attribute-slider-track-wrap">
@@ -198,6 +234,18 @@ export default function Chapter1CharacterCreation({
                   className="attribute-slider-input fear-input"
                   aria-label="Fear of Failure Slider"
                 />
+
+                {/* Target Reality Marker Pin when Revealed */}
+                {revealed && (
+                  <div
+                    className="real-target-pin reality-pin-fear"
+                    style={{ left: toTrackPct(realFear) }}
+                    title={`Real Answer: ${realFear}`}
+                  >
+                    <span className="pin-flag">Real: {realFear}</span>
+                    <div className="pin-needle" />
+                  </div>
+                )}
               </div>
 
               <div className="attribute-scale-labels">
@@ -208,7 +256,7 @@ export default function Chapter1CharacterCreation({
             </div>
 
             {/* Stat 3: Uncertainty Tolerance */}
-            <div className="attribute-card uncertainty-card">
+            <div className={`attribute-card uncertainty-card ${revealed && uncertainty === realUncertainty ? 'card-matched' : ''}`}>
               <div className="attribute-header-row">
                 <div className="attribute-title-wrap">
                   <div className="attribute-icon-bubble uncertainty-bubble">
@@ -219,10 +267,7 @@ export default function Chapter1CharacterCreation({
                     <span className="attribute-sublabel">Comfort with ambiguity & no rubric</span>
                   </div>
                 </div>
-                <div className="attribute-value-pill uncertainty-pill">
-                  <span>{uncertainty}</span>
-                  <span className="val-max">/ 10</span>
-                </div>
+                {renderComparisonChip(uncertainty, realUncertainty, 'uncertainty-pill')}
               </div>
 
               <div className="attribute-slider-track-wrap">
@@ -236,6 +281,18 @@ export default function Chapter1CharacterCreation({
                   className="attribute-slider-input uncertainty-input"
                   aria-label="Uncertainty Tolerance Slider"
                 />
+
+                {/* Target Reality Marker Pin when Revealed */}
+                {revealed && (
+                  <div
+                    className="real-target-pin reality-pin-uncertainty"
+                    style={{ left: toTrackPct(realUncertainty) }}
+                    title={`Real Answer: ${realUncertainty}`}
+                  >
+                    <span className="pin-flag">Real: {realUncertainty}</span>
+                    <div className="pin-needle" />
+                  </div>
+                )}
               </div>
 
               <div className="attribute-scale-labels">
@@ -246,16 +303,26 @@ export default function Chapter1CharacterCreation({
             </div>
           </div>
 
-          {/* Reset Action */}
+          {/* Reveal Reality Button */}
           <div className="attributes-footer">
             <button
               type="button"
-              className="btn-reset-baseline"
-              onClick={handleReset}
-              title="Reset sliders to Day 1 Baseline values (6, 8, 6)"
+              className={`btn-reveal-reality ${revealed ? 'active-revealed' : ''}`}
+              onClick={handleToggleReveal}
+              title={revealed ? 'Click to hide answers' : 'Reveal Andrew’s real Day 1 stats'}
             >
-              <RotateCcw size={14} />
-              <span>Reset to Day 1 Baseline (6, 8, 6)</span>
+              {revealed ? (
+                <>
+                  <EyeOff size={16} />
+                  <span>HIDE REAL ANSWERS</span>
+                </>
+              ) : (
+                <>
+                  <Eye size={16} />
+                  <span>REVEAL REAL ANSWERS</span>
+                  <Sparkles size={16} />
+                </>
+              )}
             </button>
           </div>
         </div>

@@ -2470,29 +2470,151 @@
 .attributes-footer {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding-top: 4px;
+  justify-content: center;
+  padding-top: 10px;
 }
 
-.btn-reset-baseline {
+.btn-reveal-reality {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted, #94a3b8);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.1));
-  border-radius: 9999px;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 28px;
+  border-radius: var(--md-shape-full, 9999px);
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  font-family: var(--font-heading, sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 18px rgba(2, 132, 199, 0.4);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.btn-reset-baseline:hover {
-  color: var(--text-main, #ffffff);
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+.btn-reveal-reality:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.6);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-reveal-reality:active {
+  transform: translateY(0);
+}
+
+.btn-reveal-reality.active-revealed {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #94a3b8;
+  box-shadow: none;
+}
+
+.btn-reveal-reality.active-revealed:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+/* Comparison Chips when Revealed */
+.attribute-result-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-family: var(--font-heading, sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  animation: chipPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.attribute-result-chip.chip-correct {
+  background: rgba(16, 185, 129, 0.16);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.attribute-result-chip.chip-over {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.attribute-result-chip.chip-under {
+  background: rgba(239, 68, 68, 0.16);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+/* Target Reality Pins on Track */
+.real-target-pin {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 15;
+  animation: pinDrop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.real-target-pin .pin-flag {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #111827;
+  border: 1.5px solid #ffffff;
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  margin-bottom: 2px;
+}
+
+.real-target-pin .pin-needle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.reality-pin-confidence .pin-needle { border-color: #f59e0b; }
+.reality-pin-fear .pin-needle { border-color: #ef4444; }
+.reality-pin-uncertainty .pin-needle { border-color: #06b6d4; }
+
+.attribute-card.card-matched {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.15);
+}
+
+@keyframes chipPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pinDrop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -80%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
 }
 
 @media (max-width: 860px) {
