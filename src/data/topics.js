@@ -52,7 +52,7 @@ export const initialTopics = [
     keyTakeaway: 'The best creative advice isn\'t about the craft—it\'s about how to protect your curiosity when things get difficult.',
     tags: ['Mentorship', 'Vulnerability', 'Career Insights', 'Long-term Growth'],
     mentorName: 'Linda Garland',
-    mentorTitle: 'Executive Creative Mentor'
+    mentorTitle: "Andrew's mom, former marketing employee at P&G"
   },
   {
     id: 'rube-goldberg',
