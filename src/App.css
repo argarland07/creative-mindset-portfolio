@@ -2969,11 +2969,15 @@
 }
 
 .mentor-zoom-experience {
-  padding: 20px 28px 32px;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 56px 64px 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   text-align: left;
+  box-sizing: border-box;
 }
 
 /* =========================================================
@@ -3808,9 +3812,21 @@
   align-self: flex-end;
 }
 
+@media (max-width: 1024px) {
+  .mentor-zoom-experience {
+    padding: 56px 32px 20px;
+  }
+}
+
 @media (max-width: 900px) {
   .zoom-arena-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .mentor-zoom-experience {
+    padding: 48px 16px 16px;
   }
 }
 

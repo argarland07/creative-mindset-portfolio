@@ -82,7 +82,10 @@ export default function Chapter3MentorInterview({
 
   const questions = topic.mentorQuestions || defaultQuestions;
   const mentorName = topic.mentorName || defaultMentorName;
-  const mentorTitle = topic.mentorTitle || defaultMentorTitle;
+  const mentorTitle =
+    topic.mentorTitle && topic.mentorTitle !== 'Executive Creative Mentor'
+      ? topic.mentorTitle
+      : defaultMentorTitle;
 
   const [meetingStarted, setMeetingStarted] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
