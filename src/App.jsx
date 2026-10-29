@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import StoryNavbar from './components/StoryNavbar';
 import StoryChapterView from './components/StoryChapterView';
 import CardsOverview from './components/CardsOverview';
 import StoryEditModal from './components/StoryEditModal';
@@ -15,7 +14,9 @@ function App() {
         const parsed = JSON.parse(saved);
         return initialTopics.map((init) => {
           const match = parsed.find((p) => p.id === init.id);
-          return match ? { ...init, ...match, image: init.image } : init;
+          return match
+            ? { ...init, ...match, number: init.number, phase: init.phase, image: init.image }
+            : init;
         });
       }
     } catch {
@@ -30,6 +31,10 @@ function App() {
   const [autoPlayProgress, setAutoPlayProgress] = useState(0);
   const [editingTopic, setEditingTopic] = useState(null);
   const [wipeState, setWipeState] = useState('idle'); // 'idle' | 'wiping-in' | 'wiping-out'
+  const [chapterTransition, setChapterTransition] = useState({
+    status: 'idle', // 'idle' | 'exiting' | 'entering'
+    direction: 'forward' // 'forward' | 'backward'
+  });
 
   // Automatic Light / Dark Mode System
   const [themeMode, setThemeMode] = useState(() => {
@@ -87,75 +92,34 @@ function App() {
     }
   }, [topics]);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      // Don't intercept if user is typing in an input/textarea
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const navigateToChapter = (targetIdx, explicitDirection) => {
+    if (chapterTransition.status !== 'idle' || targetIdx === currentIndex) return;
+    const direction =
+      explicitDirection || (targetIdx > currentIndex ? 'forward' : 'backward');
+    setAutoPlayProgress(0);
+    soundManager.playSlideTransition();
+    setChapterTransition({ status: 'exiting', direction });
 
-      if (e.key === 'ArrowRight') {
-        handleNext();
-      } else if (e.key === 'ArrowLeft') {
-        handlePrev();
-      } else if (e.key === ' ') {
-        e.preventDefault();
-        setIsAutoPlaying((prev) => !prev);
-      } else if (e.key >= '1' && e.key <= '8') {
-        const idx = parseInt(e.key, 10) - 1;
-        if (idx < topics.length) {
-          soundManager.playSlideTransition();
-          setCurrentIndex(idx);
-          setViewMode('story');
-          setAutoPlayProgress(0);
-        }
-      }
-    };
+    setTimeout(() => {
+      setCurrentIndex(targetIdx);
+      setChapterTransition({ status: 'entering', direction });
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, topics.length]);
-
-  // Auto-walkthrough timer
-  useEffect(() => {
-    if (!isAutoPlaying || viewMode !== 'story') {
-      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-      setAutoPlayProgress(0);
-      return;
-    }
-
-    const intervalMs = 100;
-    const totalSteps = (slideDurationSeconds * 1000) / intervalMs;
-
-    autoPlayTimerRef.current = setInterval(() => {
-      setAutoPlayProgress((prev) => {
-        if (prev >= 100) {
-          setCurrentIndex((curr) => {
-            const nextIdx = (curr + 1) % topics.length;
-            soundManager.playSlideTransition();
-            return nextIdx;
-          });
-          return 0;
-        }
-        return prev + 100 / totalSteps;
-      });
-    }, intervalMs);
-
-    return () => {
-      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-    };
-  }, [isAutoPlaying, viewMode, currentIndex, topics.length]);
+      setTimeout(() => {
+        setChapterTransition({ status: 'idle', direction });
+      }, 400);
+    }, 280);
+  };
 
   const handleNext = () => {
-    setAutoPlayProgress(0);
-    setCurrentIndex((prev) => (prev + 1) % topics.length);
-    soundManager.playSlideTransition();
+    if (chapterTransition.status !== 'idle') return;
+    const nextIdx = (currentIndex + 1) % topics.length;
+    navigateToChapter(nextIdx, 'forward');
   };
 
   const handlePrev = () => {
+    if (chapterTransition.status !== 'idle') return;
     if (currentIndex > 0) {
-      setAutoPlayProgress(0);
-      setCurrentIndex((prev) => prev - 1);
-      soundManager.playSlideTransition();
+      navigateToChapter(currentIndex - 1, 'backward');
     }
   };
 
@@ -187,6 +151,60 @@ function App() {
     }, 450);
   };
 
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Don't intercept if user is typing in an input/textarea
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if (e.key === 'ArrowRight') {
+        handleNext();
+      } else if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        setIsAutoPlaying((prev) => !prev);
+      } else if (e.key >= '1' && e.key <= String(topics.length)) {
+        const idx = parseInt(e.key, 10) - 1;
+        if (idx < topics.length && idx !== currentIndex) {
+          if (viewMode === 'story') {
+            navigateToChapter(idx);
+          } else {
+            handleSelectIndex(idx);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIndex, topics.length, chapterTransition.status, viewMode]);
+
+  // Auto-walkthrough timer
+  useEffect(() => {
+    if (!isAutoPlaying || viewMode !== 'story') {
+      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
+      return;
+    }
+
+    const intervalMs = 100;
+    const totalSteps = (slideDurationSeconds * 1000) / intervalMs;
+
+    autoPlayTimerRef.current = setInterval(() => {
+      setAutoPlayProgress((prev) => {
+        if (prev >= 100) {
+          handleNext();
+          return 0;
+        }
+        return prev + 100 / totalSteps;
+      });
+    }, intervalMs);
+
+    return () => {
+      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
+    };
+  }, [isAutoPlaying, viewMode, currentIndex, topics.length, chapterTransition.status]);
+
   const handleSaveTopicNotes = (topicId, updatedFields) => {
     setTopics((prev) =>
       prev.map((t) => (t.id === topicId ? { ...t, ...updatedFields } : t))
@@ -216,6 +234,7 @@ function App() {
           <StoryChapterView
             topics={topics}
             currentIndex={currentIndex}
+            chapterTransition={chapterTransition}
             onSelectIndex={handleSelectIndex}
             onNext={handleNext}
             onPrev={handlePrev}

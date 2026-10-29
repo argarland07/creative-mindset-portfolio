@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Compass,
   Users,
@@ -15,16 +15,13 @@ import {
   CheckCircle2,
   AlertTriangle,
   MessageSquare,
-  Shield,
-  HelpCircle,
-  Eye
+  Shield
 } from 'lucide-react';
 import { soundManager } from '../../utils/audio';
 import { assetUrl } from '../../utils/assetUrl';
 
-export default function Chapter6ComfortZone({
+export default function Chapter5ComfortZone({
   topic,
-  onUpdateTopicData,
   onCompleteSection
 }) {
   const defaultStrangers = [

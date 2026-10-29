@@ -414,9 +414,9 @@ export default function Chapter1CharacterCreation({
                   type="button"
                   className="btn-proceed-next-chapter"
                   onClick={onProceedToNextChapter}
-                  title="Advance to Chapter 2: Exploring Creativity, Business, and AI"
+                  title="Advance to Chapter 2: Mentor Interview"
                 >
-                  <span>Next Chapter: Business & AI</span>
+                  <span>Next Chapter: Mentor Interview</span>
                   <ChevronRight size={16} />
                 </button>
               )}
