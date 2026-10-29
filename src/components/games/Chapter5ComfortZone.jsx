@@ -1,11 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Compass,
   Users,
   MapPin,
-  Heart,
   Sparkles,
-  Zap,
   ArrowRight,
   RotateCcw,
   Coffee,
@@ -40,21 +38,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '18%', y: '18%' },
       image: assetUrl('/topics/strangers/stranger-colten.jpg'),
-      hesitation: {
-        thought:
-          '“Approaching another student in the corridor to ask an unexpected personal question felt nerve-wracking. What if he thought it was strange or didn’t want to be bothered?”',
-        fearRating: 65,
-        heartRate: 110
-      },
-      approachPrompt: 'Step up, smile, and ask about what he has on him',
-      question:
-        '“What is your favorite item you have on you right now?”',
-      response:
-        '“‘My water bottle, I use it all the time.’ He grinned, held up his BlenderBottle, and we shared an instant laugh—such an honest, grounded answer that immediately broke the ice.”',
-      takeaway:
-        'Simple, lighthearted questions about everyday items break through social walls faster than rehearsed speeches.',
-      expansionBoost: 9,
-      xp: 150
+      question: '“What is your favorite item you have on you right now?”',
+      response: '“My water bottle, I use it all the time.”'
     },
     {
       id: 'alex',
@@ -64,21 +49,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '50%', y: '16%' },
       image: assetUrl('/topics/strangers/stranger-alex.jpg'),
-      hesitation: {
-        thought:
-          '“Asking someone what they are privately proud of is vulnerable. What if he feels put on the spot or brushes it off?”',
-        fearRating: 74,
-        heartRate: 118
-      },
-      approachPrompt: 'Take a seat nearby, smile, and ask with genuine curiosity',
-      question:
-        '“What is something you are proud of that you never get to talk about?”',
-      response:
-        '“‘I’m proud of having good social skills.’ He smiled with pure warmth—such a genuine and ironically fitting answer while having a spontaneous conversation with someone who had just stepped out of their comfort zone to talk to him!”',
-      takeaway:
-        'When you invite people to share what they are quietly proud of, they reveal strengths that standard small talk completely misses.',
-      expansionBoost: 9,
-      xp: 175
+      question: '“What is something you are proud of that you never get to talk about?”',
+      response: '“I’m proud of having good social skills.”'
     },
     {
       id: 'vinney',
@@ -88,21 +60,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '82%', y: '18%' },
       image: assetUrl('/topics/strangers/stranger-vinney.jpg'),
-      hesitation: {
-        thought:
-          '“Walking up to someone in the busy foyer felt intimidating. What if he was in a rush between classes or thought the question was random?”',
-        fearRating: 60,
-        heartRate: 106
-      },
-      approachPrompt: 'Step forward in the foyer, offer a friendly smile, and break the ice',
-      question:
-        '“What is your favorite item you have on you right now?”',
-      response:
-        '“‘My Apple Watch.’ He smiled warmly and tapped his wrist—a relatable, modern answer that immediately opened the door to a relaxed and friendly conversation!”',
-      takeaway:
-        'Everyday tech is intimately personal; asking people about what they carry or wear creates an effortless, natural bridge between strangers.',
-      expansionBoost: 9,
-      xp: 150
+      question: '“What is your favorite item you have on you right now?”',
+      response: '“My Apple Watch.”'
     },
     {
       id: 'evy',
@@ -112,21 +71,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '22%', y: '40%' },
       image: assetUrl('/topics/strangers/stranger-evy.jpg'),
-      hesitation: {
-        thought:
-          '“She was sitting in the Career Commons lounge. Walking up to ask a deep question about life advice felt vulnerable—what if the timing felt awkward?”',
-        fearRating: 58,
-        heartRate: 104
-      },
-      approachPrompt: 'Step forward into the lounge, smile warmly, and ask with open curiosity',
-      question:
-        '“What is a piece of advice you learned that turned out to be very valuable?”',
-      response:
-        '“‘I learned how to be curious and talk to people!’ Her face beamed with energy—such an incredible, full-circle answer that completely captures the spirit of this entire creative challenge!”',
-      takeaway:
-        'Learning to be curious and talk to people isn’t just a social skill—it is a superpower that opens every door.',
-      expansionBoost: 9,
-      xp: 175
+      question: '“What is a piece of advice you learned that turned out to be very valuable?”',
+      response: '“I learned how to be curious and talk to people!”'
     },
     {
       id: 'jackson',
@@ -136,21 +82,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '50%', y: '38%' },
       image: assetUrl('/topics/strangers/stranger-jackson.jpg'),
-      hesitation: {
-        thought:
-          '“Asking someone to imagine an impromptu TED Talk on the spot is a bold prompt. What if he felt put on the spot or self-conscious?”',
-        fearRating: 63,
-        heartRate: 109
-      },
-      approachPrompt: 'Step up near the staircase, smile, and pitch the impromptu challenge',
-      question:
-        '“If you had to give a 10-minute TED Talk right now with zero preparation, what topic would it be on?”',
-      response:
-        '“‘Cologne.’ He flashed a peace sign with a huge, radiant grin—such an unexpected, hilarious, and genuinely passionate answer that made the entire interaction pure gold!”',
-      takeaway:
-        'When you invite people to speak on an unexpected personal niche with zero judgment, you unlock pure spontaneous charisma.',
-      expansionBoost: 9,
-      xp: 160
+      question: '“If you had to give a 10-minute TED Talk right now with zero preparation, what topic would it be on?”',
+      response: '“Cologne.”'
     },
     {
       id: 'conner',
@@ -160,21 +93,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '78%', y: '40%' },
       image: assetUrl('/topics/strangers/stranger-conner.jpg'),
-      hesitation: {
-        thought:
-          '“He was focused with his laptop open in the lounge. Approaching someone working on their computer felt risky—what if I broke his deep work flow?”',
-        fearRating: 64,
-        heartRate: 108
-      },
-      approachPrompt: 'Step up to the table, smile, and ask with genuine friendliness',
-      question:
-        '“What is your favorite item you have on you right now?”',
-      response:
-        '“‘My laptop.’ He smiled brightly, angled the screen up toward me, and laughed—an honest, indispensable student tool that powers everything from classwork to creative exploration!”',
-      takeaway:
-        'Acknowledging the tools people rely on every single day turns an everyday object into an instant point of connection.',
-      expansionBoost: 9,
-      xp: 160
+      question: '“What is your favorite item you have on you right now?”',
+      response: '“My laptop.”'
     },
     {
       id: 'hugo',
@@ -184,21 +104,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '34%', y: '62%' },
       image: assetUrl('/topics/strangers/stranger-hugo.jpg'),
-      hesitation: {
-        thought:
-          '“He was hanging out in the student lounge by the monitors. Asking someone about their favorite item felt like an unexpected question—what if he thought it was unusual?”',
-        fearRating: 59,
-        heartRate: 104
-      },
-      approachPrompt: 'Step over, smile, and ask with lighthearted curiosity',
-      question:
-        '“What is your favorite item you have on you right now?”',
-      response:
-        '“‘My book.’ In an era dominated by glowing screens, having a physical book as your go-to item was such a refreshing, thoughtful, and grounded answer!”',
-      takeaway:
-        'Physical books represent quiet reflection in a noisy digital world; asking about carried items reveals people’s personal sanctuaries.',
-      expansionBoost: 9,
-      xp: 160
+      question: '“What is your favorite item you have on you right now?”',
+      response: '“My book.”'
     },
     {
       id: 'josh',
@@ -208,21 +115,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '66%', y: '62%' },
       image: assetUrl('/topics/strangers/stranger-josh.jpg'),
-      hesitation: {
-        thought:
-          '“Interrupting someone relaxing by the window felt daunting. What if he feels like I’m putting him on the spot with a deep life question?”',
-        fearRating: 68,
-        heartRate: 112
-      },
-      approachPrompt: 'Approach the window bay, offer a warm smile, and ask for his perspective',
-      question:
-        '“What is a piece of advice you learned that turned out to be very valuable?”',
-      response:
-        '“‘Your habits really make you who you are.’ He shared it with genuine conviction—such a profound and grounding insight that speaks directly to building a daily creative practice.”',
-      takeaway:
-        'Wisdom isn’t reserved for lectures or distant mentors; your peers are carrying transformative life lessons learned through their own daily habits.',
-      expansionBoost: 9,
-      xp: 175
+      question: '“What is a piece of advice you learned that turned out to be very valuable?”',
+      response: '“Your habits really make you who you are.”'
     },
     {
       id: 'alex-fitness',
@@ -232,21 +126,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '18%', y: '84%' },
       image: assetUrl('/topics/strangers/stranger-alex2.jpg'),
-      hesitation: {
-        thought:
-          '“Approaching someone by the doorway to ask for an impromptu talk felt bold. What if he was on his way somewhere or felt put on the spot?”',
-        fearRating: 61,
-        heartRate: 107
-      },
-      approachPrompt: 'Step forward near the gateway, offer a warm smile, and ask for his go-to topic',
-      question:
-        '“If you had to give a 10-minute TED Talk right now with zero preparation, what topic would it be on?”',
-      response:
-        '“‘Health and fitness.’ He flashed a peace sign with an effortless, confident grin—speaking immediately to a topic he lives, breathes, and practices every single day!”',
-      takeaway:
-        'When you ask people what they could talk about without prep, you instantly uncover the daily discipline and passions that drive them.',
-      expansionBoost: 9,
-      xp: 160
+      question: '“If you had to give a 10-minute TED Talk right now with zero preparation, what topic would it be on?”',
+      response: '“Health and fitness.”'
     },
     {
       id: 'anna-k',
@@ -256,21 +137,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '50%', y: '84%' },
       image: assetUrl('/topics/strangers/stranger-anna.jpg'),
-      hesitation: {
-        thought:
-          '“She was relaxing in the armchair in the atrium. Approaching someone in a quiet study space felt intrusive—what if she didn’t want to be interrupted?”',
-        fearRating: 62,
-        heartRate: 105
-      },
-      approachPrompt: 'Step into the lounge area, smile warmly, and ask with genuine interest',
-      question:
-        '“What is something you bought that has significantly improved your life?”',
-      response:
-        '“‘My car.’ She immediately smiled, pulled out her phone, and held up a photo of her car to show me—such an honest, relatable answer about daily freedom that made the conversation feel completely effortless!”',
-      takeaway:
-        'Asking about practical life upgrades brings out stories of personal independence and pride that people are eager to share.',
-      expansionBoost: 9,
-      xp: 175
+      question: '“What is something you bought that has significantly improved your life?”',
+      response: '“My car.”'
     },
     {
       id: 'anna-s',
@@ -280,21 +148,8 @@ export default function Chapter5ComfortZone({
       icon: 'smile',
       coords: { x: '82%', y: '84%' },
       image: assetUrl('/topics/strangers/stranger-anna-s.jpg'),
-      hesitation: {
-        thought:
-          '“She was sitting quietly in the study parlor. Asking someone to share a personal achievement they rarely talk about felt vulnerable—what if she felt put on the spot?”',
-        fearRating: 64,
-        heartRate: 108
-      },
-      approachPrompt: 'Step into the study parlor, offer a warm smile, and ask with open curiosity',
-      question:
-        '“What is something you’re proud of you never get to talk about?”',
-      response:
-        '“‘I graduated with an associates degree.’ Her face lit up with genuine pride and a radiant smile—such an incredible milestone and testament to hard work that deserved every bit of celebration!”',
-      takeaway:
-        'People carry remarkable personal triumphs they rarely mention in day-to-day conversation; creating a safe space lets their genuine pride shine.',
-      expansionBoost: 9,
-      xp: 175
+      question: '“What is something you’re proud of you never get to talk about?”',
+      response: '“I graduated with an associates degree.”'
     }
   ];
 
@@ -304,9 +159,8 @@ export default function Chapter5ComfortZone({
   const [activeStrangerId, setActiveStrangerId] = useState(null);
   // Unlocked strangers array
   const [unlockedIds, setUnlockedIds] = useState([]);
-  // Interaction phase: 'map' | 'hesitation' | 'approaching' | 'unlocked'
+  // Interaction phase: 'map' | 'unlocked'
   const [phase, setPhase] = useState('map');
-  const [approachProgress, setApproachProgress] = useState(0);
 
   const activeStranger = strangers.find((s) => s.id === activeStrangerId) || null;
 
@@ -328,59 +182,24 @@ export default function Chapter5ComfortZone({
     Math.round(45 + (unlockedIds.length / (strangers.length || 1)) * 54)
   );
 
-  // Select a stranger from the map
+  // Select a stranger from the map: immediately view question & answer
   const handleSelectStranger = (id) => {
     soundManager.playClick();
     setActiveStrangerId(id);
+    setPhase('unlocked');
 
-    if (unlockedIds.includes(id)) {
-      setPhase('unlocked');
-    } else {
-      setPhase('hesitation');
-      soundManager.playHeartbeat();
-    }
-  };
-
-  // Trigger the approach action
-  const handleStartApproach = () => {
-    if (phase !== 'hesitation') return;
-    setPhase('approaching');
-    soundManager.playApproach();
-
-    let prog = 0;
-    const interval = setInterval(() => {
-      prog += 15;
-      if (prog >= 100) {
-        clearInterval(interval);
-        setApproachProgress(100);
-        setTimeout(() => {
-          setUnlockedIds((prev) =>
-            prev.includes(activeStrangerId) ? prev : [...prev, activeStrangerId]
-          );
-          setPhase('unlocked');
-          soundManager.playComfortExpansion();
-          soundManager.playLevelUp();
-          if (onCompleteSection) {
-            onCompleteSection(topic.id);
-          }
-        }, 300);
-      } else {
-        setApproachProgress(prog);
+    setUnlockedIds((prev) => {
+      if (prev.includes(id)) return prev;
+      const next = [...prev, id];
+      if (next.length >= strangers.length) {
+        soundManager.playLevelUp();
+        if (onCompleteSection) {
+          onCompleteSection(topic.id);
+        }
       }
-    }, 60);
+      return next;
+    });
   };
-
-  // Keyboard shortcut: Spacebar to approach
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.code === 'Space' && phase === 'hesitation') {
-        e.preventDefault();
-        handleStartApproach();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [phase, activeStrangerId]);
 
   // Reset progress
   const handleReset = () => {
@@ -388,7 +207,6 @@ export default function Chapter5ComfortZone({
     setUnlockedIds([]);
     setPhase('map');
     setActiveStrangerId(null);
-    setApproachProgress(0);
   };
 
   const getIcon = (type) => {
@@ -472,11 +290,11 @@ export default function Chapter5ComfortZone({
         <div className="comfort-title-col">
           <div className="comfort-badge">
             <Compass size={14} />
-            <span>Social Curiosity Simulator · Field Experiment</span>
+            <span>Social Curiosity · Field Experiment</span>
           </div>
-          <h2 className="comfort-main-title">The Rejection & Curiosity Gauge</h2>
+          <h2 className="comfort-main-title">Social Curiosity: Talking to Strangers</h2>
           <p className="comfort-subtitle">
-            Conquering the 5-Second Hesitation Wall by asking deep, genuine questions to random people.
+            Click on people across campus to see the questions I asked and their answers.
           </p>
         </div>
 
@@ -624,7 +442,7 @@ export default function Chapter5ComfortZone({
 
           <div className="map-footer-guide">
             <span className="map-instruction">
-              💡 <strong>Action:</strong> Click on any classmate marker across Forsythe Commons to face the 5-Second Hesitation Wall and initiate conversation.
+              💡 <strong>Action:</strong> Click on any person across campus to view the conversation.
             </span>
           </div>
         </div>
@@ -637,107 +455,24 @@ export default function Chapter5ComfortZone({
               <div className="idle-compass-ring">
                 <Users size={42} className="text-cyan pulse-slow" />
               </div>
-              <h3>Choose a Stranger to Approach</h3>
+              <h3>Choose a Person to View</h3>
               <p>
-                Every stranger is a library of unread stories. Click any marker on the urban grid to confront the fear of rejection and ask an unexpected question.
+                Click any person on the campus map to see the question I asked and their answer.
               </p>
               <div className="idle-quick-stats">
                 <div className="stat-pill">
-                  <strong>4</strong> Field Encounters
+                  <strong>{strangers.length}</strong> People Met
                 </div>
                 <div className="stat-pill">
-                  <strong>{unlockedIds.length} / 4</strong> Completed
+                  <strong>{unlockedIds.length} / {strangers.length}</strong> Viewed
                 </div>
               </div>
             </div>
           )}
 
-          {/* State 2: Hesitation Phase (The 5-Second Wall) */}
-          {phase === 'hesitation' && activeStranger && (
-            <div className="panel-hesitation-state">
-              <div className="hesitation-alert-banner">
-                <AlertTriangle size={18} className="text-rose" />
-                <span>The 5-Second Hesitation Wall</span>
-              </div>
-
-              <div className="hesitation-stranger-preview">
-                <div className="preview-avatar-silhouette">
-                  {getIcon(activeStranger.icon)}
-                </div>
-                <div>
-                  <h4 className="preview-name">{activeStranger.name}</h4>
-                  <span className="preview-role">{activeStranger.role}</span>
-                </div>
-              </div>
-
-              {/* Heartbeat & Anxiety Meter */}
-              <div className="anxiety-monitor-box">
-                <div className="anxiety-header">
-                  <span className="heart-bpm">
-                    <Heart size={16} className="text-rose heart-throb" />{' '}
-                    {activeStranger.hesitation.heartRate} BPM
-                  </span>
-                  <span className="fear-level-tag">
-                    Hesitation Intensity: {activeStranger.hesitation.fearRating}%
-                  </span>
-                </div>
-                <div className="hesitation-thought-bubble">
-                  <div className="thought-quote-label">Internal Self-Doubt:</div>
-                  <p className="thought-quote-text">
-                    {activeStranger.hesitation.thought}
-                  </p>
-                </div>
-              </div>
-
-              {/* Approach Action Call */}
-              <div className="approach-action-area">
-                <p className="action-hint">
-                  The cure for social fear is immediate curiosity. Don’t wait for your brain to invent excuses.
-                </p>
-                <button
-                  className="btn-approach-action"
-                  onClick={handleStartApproach}
-                >
-                  <Zap size={18} />
-                  <span>Press [ SPACEBAR ] or Click to Step Forward</span>
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* State 3: Approaching Animation */}
-          {phase === 'approaching' && activeStranger && (
-            <div className="panel-approaching-state">
-              <div className="approaching-spinner">
-                <div className="pulse-ripple" />
-                <Users size={36} className="text-cyan" />
-              </div>
-              <h3 className="approaching-title">Stepping Forward...</h3>
-              <p className="approaching-subtitle">
-                {activeStranger.approachPrompt}
-              </p>
-              <div className="approach-progress-bar">
-                <div
-                  className="approach-progress-fill"
-                  style={{ width: `${approachProgress}%` }}
-                />
-              </div>
-              <span className="approach-metric">Breaking the Silence...</span>
-            </div>
-          )}
-
-          {/* State 4: Unlocked Story & Conversation Card */}
+          {/* State 2: Unlocked Story & Conversation Card */}
           {phase === 'unlocked' && activeStranger && (
             <div className="panel-unlocked-card">
-              <div className="unlocked-header">
-                <span className="unlocked-tag">
-                  <CheckCircle2 size={14} /> Connection Made
-                </span>
-                <span className="unlocked-reward">
-                  +{activeStranger.expansionBoost}% Comfort · +{activeStranger.xp} XP
-                </span>
-              </div>
-
               {/* Photo & Identity */}
               <div className="unlocked-identity-strip">
                 <div className="stranger-photo-wrap">
@@ -764,22 +499,14 @@ export default function Chapter5ComfortZone({
                 <p className="dialogue-text-body">{activeStranger.question}</p>
               </div>
 
-              {/* Their Unexpected Response */}
+              {/* Their Exact Answer */}
               <div className="conversation-section response-bubble">
                 <div className="dialogue-speaker-tag response-tag">
-                  <Sparkles size={13} /> {activeStranger.name}’s Response:
+                  <Sparkles size={13} /> {activeStranger.name}’s Answer:
                 </div>
                 <p className="dialogue-text-body response-quote">
                   {activeStranger.response}
                 </p>
-              </div>
-
-              {/* Comfort Zone Epiphany */}
-              <div className="creative-takeaway-box">
-                <span className="takeaway-badge">
-                  <Smile size={14} /> The Creative Takeaway:
-                </span>
-                <p className="takeaway-text">{activeStranger.takeaway}</p>
               </div>
 
               {/* Return or Next Stranger Button */}
@@ -791,7 +518,7 @@ export default function Chapter5ComfortZone({
                     setPhase('map');
                   }}
                 >
-                  <ArrowRight size={16} /> Return to Map / Next Stranger
+                  <ArrowRight size={16} /> Choose Another Person
                 </button>
               </div>
             </div>
@@ -808,10 +535,10 @@ export default function Chapter5ComfortZone({
             </div>
             <div>
               <h4 className="mastery-title">
-                Comfort Zone Perimeter: 100% Expanded
+                All Campus Conversations Viewed!
               </h4>
               <p className="mastery-desc">
-                By asking questions driven by sincere wonder rather than transactional small talk, fear of rejection collapsed. Every human is walking around waiting to be seen.
+                Every person has been spoken with. Click below to continue to the reflection.
               </p>
             </div>
           </div>
@@ -828,7 +555,7 @@ export default function Chapter5ComfortZone({
               </button>
             )}
             <button className="btn-reset-simulator" onClick={handleReset}>
-              <RotateCcw size={15} /> Replay Simulator
+              <RotateCcw size={15} /> Reset
             </button>
           </div>
         </div>
