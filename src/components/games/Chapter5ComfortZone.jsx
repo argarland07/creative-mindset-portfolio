@@ -15,14 +15,21 @@ import {
   CheckCircle2,
   AlertTriangle,
   MessageSquare,
-  Shield
+  Shield,
+  Quote,
+  ChevronRight
 } from 'lucide-react';
 import { soundManager } from '../../utils/audio';
 import { assetUrl } from '../../utils/assetUrl';
 
 export default function Chapter5ComfortZone({
   topic,
-  onCompleteSection
+  onCompleteSection,
+  chapterPhase = 'simulator', // 'simulator' | 'reflection'
+  isTransitioning = false,
+  onGoToReflection,
+  onGoToSimulator,
+  onProceedToNextChapter
 }) {
   const defaultStrangers = [
     {
@@ -397,6 +404,67 @@ export default function Chapter5ComfortZone({
     }
   };
 
+  // Phase: Reflection View
+  if (chapterPhase === 'reflection') {
+    return (
+      <div
+        className={`strangers-reflection-container ${
+          isTransitioning ? 'anim-reflection-exit' : 'anim-reflection-enter'
+        }`}
+      >
+        <div className="reflection-header">
+          <div className="reflection-badge">
+            <Sparkles size={16} />
+            <span>SOCIAL CURIOSITY • REFLECTION</span>
+          </div>
+          <h2 className="reflection-title">Talking to Strangers & The Courage of Social Curiosity</h2>
+          <p className="reflection-subtitle">
+            Personal reflection by Andrew Garland on the 5 Dimensions of Curiosity test and stepping outside my comfort zone
+          </p>
+        </div>
+
+        <div className="reflection-narrative-card">
+          <div className="reflection-quote-icon-wrap">
+            <Quote size={24} className="reflection-quote-svg" />
+          </div>
+          <div className="reflection-text-paragraphs">
+            <p>
+              On our 5 Dimensions of Curiosity test, I got Social Curiosity as my most natural dimension. I spent time thinking about what action I could take for this activity, and decided to do something that I&apos;ve always wanted to do: talk to random people about something.
+            </p>
+            <p>
+              I care a lot about interests, stories, and advice from other people. However, I am pretty introverted, so this activity required some confidence and leaving my comfort zone to complete. But I am glad I did, and although I might not be able to remember what everyone said, I do have photos that show all the people I met.
+            </p>
+          </div>
+        </div>
+
+        {/* In-Card Navigation Controls */}
+        <div className="reflection-actions-footer">
+          <button
+            type="button"
+            className="btn-back-to-attributes"
+            onClick={onGoToSimulator}
+            title="Return to Social Curiosity Simulator"
+          >
+            <RotateCcw size={15} />
+            <span>Review Encounters</span>
+          </button>
+
+          {onProceedToNextChapter && (
+            <button
+              type="button"
+              className="btn-proceed-next-chapter"
+              onClick={onProceedToNextChapter}
+              title="Finish or Restart Journey"
+            >
+              <span>Restart Journey</span>
+              <ChevronRight size={16} />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="comfort-zone-game-root">
       {/* Top Experience Banner & Stats */}
@@ -732,7 +800,7 @@ export default function Chapter5ComfortZone({
       </div>
 
       {/* Bottom Summary & Celebration Banner */}
-      {unlockedIds.length === 4 && (
+      {unlockedIds.length === strangers.length && (
         <div className="comfort-mastery-banner">
           <div className="mastery-content">
             <div className="mastery-icon-badge">
@@ -747,9 +815,22 @@ export default function Chapter5ComfortZone({
               </p>
             </div>
           </div>
-          <button className="btn-reset-simulator" onClick={handleReset}>
-            <RotateCcw size={15} /> Replay Simulator
-          </button>
+          <div className="mastery-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            {onGoToReflection && (
+              <button
+                type="button"
+                className="btn-continue-reflection-pill"
+                onClick={onGoToReflection}
+                title="Proceed to Reflection"
+              >
+                <span>Continue to Reflection</span>
+                <ChevronRight size={15} />
+              </button>
+            )}
+            <button className="btn-reset-simulator" onClick={handleReset}>
+              <RotateCcw size={15} /> Replay Simulator
+            </button>
+          </div>
         </div>
       )}
     </div>

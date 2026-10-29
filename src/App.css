@@ -4142,6 +4142,62 @@
   color: #f43f5e;
 }
 
+/* =========================================================
+   CHAPTER 4 REFLECTION VIEW
+   ========================================================= */
+.night-reflection-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 32px 24px;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.night-reflection-container .reflection-badge {
+  color: #14b8a6;
+}
+
+.night-reflection-container .reflection-narrative-card {
+  border-color: rgba(20, 184, 166, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(20, 184, 166, 0.08);
+}
+
+.night-reflection-container .reflection-quote-icon-wrap {
+  color: #14b8a6;
+}
+
+/* =========================================================
+   CHAPTER 5 REFLECTION VIEW
+   ========================================================= */
+.strangers-reflection-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 32px 24px;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.strangers-reflection-container .reflection-badge {
+  color: #22c55e;
+}
+
+.strangers-reflection-container .reflection-narrative-card {
+  border-color: rgba(34, 197, 94, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(34, 197, 94, 0.08);
+}
+
+.strangers-reflection-container .reflection-quote-icon-wrap {
+  color: #22c55e;
+}
+
 .rube-videos-experience {
   display: flex;
   flex-direction: column;

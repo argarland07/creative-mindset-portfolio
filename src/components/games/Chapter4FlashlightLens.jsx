@@ -11,7 +11,8 @@ import {
   ZoomOut,
   ChevronRight,
   X,
-  CheckCircle2
+  CheckCircle2,
+  Quote
 } from 'lucide-react';
 import { soundManager } from '../../utils/audio';
 import { assetUrl } from '../../utils/assetUrl';
@@ -51,7 +52,12 @@ const DEFAULT_SHOTS = [
 
 export default function Chapter4FlashlightLens({
   topic,
-  onCompleteSection
+  onCompleteSection,
+  phase = 'flashlight', // 'flashlight' | 'reflection'
+  isTransitioning = false,
+  onGoToReflection,
+  onGoToFlashlight,
+  onProceedToNextChapter
 }) {
   const shots = topic.nightShots || DEFAULT_SHOTS;
 
@@ -114,6 +120,67 @@ export default function Chapter4FlashlightLens({
 
   const uncapturedShots = shots.filter((s) => !capturedIds.includes(s.id));
   const capturedShots = shots.filter((s) => capturedIds.includes(s.id));
+
+  // Phase: Reflection View
+  if (phase === 'reflection') {
+    return (
+      <div
+        className={`night-reflection-container ${
+          isTransitioning ? 'anim-reflection-exit' : 'anim-reflection-enter'
+        }`}
+      >
+        <div className="reflection-header">
+          <div className="reflection-badge">
+            <Sparkles size={16} />
+            <span>JOYOUS EXPLORATION • REFLECTION</span>
+          </div>
+          <h2 className="reflection-title">Night Photography & Stepping Outside My Natural Dimensions</h2>
+          <p className="reflection-subtitle">
+            Personal reflection by Andrew Garland on the 5 Dimensions of Curiosity test and nocturnal exploration
+          </p>
+        </div>
+
+        <div className="reflection-narrative-card">
+          <div className="reflection-quote-icon-wrap">
+            <Quote size={24} className="reflection-quote-svg" />
+          </div>
+          <div className="reflection-text-paragraphs">
+            <p>
+              On our 5 Dimensions of Curiosity test, I got Joyous Exploration as my least natural dimension. I worked with Gemini to find an activity that would push me out of my comfort zone, and walking around at night with no specific end or goal was definitely a new activity for me.
+            </p>
+            <p>
+              I also added in a photography piece because I like to take photos, and I thought it would make the walk around campus more interesting. It also gave me some examples to show where I went, and what I found interesting. While it was uncomfortable, it was fun, and I would do it again.
+            </p>
+          </div>
+        </div>
+
+        {/* In-Card Navigation Controls */}
+        <div className="reflection-actions-footer">
+          <button
+            type="button"
+            className="btn-back-to-attributes"
+            onClick={onGoToFlashlight}
+            title="Return to the Night Viewfinder"
+          >
+            <RotateCcw size={15} />
+            <span>Review Night Photos</span>
+          </button>
+
+          {onProceedToNextChapter && (
+            <button
+              type="button"
+              className="btn-proceed-next-chapter"
+              onClick={onProceedToNextChapter}
+              title="Advance to Social Curiosity"
+            >
+              <span>Next: Social Curiosity</span>
+              <ChevronRight size={16} />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flashlight-darkroom-screen">
@@ -255,6 +322,17 @@ export default function Chapter4FlashlightLens({
               <h4>All Night Photographs Captured!</h4>
               <p>Every photo has been moved to your gallery below.</p>
             </div>
+            {onGoToReflection && (
+              <button
+                type="button"
+                className="btn-continue-reflection-pill"
+                onClick={onGoToReflection}
+                title="Proceed to Reflection"
+              >
+                <span>Continue to Reflection</span>
+                <ChevronRight size={15} />
+              </button>
+            )}
           </div>
         )}
 

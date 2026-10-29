@@ -15,7 +15,15 @@ function App() {
         return initialTopics.map((init) => {
           const match = parsed.find((p) => p.id === init.id);
           return match
-            ? { ...init, ...match, number: init.number, phase: undefined, accentColor: init.accentColor, image: init.image }
+            ? {
+                ...init,
+                ...match,
+                number: init.number,
+                phase: undefined,
+                accentColor: init.accentColor,
+                image: init.image,
+                reflection: init.reflection
+              }
             : init;
         });
       }
@@ -34,48 +42,28 @@ function App() {
     direction: 'forward' // 'forward' | 'backward'
   });
 
-  // Automatic Light / Dark Mode System
+  // Light / Dark Mode System (Defaults to Dark, No Auto)
   const [themeMode, setThemeMode] = useState(() => {
     try {
-      return localStorage.getItem('creativity_theme_mode') || 'auto';
+      const saved = localStorage.getItem('creativity_theme_mode');
+      return saved === 'light' ? 'light' : 'dark';
     } catch {
-      return 'auto';
+      return 'dark';
     }
   });
 
-  const [systemIsDark, setSystemIsDark] = useState(() => {
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    return true;
-  });
-
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return;
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e) => setSystemIsDark(e.matches);
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  const effectiveTheme = themeMode === 'auto' ? (systemIsDark ? 'dark' : 'light') : themeMode;
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', effectiveTheme);
+    document.documentElement.setAttribute('data-theme', themeMode);
     try {
       localStorage.setItem('creativity_theme_mode', themeMode);
     } catch {
       // Ignore
     }
-  }, [effectiveTheme, themeMode]);
+  }, [themeMode]);
 
   const handleToggleTheme = () => {
     soundManager.playClick();
-    setThemeMode((prev) => {
-      if (prev === 'auto') return 'light';
-      if (prev === 'light') return 'dark';
-      return 'auto';
-    });
+    setThemeMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   // Save to local storage on edits

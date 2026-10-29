@@ -6,8 +6,6 @@ import {
   Pause,
   Volume2,
   VolumeX,
-  Compass,
-  Monitor,
   Sun,
   Moon,
   Sparkles
@@ -19,10 +17,7 @@ export default function StoryNavbar({
   setViewMode,
   isAutoPlaying,
   setIsAutoPlaying,
-  currentChapter,
-  totalChapters,
-  themeMode = 'auto',
-  effectiveTheme = 'dark',
+  themeMode = 'dark',
   onToggleTheme
 }) {
   const [isMuted, setIsMuted] = useState(soundManager.isMuted);
@@ -124,22 +119,13 @@ export default function StoryNavbar({
             {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
           </button>
 
-          {/* Windows 10 Theme Switcher: Auto / Light / Dark */}
+          {/* Theme Switcher: Dark / Light */}
           <button
             className="metro-icon-btn metro-theme-btn"
             onClick={onToggleTheme}
-            title={
-              themeMode === 'auto'
-                ? `Theme: Automatic System Sync (${effectiveTheme.toUpperCase()}) • Click to change`
-                : `Theme: ${themeMode.toUpperCase()} Mode • Click to change`
-            }
+            title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
-            {themeMode === 'auto' ? (
-              <span className="theme-auto-wrap">
-                <Monitor size={15} />
-                <span className="theme-badge-dot" />
-              </span>
-            ) : themeMode === 'light' ? (
+            {themeMode === 'light' ? (
               <Sun size={15} className="text-amber" />
             ) : (
               <Moon size={15} className="text-cyan" />
@@ -150,7 +136,7 @@ export default function StoryNavbar({
           <div className="metro-system-clock" title="System Time">
             <span className="clock-time">{currentTime || '10:52 PM'}</span>
             <span className="clock-status">
-              {themeMode === 'auto' ? `AUTO • ${effectiveTheme.toUpperCase()}` : themeMode.toUpperCase()}
+              {themeMode.toUpperCase()}
             </span>
           </div>
         </div>

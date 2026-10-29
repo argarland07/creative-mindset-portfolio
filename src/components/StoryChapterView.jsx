@@ -10,7 +10,8 @@ import {
   Maximize2,
   Volume2,
   VolumeX,
-  Monitor,
+  Sun,
+  Moon,
   Settings,
   Lock,
   Check,
@@ -106,7 +107,7 @@ export default function StoryChapterView({
   const isChapter4 = current.id === 'night-photos';
   const isChapter5 = current.id === 'social-curiosity';
 
-  // Chapter 1, 2, & 3 multi-step phases ('attributes'/'interview'/'videos' | 'reflection')
+  // Chapter 1, 2, 3, 4, & 5 multi-step phases ('attributes'/'interview'/'videos'/'flashlight'/'simulator' | 'reflection')
   const [prevCurrentId, setPrevCurrentId] = useState(current.id);
   const [chapter1Phase, setChapter1Phase] = useState('attributes');
   const [isChapter1Transitioning, setIsChapter1Transitioning] = useState(false);
@@ -114,6 +115,10 @@ export default function StoryChapterView({
   const [isChapter2Transitioning, setIsChapter2Transitioning] = useState(false);
   const [chapter3Phase, setChapter3Phase] = useState('videos');
   const [isChapter3Transitioning, setIsChapter3Transitioning] = useState(false);
+  const [chapter4Phase, setChapter4Phase] = useState('flashlight');
+  const [isChapter4Transitioning, setIsChapter4Transitioning] = useState(false);
+  const [chapter5Phase, setChapter5Phase] = useState('simulator');
+  const [isChapter5Transitioning, setIsChapter5Transitioning] = useState(false);
 
   // Reset chapter phases during render when switching chapters
   if (prevCurrentId !== current.id) {
@@ -129,6 +134,14 @@ export default function StoryChapterView({
     if (!isChapter3) {
       setChapter3Phase('videos');
       setIsChapter3Transitioning(false);
+    }
+    if (!isChapter4) {
+      setChapter4Phase('flashlight');
+      setIsChapter4Transitioning(false);
+    }
+    if (!isChapter5) {
+      setChapter5Phase('simulator');
+      setIsChapter5Transitioning(false);
     }
   }
 
@@ -195,6 +208,48 @@ export default function StoryChapterView({
     }, 300);
   };
 
+  const handleChapter4Next = () => {
+    if (isChapter4Transitioning) return;
+    setIsChapter4Transitioning(true);
+    soundManager.playLevelUp();
+    setTimeout(() => {
+      setChapter4Phase('reflection');
+      setIsChapter4Transitioning(false);
+      handleCompleteSection(current.id);
+    }, 380);
+  };
+
+  const handleChapter4Prev = () => {
+    if (isChapter4Transitioning) return;
+    setIsChapter4Transitioning(true);
+    soundManager.playSlideTransition();
+    setTimeout(() => {
+      setChapter4Phase('flashlight');
+      setIsChapter4Transitioning(false);
+    }, 300);
+  };
+
+  const handleChapter5Next = () => {
+    if (isChapter5Transitioning) return;
+    setIsChapter5Transitioning(true);
+    soundManager.playLevelUp();
+    setTimeout(() => {
+      setChapter5Phase('reflection');
+      setIsChapter5Transitioning(false);
+      handleCompleteSection(current.id);
+    }, 380);
+  };
+
+  const handleChapter5Prev = () => {
+    if (isChapter5Transitioning) return;
+    setIsChapter5Transitioning(true);
+    soundManager.playSlideTransition();
+    setTimeout(() => {
+      setChapter5Phase('simulator');
+      setIsChapter5Transitioning(false);
+    }, 300);
+  };
+
   // Intercept ArrowRight / ArrowLeft in Chapter 1 so right arrow triggers reflection first
   useEffect(() => {
     if (!isChapter1) return;
@@ -222,6 +277,10 @@ export default function StoryChapterView({
       ? isCurrentCompleted || chapter2Phase === 'reflection'
       : isChapter3
       ? isCurrentCompleted || chapter3Phase === 'reflection'
+      : isChapter4
+      ? isCurrentCompleted || chapter4Phase === 'reflection'
+      : isChapter5
+      ? isCurrentCompleted || chapter5Phase === 'reflection'
       : isCurrentCompleted);
 
   // Intercept ArrowRight / ArrowLeft in Chapter 2 (Mentor Interview)
@@ -260,6 +319,42 @@ export default function StoryChapterView({
     return () => window.removeEventListener('keydown', handleChapter3Key, true);
   }, [isChapter3, chapter3Phase, isChapter3Transitioning, canAdvance, chapterTransition?.status]);
 
+  // Intercept ArrowRight / ArrowLeft in Chapter 4 (Night Photos)
+  useEffect(() => {
+    if (!isChapter4) return;
+    const handleChapter4Key = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (chapterTransition?.status && chapterTransition.status !== 'idle') return;
+      if (e.key === 'ArrowRight' && chapter4Phase === 'flashlight' && canAdvance) {
+        e.stopPropagation();
+        handleChapter4Next();
+      } else if (e.key === 'ArrowLeft' && chapter4Phase === 'reflection') {
+        e.stopPropagation();
+        handleChapter4Prev();
+      }
+    };
+    window.addEventListener('keydown', handleChapter4Key, true);
+    return () => window.removeEventListener('keydown', handleChapter4Key, true);
+  }, [isChapter4, chapter4Phase, isChapter4Transitioning, canAdvance, chapterTransition?.status]);
+
+  // Intercept ArrowRight / ArrowLeft in Chapter 5 (Social Curiosity)
+  useEffect(() => {
+    if (!isChapter5) return;
+    const handleChapter5Key = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (chapterTransition?.status && chapterTransition.status !== 'idle') return;
+      if (e.key === 'ArrowRight' && chapter5Phase === 'simulator' && canAdvance) {
+        e.stopPropagation();
+        handleChapter5Next();
+      } else if (e.key === 'ArrowLeft' && chapter5Phase === 'reflection') {
+        e.stopPropagation();
+        handleChapter5Prev();
+      }
+    };
+    window.addEventListener('keydown', handleChapter5Key, true);
+    return () => window.removeEventListener('keydown', handleChapter5Key, true);
+  }, [isChapter5, chapter5Phase, isChapter5Transitioning, canAdvance, chapterTransition?.status]);
+
   return (
     <div className="story-container story-fullscreen-view">
       {/* Floating Minimal Top-Left Back / Exit Action */}
@@ -289,9 +384,9 @@ export default function StoryChapterView({
           <button
             className="hud-icon-btn"
             onClick={onToggleTheme}
-            title={`Toggle Theme Mode (Current: ${themeMode})`}
+            title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
-            <Monitor size={15} />
+            {themeMode === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
           </button>
         )}
 
@@ -377,11 +472,21 @@ export default function StoryChapterView({
             topic={current}
             onUpdateTopicData={onUpdateTopicData}
             onCompleteSection={handleCompleteSection}
+            phase={chapter4Phase}
+            isTransitioning={isChapter4Transitioning}
+            onGoToReflection={handleChapter4Next}
+            onGoToFlashlight={handleChapter4Prev}
+            onProceedToNextChapter={onNext}
           />
         ) : isChapter5 ? (
           <Chapter5ComfortZone
             topic={current}
             onCompleteSection={handleCompleteSection}
+            chapterPhase={chapter5Phase}
+            isTransitioning={isChapter5Transitioning}
+            onGoToReflection={handleChapter5Next}
+            onGoToSimulator={handleChapter5Prev}
+            onProceedToNextChapter={onNext}
           />
         ) : (
           /* Standard Fullscreen Story Layout Grid */
@@ -540,6 +645,10 @@ export default function StoryChapterView({
                 ? handleChapter2Prev
                 : isChapter3 && chapter3Phase === 'reflection'
                 ? handleChapter3Prev
+                : isChapter4 && chapter4Phase === 'reflection'
+                ? handleChapter4Prev
+                : isChapter5 && chapter5Phase === 'reflection'
+                ? handleChapter5Prev
                 : onPrev
             }
             disabled={
@@ -547,7 +656,9 @@ export default function StoryChapterView({
               (currentIndex === 0 &&
                 !(isChapter1 && chapter1Phase === 'reflection') &&
                 !(isChapter2 && chapter2Phase === 'reflection') &&
-                !(isChapter3 && chapter3Phase === 'reflection'))
+                !(isChapter3 && chapter3Phase === 'reflection') &&
+                !(isChapter4 && chapter4Phase === 'reflection') &&
+                !(isChapter5 && chapter5Phase === 'reflection'))
             }
             title={
               isChapter1 && chapter1Phase === 'reflection'
@@ -556,6 +667,10 @@ export default function StoryChapterView({
                 ? 'Return to Video Interview (Left Arrow)'
                 : isChapter3 && chapter3Phase === 'reflection'
                 ? 'Return to Video Attempts (Left Arrow)'
+                : isChapter4 && chapter4Phase === 'reflection'
+                ? 'Return to Night Viewfinder (Left Arrow)'
+                : isChapter5 && chapter5Phase === 'reflection'
+                ? 'Return to Social Curiosity Simulator (Left Arrow)'
                 : 'Previous Section (Left Arrow)'
             }
           >
@@ -572,6 +687,10 @@ export default function StoryChapterView({
                   : isChapter2 && chapter2Phase === 'reflection'
                   ? `${current.title} • Reflection`
                   : isChapter3 && chapter3Phase === 'reflection'
+                  ? `${current.title} • Reflection`
+                  : isChapter4 && chapter4Phase === 'reflection'
+                  ? `${current.title} • Reflection`
+                  : isChapter5 && chapter5Phase === 'reflection'
                   ? `${current.title} • Reflection`
                   : current.title}
               </span>
@@ -601,6 +720,10 @@ export default function StoryChapterView({
                   ? handleChapter2Next
                   : isChapter3 && chapter3Phase === 'videos'
                   ? handleChapter3Next
+                  : isChapter4 && chapter4Phase === 'flashlight'
+                  ? handleChapter4Next
+                  : isChapter5 && chapter5Phase === 'simulator'
+                  ? handleChapter5Next
                   : onNext
               }
               style={{
@@ -614,6 +737,10 @@ export default function StoryChapterView({
                   ? 'Proceed to Mentor Reflection (Right Arrow)'
                   : isChapter3 && chapter3Phase === 'videos'
                   ? 'Proceed to Rube Goldberg Reflection (Right Arrow)'
+                  : isChapter4 && chapter4Phase === 'flashlight'
+                  ? 'Proceed to Night Photos Reflection (Right Arrow)'
+                  : isChapter5 && chapter5Phase === 'simulator'
+                  ? 'Proceed to Social Curiosity Reflection (Right Arrow)'
                   : currentIndex === topics.length - 1
                   ? 'Start Over'
                   : 'Next Section (Right Arrow)'
@@ -625,6 +752,10 @@ export default function StoryChapterView({
                   : isChapter2 && chapter2Phase === 'interview'
                   ? 'Next'
                   : isChapter3 && chapter3Phase === 'videos'
+                  ? 'Next'
+                  : isChapter4 && chapter4Phase === 'flashlight'
+                  ? 'Next'
+                  : isChapter5 && chapter5Phase === 'simulator'
                   ? 'Next'
                   : currentIndex === topics.length - 1
                   ? 'Restart Story'
@@ -643,6 +774,10 @@ export default function StoryChapterView({
                     ? 'Complete all 4 interview questions to unlock the Next button'
                     : isChapter3
                     ? 'Complete all video attempts to unlock the Next button'
+                    : isChapter4
+                    ? 'Discover and capture all night photos to unlock the Next button'
+                    : isChapter5
+                    ? 'Talk to all strangers to expand your comfort zone and unlock the Next button'
                     : "Complete this section's activity or reading checkpoint to unlock the Next button"
                 }
               >

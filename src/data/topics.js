@@ -60,7 +60,7 @@ export const initialTopics = [
     image: assetUrl('/topics/night-shots/pearson-hall-lanterns.jpg'),
     accentColor: '#008272',
     story: 'Heading out into the city after hours with a camera completely inverted my perception of time and space. Places that feel mundane or rushed during daylight became cinematic canvases bathed in amber streetlamps, neon signage reflections in rain puddles, and deep shadows. Without the noise and bustle of daily errands, I was forced to slow down, look up, and notice the textures of the city that usually slip by unnoticed. It was an exercise in pure joyous exploration without a predetermined destination or commercial goal.',
-    reflection: 'Creativity often requires altering your physical constraints—shifting time of day, changing your pace, or looking at familiar surroundings through an entirely different lens.',
+    reflection: "On our 5 Dimensions of Curiosity test, I got Joyous Exploration as my least natural dimension. I worked with Gemini to find an activity that would push me out of my comfort zone, and walking around at night with no specific end or goal was definitely a new activity for me. I also added in a photography piece because I like to take photos, and I thought it would make the walk around campus more interesting. It also gave me some examples to show where I went, and what I found interesting. While it was uncomfortable, it was fun, and I would do it again.",
     keyTakeaway: 'The world is full of magic when you stop rushing through it and start truly observing.',
     tags: ['Night Photography', 'Slow Observation', 'Light & Shadow', 'Solo Adventure']
   },
@@ -72,7 +72,7 @@ export const initialTopics = [
     image: assetUrl('/topics/strangers/stranger-colten.jpg'),
     accentColor: '#107c10',
     story: 'Approaching a stranger on the street with intentional curiosity was undeniably terrifying at first. Our culture defaults to headphones, averted eyes, and looking down at our phones. Taking that first step to ask genuine questions about someone\'s craft, their day, or their history shattered that invisible wall. The conversation turned into a warm, deeply human encounter. I realized that almost everyone is carrying an extraordinary story, waiting for someone to be curious enough to listen.',
-    reflection: 'Social curiosity is a creative muscle. Breaking past the fear of awkwardness opened up an endless reservoir of empathy, unexpected viewpoints, and human connection.',
+    reflection: "On our 5 Dimensions of Curiosity test, I got Social Curiosity as my most natural dimension. I spent time thinking about what action I could take for this activity, and decided to do something that I've always wanted to do: talk to random people about something. I care a lot about interests, stories, and advice from other people. However, I am pretty introverted, so this activity required some confidence and leaving my comfort zone to complete. But I am glad I did, and although I might not be able to remember what everyone said, I do have photos that show all the people I met.",
     keyTakeaway: 'Curiosity is an act of courage; behind everyday people are worlds of untold stories.',
     tags: ['Social Bravery', 'Deep Listening', 'Empathy', 'Spontaneous Connection']
   }
