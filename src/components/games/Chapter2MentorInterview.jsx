@@ -305,7 +305,7 @@ export default function Chapter2MentorInterview({
         <div className="reflection-header">
           <div className="reflection-badge">
             <Sparkles size={16} />
-            <span>CHAPTER 02 REFLECTION • MENTOR INTERVIEW</span>
+            <span>MENTOR INTERVIEW • REFLECTION</span>
           </div>
           <h2 className="reflection-title">Wisdom on Real-World Creativity & Mentorship</h2>
           <p className="reflection-subtitle">
@@ -341,9 +341,9 @@ export default function Chapter2MentorInterview({
               type="button"
               className="btn-proceed-next-chapter"
               onClick={onProceedToNextChapter}
-              title="Advance to Chapter 3: Rube Goldberg"
+              title="Advance to Rube Goldberg"
             >
-              <span>Next Chapter: Rube Goldberg</span>
+              <span>Next: Rube Goldberg</span>
               <ChevronRight size={16} />
             </button>
           )}
@@ -755,7 +755,7 @@ export default function Chapter2MentorInterview({
                       type="button"
                       className="btn-continue-reflection-pill"
                       onClick={onGoToReflection}
-                      title="Proceed to Chapter 2 Reflection"
+                      title="Proceed to Reflection"
                     >
                       <span>Continue to Reflection</span>
                       <ArrowRight size={14} />

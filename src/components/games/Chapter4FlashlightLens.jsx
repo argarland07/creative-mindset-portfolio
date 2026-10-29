@@ -120,7 +120,7 @@ export default function Chapter4FlashlightLens({
       {/* Top Darkroom Header Bar */}
       <div className="darkroom-header-bar">
         <div className="darkroom-title-group">
-          <span className="darkroom-badge">INTERACTIVE DARKROOM • CHAPTER 04</span>
+          <span className="darkroom-badge">INTERACTIVE DARKROOM</span>
           <h2 className="darkroom-heading">The Viewfinder: &ldquo;Flashlight Lens&rdquo;</h2>
           <p className="darkroom-subheading">
             The studio canvas is submerged in darkness. Sweep your cursor as a flashlight beam to hunt for hidden nighttime shots, then click to capture them into your gallery!

@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X, Save, RotateCcw } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
 export default function StoryEditModal({ topic, isOpen, onClose, onSave, onResetDefault }) {
-  const [story, setStory] = useState('');
-  const [reflection, setReflection] = useState('');
-  const [keyTakeaway, setKeyTakeaway] = useState('');
+  const [prevTopicId, setPrevTopicId] = useState(topic?.id);
+  const [story, setStory] = useState(topic?.story || '');
+  const [reflection, setReflection] = useState(topic?.reflection || '');
+  const [keyTakeaway, setKeyTakeaway] = useState(topic?.keyTakeaway || '');
 
-  useEffect(() => {
-    if (topic) {
-      setStory(topic.story || '');
-      setReflection(topic.reflection || '');
-      setKeyTakeaway(topic.keyTakeaway || '');
-    }
-  }, [topic]);
+  if (topic && prevTopicId !== topic.id) {
+    setPrevTopicId(topic.id);
+    setStory(topic.story || '');
+    setReflection(topic.reflection || '');
+    setKeyTakeaway(topic.keyTakeaway || '');
+  }
 
   if (!isOpen || !topic) return null;
 
@@ -33,7 +33,7 @@ export default function StoryEditModal({ topic, isOpen, onClose, onSave, onReset
       <div className="story-edit-container" onClick={(e) => e.stopPropagation()}>
         <div className="story-edit-header">
           <div>
-            <span className="edit-chapter-tag">Chapter 0{topic.number}</span>
+            <span className="edit-chapter-tag">{topic.title}</span>
             <h3>Personalize Your Notes: {topic.title}</h3>
             <p>Customize the story narrative, reflection, or takeaway with your own class memories.</p>
           </div>
@@ -88,7 +88,7 @@ export default function StoryEditModal({ topic, isOpen, onClose, onSave, onReset
               }}
             >
               <RotateCcw size={14} />
-              <span>Reset this chapter</span>
+              <span>Reset to default notes</span>
             </button>
 
             <div className="action-buttons">

@@ -462,9 +462,11 @@ export default function StoryChapterView({
                 />
                 <div className="chapter-img-overlay" />
 
-                <div className="chapter-badge">
-                  <span>{current.phase}</span>
-                </div>
+                {current.phase && (
+                  <div className="chapter-badge">
+                    <span>{current.phase}</span>
+                  </div>
+                )}
 
                 <div className="expand-indicator">
                   <Maximize2 size={14} />
@@ -494,7 +496,7 @@ export default function StoryChapterView({
                     background: `${current.accentColor}15`
                   }}
                 >
-                  CHAPTER {currentIndex + 1} OF {topics.length}
+                  {current.title}
                 </span>
 
                 <button
@@ -615,7 +617,7 @@ export default function StoryChapterView({
                 ? 'Return to Video Interview (Left Arrow)'
                 : isChapter3 && chapter3Phase === 'reflection'
                 ? 'Return to Video Attempts (Left Arrow)'
-                : 'Previous Chapter (Left Arrow)'
+                : 'Previous Section (Left Arrow)'
             }
           >
             <ChevronLeft size={18} />
@@ -639,12 +641,12 @@ export default function StoryChapterView({
             <div className="immersive-chapter-indicator">
               <span className="immersive-crumb">
                 {isChapter1 && chapter1Phase === 'reflection'
-                  ? `Chapter ${currentIndex + 1} of ${topics.length} • Reflection`
+                  ? `${current.title} • Reflection`
                   : isChapter2 && chapter2Phase === 'reflection'
-                  ? `Chapter ${currentIndex + 1} of ${topics.length} • Reflection`
+                  ? `${current.title} • Reflection`
                   : isChapter3 && chapter3Phase === 'reflection'
-                  ? `Chapter ${currentIndex + 1} of ${topics.length} • Reflection`
-                  : `Chapter ${currentIndex + 1} of ${topics.length}`}
+                  ? `${current.title} • Reflection`
+                  : current.title}
               </span>
               {isCurrentCompleted ? (
                 <span className="status-badge-chip completed">
@@ -687,7 +689,7 @@ export default function StoryChapterView({
                   ? 'Proceed to Rube Goldberg Reflection (Right Arrow)'
                   : currentIndex === topics.length - 1
                   ? 'Start Over'
-                  : 'Next Chapter (Right Arrow)'
+                  : 'Next Section (Right Arrow)'
               }
             >
               <span>
@@ -699,7 +701,7 @@ export default function StoryChapterView({
                   ? 'Next'
                   : currentIndex === topics.length - 1
                   ? 'Restart Story'
-                  : 'Next Chapter'}
+                  : 'Next Section'}
               </span>
               <ChevronRight size={18} />
             </button>
@@ -769,7 +771,7 @@ export default function StoryChapterView({
                     Show next page button always
                   </label>
                   <p className="setting-desc">
-                    Allows you to navigate freely to the next chapter immediately, bypassing
+                    Allows you to navigate freely to the next section immediately, bypassing
                     the completion check on each interactive section.
                   </p>
                 </div>
@@ -811,7 +813,7 @@ export default function StoryChapterView({
                 <div className="setting-info">
                   <span className="setting-label">Sound Effects</span>
                   <p className="setting-desc">
-                    Audio cues for slider adjustments, dialogue selection, and chapter progression.
+                    Audio cues for slider adjustments, dialogue selection, and section progression.
                   </p>
                 </div>
                 <div className="setting-control">
@@ -830,17 +832,17 @@ export default function StoryChapterView({
               {/* Setting 4: Chapter Progress Reset */}
               <div className="setting-row">
                 <div className="setting-info">
-                  <span className="setting-label">Chapter Completion Progress</span>
+                  <span className="setting-label">Section Completion Progress</span>
                   <p className="setting-desc">
                     You have currently completed {completedSections.length} of {topics.length}{' '}
-                    chapters.
+                    sections.
                   </p>
                 </div>
                 <div className="setting-control">
                   <button
                     className="setting-action-btn reset-btn"
                     onClick={handleResetProgress}
-                    title="Clear completed chapters to re-lock sections"
+                    title="Clear completed sections to re-lock activities"
                   >
                     <RotateCcw size={13} />
                     <span>Reset Progress</span>

@@ -15,7 +15,7 @@ function App() {
         return initialTopics.map((init) => {
           const match = parsed.find((p) => p.id === init.id);
           return match
-            ? { ...init, ...match, number: init.number, phase: init.phase, image: init.image }
+            ? { ...init, ...match, number: init.number, phase: undefined, image: init.image }
             : init;
         });
       }

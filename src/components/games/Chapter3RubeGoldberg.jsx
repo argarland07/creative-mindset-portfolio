@@ -115,7 +115,7 @@ export default function Chapter3RubeGoldberg({
         <div className="reflection-header">
           <div className="reflection-badge">
             <Sparkles size={16} />
-            <span>CHAPTER 03 REFLECTION • RUBE GOLDBERG</span>
+            <span>RUBE GOLDBERG • REFLECTION</span>
           </div>
           <h2 className="reflection-title">Iteration, Failure, & Creative Video Editing</h2>
           <p className="reflection-subtitle">
@@ -154,9 +154,9 @@ export default function Chapter3RubeGoldberg({
               type="button"
               className="btn-proceed-next-chapter"
               onClick={onProceedToNextChapter}
-              title="Advance to Chapter 4: Joyous Exploration"
+              title="Advance to Joyous Exploration"
             >
-              <span>Next Chapter: Night Photos</span>
+              <span>Next: Night Photos</span>
               <ChevronRight size={16} />
             </button>
           )}
@@ -175,7 +175,7 @@ export default function Chapter3RubeGoldberg({
       {/* Top Header */}
       <div className="rube-header-bar">
         <div className="rube-title-group">
-          <span className="rube-badge">PHYSICS ITERATION & DOCUMENTATION • CHAPTER 03</span>
+          <span className="rube-badge">PHYSICS ITERATION & DOCUMENTATION</span>
           <h2 className="rube-heading">Rube Goldberg: Trying, Failing, & Adapting</h2>
           <p className="rube-subheading">
             Watch through our recorded attempts in sequence. When an attempt doesn&apos;t work out, click &ldquo;Try Again&rdquo; to see how we adapted until the final run succeeds!

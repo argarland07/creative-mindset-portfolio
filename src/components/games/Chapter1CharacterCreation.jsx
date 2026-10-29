@@ -203,6 +203,7 @@ export default function Chapter1CharacterCreation({
                     onChange={handleSliderChange('confidence', setConfidence)}
                     className="attribute-slider-input confidence-input"
                     aria-label="Creative Confidence Slider"
+                    style={{ '--slider-pct': toTrackPct(confidence) }}
                   />
 
                   {/* Target Reality Marker Pin when Revealed */}
@@ -250,6 +251,7 @@ export default function Chapter1CharacterCreation({
                     onChange={handleSliderChange('fear', setFear)}
                     className="attribute-slider-input fear-input"
                     aria-label="Fear of Failure Slider"
+                    style={{ '--slider-pct': toTrackPct(fear) }}
                   />
 
                   {/* Target Reality Marker Pin when Revealed */}
@@ -297,6 +299,7 @@ export default function Chapter1CharacterCreation({
                     onChange={handleSliderChange('uncertainty', setUncertainty)}
                     className="attribute-slider-input uncertainty-input"
                     aria-label="Uncertainty Tolerance Slider"
+                    style={{ '--slider-pct': toTrackPct(uncertainty) }}
                   />
 
                   {/* Target Reality Marker Pin when Revealed */}
@@ -414,9 +417,9 @@ export default function Chapter1CharacterCreation({
                   type="button"
                   className="btn-proceed-next-chapter"
                   onClick={onProceedToNextChapter}
-                  title="Advance to Chapter 2: Mentor Interview"
+                  title="Advance to Mentor Interview"
                 >
-                  <span>Next Chapter: Mentor Interview</span>
+                  <span>Next: Mentor Interview</span>
                   <ChevronRight size={16} />
                 </button>
               )}
