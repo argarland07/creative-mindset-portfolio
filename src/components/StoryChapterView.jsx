@@ -16,7 +16,8 @@ import {
   Lock,
   Check,
   X,
-  RotateCcw
+  RotateCcw,
+  ExternalLink
 } from 'lucide-react';
 import Chapter1CharacterCreation from './games/Chapter1CharacterCreation';
 import Chapter2MentorInterview from './games/Chapter2MentorInterview';
@@ -119,10 +120,14 @@ export default function StoryChapterView({
   const [isChapter4Transitioning, setIsChapter4Transitioning] = useState(false);
   const [chapter5Phase, setChapter5Phase] = useState('simulator');
   const [isChapter5Transitioning, setIsChapter5Transitioning] = useState(false);
+  const [showThankYouPage, setShowThankYouPage] = useState(false);
+  const [isThankYouTransitioning, setIsThankYouTransitioning] = useState(false);
 
   // Reset chapter phases during render when switching chapters
   if (prevCurrentId !== current.id) {
     setPrevCurrentId(current.id);
+    setShowThankYouPage(false);
+    setIsThankYouTransitioning(false);
     if (!isChapter1) {
       setChapter1Phase('attributes');
       setIsChapter1Transitioning(false);
@@ -250,6 +255,26 @@ export default function StoryChapterView({
     }, 300);
   };
 
+  const handleGoToThankYou = () => {
+    if (isThankYouTransitioning) return;
+    setIsThankYouTransitioning(true);
+    soundManager.playLevelUp();
+    setTimeout(() => {
+      setShowThankYouPage(true);
+      setIsThankYouTransitioning(false);
+    }, 350);
+  };
+
+  const handleBackFromThankYou = () => {
+    if (isThankYouTransitioning) return;
+    setIsThankYouTransitioning(true);
+    soundManager.playSlideTransition();
+    setTimeout(() => {
+      setShowThankYouPage(false);
+      setIsThankYouTransitioning(false);
+    }, 300);
+  };
+
   // Intercept ArrowRight / ArrowLeft in Chapter 1 so right arrow triggers reflection first
   useEffect(() => {
     if (!isChapter1) return;
@@ -337,7 +362,7 @@ export default function StoryChapterView({
     return () => window.removeEventListener('keydown', handleChapter4Key, true);
   }, [isChapter4, chapter4Phase, isChapter4Transitioning, canAdvance, chapterTransition?.status]);
 
-  // Intercept ArrowRight / ArrowLeft in Chapter 5 (Social Curiosity)
+  // Intercept ArrowRight / ArrowLeft in Chapter 5 (Social Curiosity) & Thank You page
   useEffect(() => {
     if (!isChapter5) return;
     const handleChapter5Key = (e) => {
@@ -346,14 +371,20 @@ export default function StoryChapterView({
       if (e.key === 'ArrowRight' && chapter5Phase === 'simulator' && canAdvance) {
         e.stopPropagation();
         handleChapter5Next();
-      } else if (e.key === 'ArrowLeft' && chapter5Phase === 'reflection') {
+      } else if (e.key === 'ArrowRight' && chapter5Phase === 'reflection' && !showThankYouPage) {
+        e.stopPropagation();
+        handleGoToThankYou();
+      } else if (e.key === 'ArrowLeft' && showThankYouPage) {
+        e.stopPropagation();
+        handleBackFromThankYou();
+      } else if (e.key === 'ArrowLeft' && chapter5Phase === 'reflection' && !showThankYouPage) {
         e.stopPropagation();
         handleChapter5Prev();
       }
     };
     window.addEventListener('keydown', handleChapter5Key, true);
     return () => window.removeEventListener('keydown', handleChapter5Key, true);
-  }, [isChapter5, chapter5Phase, isChapter5Transitioning, canAdvance, chapterTransition?.status]);
+  }, [isChapter5, chapter5Phase, isChapter5Transitioning, showThankYouPage, isThankYouTransitioning, canAdvance, chapterTransition?.status]);
 
   return (
     <div className="story-container story-fullscreen-view">
@@ -432,7 +463,79 @@ export default function StoryChapterView({
         />
 
         {/* Gamified View vs Standard Story Layout */}
-        {isChapter1 ? (
+        {showThankYouPage ? (
+          <div className="thank-you-container anim-reflection-enter">
+            <div className="thank-you-card">
+              <div className="thank-you-badge">
+                <Sparkles size={18} />
+                <span>EXPERIENCE COMPLETE</span>
+              </div>
+
+              <h2 className="thank-you-title">Thank you for your time!</h2>
+
+              <p className="thank-you-subtitle">
+                Thank you for taking the time to explore my creative mindset portfolio, experiments, and personal reflections across the semester.
+              </p>
+
+              <div className="thank-you-ai-box">
+                <div className="ai-box-header">
+                  <ExternalLink size={16} />
+                  <span>AI Collaboration & Reflection Archive</span>
+                </div>
+                <p className="ai-box-desc">
+                  AI help found here:{' '}
+                  <a
+                    href="https://gemini.google.com/share/d/1upyD6uisZnRsE8tGJiABa6pTTThu3l06?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ai-share-link"
+                  >
+                    https://gemini.google.com/share/d/1upyD6uisZnRsE8tGJiABa6pTTThu3l06?usp=sharing
+                  </a>
+                </p>
+              </div>
+
+              <div className="thank-you-actions-row">
+                <button
+                  type="button"
+                  className="btn-thank-you-secondary"
+                  onClick={handleBackFromThankYou}
+                  title="Return to Chapter 5 Reflection"
+                >
+                  <RotateCcw size={15} />
+                  <span>Back to Reflection</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-thank-you-primary"
+                  onClick={() => {
+                    soundManager.playClick();
+                    if (onBackToStart) onBackToStart();
+                  }}
+                  title="Return to the Portfolio Title Page"
+                >
+                  <ArrowLeft size={16} />
+                  <span>Return Home</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-thank-you-restart"
+                  onClick={() => {
+                    soundManager.playLevelUp();
+                    setShowThankYouPage(false);
+                    onNext();
+                  }}
+                  title="Restart the Portfolio Experience from Chapter 1"
+                >
+                  <Sparkles size={15} />
+                  <span>Restart Journey</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : isChapter1 ? (
           <Chapter1CharacterCreation
             topic={current}
             onUpdateTopicData={onUpdateTopicData}
@@ -486,7 +589,7 @@ export default function StoryChapterView({
             isTransitioning={isChapter5Transitioning}
             onGoToReflection={handleChapter5Next}
             onGoToSimulator={handleChapter5Prev}
-            onProceedToNextChapter={onNext}
+            onProceedToNextChapter={handleGoToThankYou}
           />
         ) : (
           /* Standard Fullscreen Story Layout Grid */
@@ -639,7 +742,9 @@ export default function StoryChapterView({
           <button
             className="story-nav-btn prev-btn"
             onClick={
-              isChapter1 && chapter1Phase === 'reflection'
+              showThankYouPage
+                ? handleBackFromThankYou
+                : isChapter1 && chapter1Phase === 'reflection'
                 ? handleChapter1Prev
                 : isChapter2 && chapter2Phase === 'reflection'
                 ? handleChapter2Prev
@@ -654,6 +759,7 @@ export default function StoryChapterView({
             disabled={
               (chapterTransition?.status && chapterTransition.status !== 'idle') ||
               (currentIndex === 0 &&
+                !showThankYouPage &&
                 !(isChapter1 && chapter1Phase === 'reflection') &&
                 !(isChapter2 && chapter2Phase === 'reflection') &&
                 !(isChapter3 && chapter3Phase === 'reflection') &&
@@ -661,7 +767,9 @@ export default function StoryChapterView({
                 !(isChapter5 && chapter5Phase === 'reflection'))
             }
             title={
-              isChapter1 && chapter1Phase === 'reflection'
+              showThankYouPage
+                ? 'Return to Chapter 5 Reflection (Left Arrow)'
+                : isChapter1 && chapter1Phase === 'reflection'
                 ? 'Return to Character Attributes (Left Arrow)'
                 : isChapter2 && chapter2Phase === 'reflection'
                 ? 'Return to Video Interview (Left Arrow)'
@@ -682,7 +790,9 @@ export default function StoryChapterView({
           <div className="pager-center-group">
             <div className="immersive-chapter-indicator">
               <span className="immersive-crumb">
-                {isChapter1 && chapter1Phase === 'reflection'
+                {showThankYouPage
+                  ? 'Creative Portfolio • Conclusion'
+                  : isChapter1 && chapter1Phase === 'reflection'
                   ? `${current.title} • Reflection`
                   : isChapter2 && chapter2Phase === 'reflection'
                   ? `${current.title} • Reflection`
@@ -707,14 +817,19 @@ export default function StoryChapterView({
           </div>
 
           {/* Next Button / Locked Indicator */}
-          {canAdvance ? (
+          {canAdvance || showThankYouPage ? (
             <button
               className={`story-nav-btn next-btn unlocked-pulse ${
                 chapterTransition?.status && chapterTransition.status !== 'idle' ? 'is-navigating' : ''
               }`}
               disabled={chapterTransition?.status && chapterTransition.status !== 'idle'}
               onClick={
-                isChapter1 && chapter1Phase === 'attributes'
+                showThankYouPage
+                  ? () => {
+                      soundManager.playClick();
+                      if (onBackToStart) onBackToStart();
+                    }
+                  : isChapter1 && chapter1Phase === 'attributes'
                   ? handleChapter1Next
                   : isChapter2 && chapter2Phase === 'interview'
                   ? handleChapter2Next
@@ -724,6 +839,8 @@ export default function StoryChapterView({
                   ? handleChapter4Next
                   : isChapter5 && chapter5Phase === 'simulator'
                   ? handleChapter5Next
+                  : isChapter5 && chapter5Phase === 'reflection'
+                  ? handleGoToThankYou
                   : onNext
               }
               style={{
@@ -731,7 +848,9 @@ export default function StoryChapterView({
                 boxShadow: `0 0 20px -3px ${current.accentColor}60`
               }}
               title={
-                isChapter1 && chapter1Phase === 'attributes'
+                showThankYouPage
+                  ? 'Return to Home Overview'
+                  : isChapter1 && chapter1Phase === 'attributes'
                   ? 'Proceed to Day 1 Reflection (Right Arrow)'
                   : isChapter2 && chapter2Phase === 'interview'
                   ? 'Proceed to Mentor Reflection (Right Arrow)'
@@ -741,13 +860,17 @@ export default function StoryChapterView({
                   ? 'Proceed to Night Photos Reflection (Right Arrow)'
                   : isChapter5 && chapter5Phase === 'simulator'
                   ? 'Proceed to Social Curiosity Reflection (Right Arrow)'
+                  : isChapter5 && chapter5Phase === 'reflection'
+                  ? 'Proceed to Thank You Page (Right Arrow)'
                   : currentIndex === topics.length - 1
                   ? 'Start Over'
                   : 'Next Section (Right Arrow)'
               }
             >
               <span>
-                {isChapter1 && chapter1Phase === 'attributes'
+                {showThankYouPage
+                  ? 'Return Home'
+                  : isChapter1 && chapter1Phase === 'attributes'
                   ? 'Next'
                   : isChapter2 && chapter2Phase === 'interview'
                   ? 'Next'
@@ -757,6 +880,8 @@ export default function StoryChapterView({
                   ? 'Next'
                   : isChapter5 && chapter5Phase === 'simulator'
                   ? 'Next'
+                  : isChapter5 && chapter5Phase === 'reflection'
+                  ? 'Finish Journey'
                   : currentIndex === topics.length - 1
                   ? 'Restart Story'
                   : 'Next Section'}

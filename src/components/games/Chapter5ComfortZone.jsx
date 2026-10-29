@@ -454,9 +454,9 @@ export default function Chapter5ComfortZone({
               type="button"
               className="btn-proceed-next-chapter"
               onClick={onProceedToNextChapter}
-              title="Finish or Restart Journey"
+              title="Complete Experience & View Thank You"
             >
-              <span>Restart Journey</span>
+              <span>Finish Journey</span>
               <ChevronRight size={16} />
             </button>
           )}
