@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import StoryChapterView from './components/StoryChapterView';
 import CardsOverview from './components/CardsOverview';
 import StoryEditModal from './components/StoryEditModal';
@@ -15,7 +15,7 @@ function App() {
         return initialTopics.map((init) => {
           const match = parsed.find((p) => p.id === init.id);
           return match
-            ? { ...init, ...match, number: init.number, phase: undefined, image: init.image }
+            ? { ...init, ...match, number: init.number, phase: undefined, accentColor: init.accentColor, image: init.image }
             : init;
         });
       }
@@ -27,8 +27,6 @@ function App() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' (Start Screen Homepage) | 'story'
-  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
-  const [autoPlayProgress, setAutoPlayProgress] = useState(0);
   const [editingTopic, setEditingTopic] = useState(null);
   const [wipeState, setWipeState] = useState('idle'); // 'idle' | 'wiping-in' | 'wiping-out'
   const [chapterTransition, setChapterTransition] = useState({
@@ -80,9 +78,6 @@ function App() {
     });
   };
 
-  const autoPlayTimerRef = useRef(null);
-  const slideDurationSeconds = 12; // 12 seconds per topic in auto walkthrough
-
   // Save to local storage on edits
   useEffect(() => {
     try {
@@ -96,7 +91,6 @@ function App() {
     if (chapterTransition.status !== 'idle' || targetIdx === currentIndex) return;
     const direction =
       explicitDirection || (targetIdx > currentIndex ? 'forward' : 'backward');
-    setAutoPlayProgress(0);
     soundManager.playSlideTransition();
     setChapterTransition({ status: 'exiting', direction });
 
@@ -128,7 +122,6 @@ function App() {
     soundManager.playSlideTransition();
     setWipeState('wiping-in');
     setTimeout(() => {
-      setAutoPlayProgress(0);
       setCurrentIndex(idx);
       setViewMode('story');
       setWipeState('wiping-out');
@@ -161,9 +154,6 @@ function App() {
         handleNext();
       } else if (e.key === 'ArrowLeft') {
         handlePrev();
-      } else if (e.key === ' ') {
-        e.preventDefault();
-        setIsAutoPlaying((prev) => !prev);
       } else if (e.key >= '1' && e.key <= String(topics.length)) {
         const idx = parseInt(e.key, 10) - 1;
         if (idx < topics.length && idx !== currentIndex) {
@@ -179,31 +169,6 @@ function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentIndex, topics.length, chapterTransition.status, viewMode]);
-
-  // Auto-walkthrough timer
-  useEffect(() => {
-    if (!isAutoPlaying || viewMode !== 'story') {
-      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-      return;
-    }
-
-    const intervalMs = 100;
-    const totalSteps = (slideDurationSeconds * 1000) / intervalMs;
-
-    autoPlayTimerRef.current = setInterval(() => {
-      setAutoPlayProgress((prev) => {
-        if (prev >= 100) {
-          handleNext();
-          return 0;
-        }
-        return prev + 100 / totalSteps;
-      });
-    }, intervalMs);
-
-    return () => {
-      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-    };
-  }, [isAutoPlaying, viewMode, currentIndex, topics.length, chapterTransition.status]);
 
   const handleSaveTopicNotes = (topicId, updatedFields) => {
     setTopics((prev) =>
@@ -240,9 +205,6 @@ function App() {
             onPrev={handlePrev}
             onOpenEditModal={(topic) => setEditingTopic(topic)}
             onUpdateTopicData={handleSaveTopicNotes}
-            isAutoPlaying={isAutoPlaying}
-            setIsAutoPlaying={setIsAutoPlaying}
-            autoPlayProgress={autoPlayProgress}
             onBackToStart={handleBackToStart}
             themeMode={themeMode}
             onToggleTheme={handleToggleTheme}

@@ -11,32 +11,32 @@
 
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.2);
-  --border-active: #8ab4f8;
+  --border-active: #f87171;
 
   --text-main: #f1f3f9;
   --text-dim: #c4c7d5;
   --text-muted: #8e92a4;
 
-  /* Material 3 Dynamic Tonal Palette */
-  --md-primary: #8ab4f8;
-  --md-primary-hover: #aecbfa;
-  --md-on-primary: #041e49;
-  --md-primary-container: #17325c;
-  --md-on-primary-container: #d3e3fd;
+  /* Material 3 Dynamic Tonal Palette (Miami Red) */
+  --md-primary: #f87171;
+  --md-primary-hover: #fca5a5;
+  --md-on-primary: #450a0a;
+  --md-primary-container: #7f1d1d;
+  --md-on-primary-container: #fecaca;
 
-  --md-secondary: #a8c7fa;
-  --md-secondary-container: #004a77;
-  --md-tertiary: #a7c8ff;
+  --md-secondary: #fda4af;
+  --md-secondary-container: #9f1239;
+  --md-tertiary: #f43f5e;
 
   --md-success: #81c995;
   --md-warning: #fdd663;
   --md-error: #f28b82;
 
   /* Material Accents */
-  --metro-blue: #8ab4f8;
-  --metro-blue-light: #aecbfa;
-  --metro-blue-dark: #669df6;
-  --metro-blue-deep: #1a73e8;
+  --metro-blue: #f87171;
+  --metro-blue-light: #fca5a5;
+  --metro-blue-dark: #dc2626;
+  --metro-blue-deep: #c41e3a;
   --metro-cyan: #78d9ec;
   --metro-teal: #80cbc4;
   --metro-green: #81c995;
@@ -83,32 +83,32 @@
 
   --border-subtle: rgba(0, 0, 0, 0.08);
   --border-hover: rgba(0, 0, 0, 0.18);
-  --border-active: #1a73e8;
+  --border-active: #c41e3a;
 
   --text-main: #1f2328;
   --text-dim: #44474f;
   --text-muted: #74777f;
 
-  /* Material 3 Dynamic Tonal Palette */
-  --md-primary: #1a73e8;
-  --md-primary-hover: #1557b0;
+  /* Material 3 Dynamic Tonal Palette (Miami Red) */
+  --md-primary: #c41e3a;
+  --md-primary-hover: #a3152c;
   --md-on-primary: #ffffff;
-  --md-primary-container: #e8f0fe;
-  --md-on-primary-container: #041e49;
+  --md-primary-container: #fee2e2;
+  --md-on-primary-container: #450a0a;
 
-  --md-secondary: #00639b;
-  --md-secondary-container: #c2e7ff;
-  --md-tertiary: #006874;
+  --md-secondary: #be123c;
+  --md-secondary-container: #ffe4e6;
+  --md-tertiary: #9f1239;
 
   --md-success: #1e8e3e;
   --md-warning: #ea8600;
   --md-error: #d93025;
 
   /* Material Accents */
-  --metro-blue: #1a73e8;
-  --metro-blue-light: #4285f4;
-  --metro-blue-dark: #1557b0;
-  --metro-blue-deep: #0d47a1;
+  --metro-blue: #c41e3a;
+  --metro-blue-light: #e11d48;
+  --metro-blue-dark: #a3152c;
+  --metro-blue-deep: #881337;
   --metro-cyan: #0097a7;
   --metro-teal: #00897b;
   --metro-green: #1e8e3e;

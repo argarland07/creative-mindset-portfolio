@@ -7,7 +7,7 @@ export const initialTopics = [
     title: '1st Day of Class',
     subtitle: 'Stepping into the unknown & redefining what it means to be creative',
     image: assetUrl('/topics/topic-1-first-day.jpg'),
-    accentColor: '#0078d7',
+    accentColor: '#c41e3a',
     story: 'Walking into class on day one, I had preconceived notions about what "creativity" meant—drawing talent, innate artistic genius, or sudden lightning bolts of inspiration. Instead, we were prompted with an open blackboard: What does creative inquiry mean to you? Sitting with people from entirely different backgrounds immediately challenged my comfort zone. It became clear that this course was not about technical perfection, but about cultivating genuine curiosity, unlearning fear of judgment, and embracing the creative process as a habit rather than an accident.',
     reflection: 'In the past, I never considered myself a highly creative person. I identified three important metrics that we have worked on in this class, and rated myself on where I started. My creative confidence was okay, about a 5. Sometimes I was proud of my creative efforts, and other times I was not confident in them. My Fear of Failure was definitely high (and still is). I was afraid of not completing a goal or a task, and how that would hurt me. My Uncertainty Tolerance was actually fairly high. I worked through many assignments in school where I did not have as much direction as I would have liked, and I learned to adapt and use my creative skills.',
     keyTakeaway: 'The creative journey begins the moment you give yourself permission to be a beginner again.',

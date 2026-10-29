@@ -8,9 +8,6 @@ import {
   Quote,
   CheckCircle2,
   Maximize2,
-  Minimize2,
-  Play,
-  Pause,
   Volume2,
   VolumeX,
   Monitor,
@@ -35,9 +32,6 @@ export default function StoryChapterView({
   onPrev,
   onOpenEditModal,
   onUpdateTopicData,
-  isAutoPlaying,
-  setIsAutoPlaying,
-  autoPlayProgress,
   onBackToStart,
   themeMode,
   onToggleTheme
@@ -46,39 +40,6 @@ export default function StoryChapterView({
   const [showFullImage, setShowFullImage] = useState(false);
   const [isMuted, setIsMuted] = useState(soundManager.isMuted);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-
-  // Native Browser Fullscreen tracking
-  const [isBrowserFullscreen, setIsBrowserFullscreen] = useState(() => {
-    if (typeof document !== 'undefined') {
-      return Boolean(document.fullscreenElement);
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    const handleFsChange = () => {
-      setIsBrowserFullscreen(Boolean(document.fullscreenElement));
-    };
-    document.addEventListener('fullscreenchange', handleFsChange);
-    return () => document.removeEventListener('fullscreenchange', handleFsChange);
-  }, []);
-
-  const toggleBrowserFullscreen = async () => {
-    try {
-      soundManager.playClick();
-      if (!document.fullscreenElement) {
-        if (document.documentElement.requestFullscreen) {
-          await document.documentElement.requestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          await document.exitFullscreen();
-        }
-      }
-    } catch (err) {
-      console.warn('Fullscreen toggle failed:', err);
-    }
-  };
 
   // Section completion gating
   const [completedSections, setCompletedSections] = useState(() => {
@@ -316,20 +277,6 @@ export default function StoryChapterView({
 
       {/* Floating Minimal Top-Right HUD Controls Cluster */}
       <aside className="hud-floating-cluster" aria-label="Story View Controls">
-        {setIsAutoPlaying && (
-          <button
-            className={`hud-icon-btn ${isAutoPlaying ? 'active' : ''}`}
-            onClick={() => {
-              soundManager.playClick();
-              setIsAutoPlaying(!isAutoPlaying);
-            }}
-            title={isAutoPlaying ? 'Pause Auto Tour' : 'Start Auto Tour (Spacebar)'}
-          >
-            {isAutoPlaying ? <Pause size={15} /> : <Play size={15} />}
-            <span className="hud-btn-text">{isAutoPlaying ? 'Pause' : 'Tour'}</span>
-          </button>
-        )}
-
         <button
           className="hud-icon-btn"
           onClick={toggleSound}
@@ -347,14 +294,6 @@ export default function StoryChapterView({
             <Monitor size={15} />
           </button>
         )}
-
-        <button
-          className="hud-icon-btn"
-          onClick={toggleBrowserFullscreen}
-          title={isBrowserFullscreen ? 'Exit Browser Fullscreen (Esc)' : 'Enter Browser Fullscreen'}
-        >
-          {isBrowserFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
-        </button>
 
         <button
           className="hud-icon-btn hud-settings-btn"
@@ -626,18 +565,6 @@ export default function StoryChapterView({
 
           {/* Center Progress & Status */}
           <div className="pager-center-group">
-            {isAutoPlaying && (
-              <div className="auto-progress-wrapper">
-                <div
-                  className="auto-progress-bar"
-                  style={{
-                    width: `${autoPlayProgress}%`,
-                    background: current.accentColor
-                  }}
-                />
-              </div>
-            )}
-
             <div className="immersive-chapter-indicator">
               <span className="immersive-crumb">
                 {isChapter1 && chapter1Phase === 'reflection'
@@ -677,7 +604,7 @@ export default function StoryChapterView({
                   : onNext
               }
               style={{
-                background: `linear-gradient(135deg, ${current.accentColor}, #6366f1)`,
+                background: `linear-gradient(135deg, ${current.accentColor}, #881337)`,
                 boxShadow: `0 0 20px -3px ${current.accentColor}60`
               }}
               title={
@@ -789,26 +716,7 @@ export default function StoryChapterView({
                 </div>
               </div>
 
-              {/* Setting 2: Browser Fullscreen */}
-              <div className="setting-row">
-                <div className="setting-info">
-                  <span className="setting-label">Browser Full Screen</span>
-                  <p className="setting-desc">
-                    Expand the browser window to span your entire physical monitor screen.
-                  </p>
-                </div>
-                <div className="setting-control">
-                  <button
-                    className="setting-action-btn"
-                    onClick={toggleBrowserFullscreen}
-                  >
-                    {isBrowserFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-                    <span>{isBrowserFullscreen ? 'Exit Full Screen' : 'Go Full Screen'}</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Setting 3: Sound Effects */}
+              {/* Setting 2: Sound Effects */}
               <div className="setting-row">
                 <div className="setting-info">
                   <span className="setting-label">Sound Effects</span>
@@ -829,7 +737,7 @@ export default function StoryChapterView({
                 </div>
               </div>
 
-              {/* Setting 4: Chapter Progress Reset */}
+              {/* Setting 3: Chapter Progress Reset */}
               <div className="setting-row">
                 <div className="setting-info">
                   <span className="setting-label">Section Completion Progress</span>

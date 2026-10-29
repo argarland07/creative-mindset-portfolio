@@ -991,7 +991,7 @@
   background: var(--md-primary);
   border-color: var(--md-primary);
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.4);
+  box-shadow: 0 2px 8px rgba(196, 30, 58, 0.4);
 }
 
 .hud-settings-btn:hover {
@@ -2217,7 +2217,7 @@
   bottom: 0;
   width: 220px;
   height: 32px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, rgba(56, 189, 248, 0.25) 45%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, rgba(196, 30, 58, 0.35) 45%, transparent 70%);
   border-radius: 50%;
   z-index: 1;
   filter: blur(4px);
@@ -2546,8 +2546,8 @@
 
 [data-theme="light"] .btn-step-next-reflection:hover {
   background: #e2e8f0;
-  border-color: #0284c7;
-  color: #0284c7;
+  border-color: #c41e3a;
+  color: #c41e3a;
 }
 
 [data-theme="light"] .btn-reveal-reality.active-revealed {
@@ -2581,7 +2581,7 @@
   width: 100%;
   padding: 12px 24px;
   border-radius: var(--md-shape-full, 9999px);
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  background: linear-gradient(135deg, #c41e3a 0%, #a3152c 100%);
   color: #ffffff;
   font-family: var(--font-heading, sans-serif);
   font-size: 13.5px;
@@ -2590,14 +2590,14 @@
   text-transform: uppercase;
   border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(2, 132, 199, 0.4);
+  box-shadow: 0 4px 18px rgba(196, 30, 58, 0.4);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-reveal-reality:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.6);
+  background: linear-gradient(135deg, #d32744 0%, #b81932 100%);
+  box-shadow: 0 8px 24px rgba(196, 30, 58, 0.6);
   border-color: rgba(255, 255, 255, 0.4);
 }
 
@@ -2919,20 +2919,20 @@
   gap: 7px;
   padding: 10px 20px;
   border-radius: var(--md-shape-full, 9999px);
-  background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #c41e3a 0%, #881337 100%);
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
   font-family: var(--font-heading, sans-serif);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(2, 132, 199, 0.45);
+  box-shadow: 0 4px 18px rgba(196, 30, 58, 0.45);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-proceed-next-chapter:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55);
+  box-shadow: 0 6px 24px rgba(196, 30, 58, 0.65);
   border-color: rgba(255, 255, 255, 0.45);
 }
 
@@ -3196,7 +3196,7 @@
   gap: 10px;
   padding: 13px 32px;
   border-radius: var(--md-shape-full, 9999px);
-  background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #c41e3a 0%, #a3152c 100%);
   color: #ffffff;
   font-family: var(--font-heading, sans-serif);
   font-size: 15.5px;
@@ -3204,14 +3204,14 @@
   letter-spacing: 0.5px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   cursor: pointer;
-  box-shadow: 0 8px 28px rgba(2, 132, 199, 0.45);
+  box-shadow: 0 8px 28px rgba(196, 30, 58, 0.45);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-begin-meeting:hover:not(:disabled) {
   transform: translateY(-2px) scale(1.03);
-  background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
-  box-shadow: 0 12px 36px rgba(14, 165, 233, 0.65);
+  background: linear-gradient(135deg, #d32744 0%, #b81932 100%);
+  box-shadow: 0 12px 36px rgba(196, 30, 58, 0.65);
   border-color: rgba(255, 255, 255, 0.4);
 }
 
