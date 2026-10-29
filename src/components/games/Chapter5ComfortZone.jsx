@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Compass,
   Users,
@@ -159,10 +159,126 @@ export default function Chapter5ComfortZone({
   const [activeStrangerId, setActiveStrangerId] = useState(null);
   // Unlocked strangers array
   const [unlockedIds, setUnlockedIds] = useState([]);
-  // Interaction phase: 'map' | 'unlocked'
+  // Interaction phase: 'map' | 'approach' | 'unlocked'
   const [phase, setPhase] = useState('map');
 
+  // Spacebar hold interaction state
+  const [isHolding, setIsHolding] = useState(false);
+  const [holdProgress, setHoldProgress] = useState(0);
+
+  // Refs for smooth animation frame updates without stale closures
+  const holdProgressRef = useRef(0);
+  const isHoldingRef = useRef(false);
+
   const activeStranger = strangers.find((s) => s.id === activeStrangerId) || null;
+
+  // Keep isHolding ref in sync with state
+  useEffect(() => {
+    isHoldingRef.current = isHolding;
+  }, [isHolding]);
+
+  // Handle successfully completing an approach
+  const handleApproachComplete = useCallback(() => {
+    soundManager.playComfortExpansion();
+    setIsHolding(false);
+    isHoldingRef.current = false;
+    holdProgressRef.current = 0;
+    setHoldProgress(0);
+    setPhase('unlocked');
+
+    setUnlockedIds((prev) => {
+      if (!activeStrangerId || prev.includes(activeStrangerId)) return prev;
+      const next = [...prev, activeStrangerId];
+      if (next.length >= strangers.length) {
+        soundManager.playLevelUp();
+        if (onCompleteSection) {
+          onCompleteSection(topic.id);
+        }
+      }
+      return next;
+    });
+  }, [activeStrangerId, onCompleteSection, strangers.length, topic.id]);
+
+  // Global keyboard listeners for holding Spacebar
+  useEffect(() => {
+    if (phase !== 'approach') return;
+
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space' || e.key === ' ') {
+        e.preventDefault();
+        if (!e.repeat && !isHoldingRef.current) {
+          setIsHolding(true);
+          isHoldingRef.current = true;
+          soundManager.playApproach();
+        }
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (e.code === 'Space' || e.key === ' ') {
+        e.preventDefault();
+        setIsHolding(false);
+        isHoldingRef.current = false;
+      }
+    };
+
+    const handleBlur = () => {
+      setIsHolding(false);
+      isHoldingRef.current = false;
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('blur', handleBlur);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('blur', handleBlur);
+    };
+  }, [phase]);
+
+  // Continuous animation frame loop to charge / drain hold progress
+  useEffect(() => {
+    if (phase !== 'approach') return;
+
+    let animId;
+    let lastTime = performance.now();
+    const APPROACH_DURATION_MS = 1200; // 1.2s to fully approach
+
+    const loop = (currentTime) => {
+      const dt = currentTime - lastTime;
+      lastTime = currentTime;
+
+      if (isHoldingRef.current) {
+        holdProgressRef.current = Math.min(
+          100,
+          holdProgressRef.current + (dt / APPROACH_DURATION_MS) * 100
+        );
+        setHoldProgress(holdProgressRef.current);
+
+        if (holdProgressRef.current >= 100) {
+          handleApproachComplete();
+          return;
+        }
+      } else if (holdProgressRef.current > 0) {
+        holdProgressRef.current = Math.max(
+          0,
+          holdProgressRef.current - (dt / 320) * 100
+        );
+        setHoldProgress(holdProgressRef.current);
+      }
+
+      animId = requestAnimationFrame(loop);
+    };
+
+    animId = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      holdProgressRef.current = 0;
+    };
+  }, [phase, handleApproachComplete]);
 
   // Total comfort zone percentage (starts at 20% baseline, scales to 100%)
   const comfortScore = Math.min(
@@ -182,23 +298,19 @@ export default function Chapter5ComfortZone({
     Math.round(45 + (unlockedIds.length / (strangers.length || 1)) * 54)
   );
 
-  // Select a stranger from the map: immediately view question & answer
+  // Select a stranger from the map: if already approached, view immediately; otherwise approach!
   const handleSelectStranger = (id) => {
     soundManager.playClick();
     setActiveStrangerId(id);
-    setPhase('unlocked');
-
-    setUnlockedIds((prev) => {
-      if (prev.includes(id)) return prev;
-      const next = [...prev, id];
-      if (next.length >= strangers.length) {
-        soundManager.playLevelUp();
-        if (onCompleteSection) {
-          onCompleteSection(topic.id);
-        }
-      }
-      return next;
-    });
+    if (unlockedIds.includes(id)) {
+      setPhase('unlocked');
+    } else {
+      setPhase('approach');
+      setIsHolding(false);
+      isHoldingRef.current = false;
+      holdProgressRef.current = 0;
+      setHoldProgress(0);
+    }
   };
 
   // Reset progress
@@ -207,6 +319,10 @@ export default function Chapter5ComfortZone({
     setUnlockedIds([]);
     setPhase('map');
     setActiveStrangerId(null);
+    setIsHolding(false);
+    isHoldingRef.current = false;
+    holdProgressRef.current = 0;
+    setHoldProgress(0);
   };
 
   const getIcon = (type) => {
@@ -294,7 +410,7 @@ export default function Chapter5ComfortZone({
           </div>
           <h2 className="comfort-main-title">Social Curiosity: Talking to Strangers</h2>
           <p className="comfort-subtitle">
-            Click on people across campus to see the questions I asked and their answers.
+            Click on people across campus, then hold down the space bar to approach them and see their answers.
           </p>
         </div>
 
@@ -432,7 +548,7 @@ export default function Chapter5ComfortZone({
                   <div className="pin-label-tag">
                     <span className="pin-name">{s.name}</span>
                     <span className="pin-status">
-                      {isUnlocked ? '✓ Connected' : 'Approach NPC'}
+                      {isUnlocked ? '✓ Connected' : 'Hold Space'}
                     </span>
                   </div>
                 </button>
@@ -442,7 +558,7 @@ export default function Chapter5ComfortZone({
 
           <div className="map-footer-guide">
             <span className="map-instruction">
-              💡 <strong>Action:</strong> Click on any person across campus to view the conversation.
+              💡 <strong>Action:</strong> Click on any person pin, then hold down <strong>[ SPACEBAR ]</strong> to approach them.
             </span>
           </div>
         </div>
@@ -455,25 +571,132 @@ export default function Chapter5ComfortZone({
               <div className="idle-compass-ring">
                 <Users size={42} className="text-cyan pulse-slow" />
               </div>
-              <h3>Choose a Person to View</h3>
+              <h3>Choose a Person on Campus</h3>
               <p>
-                Click any person on the campus map to see the question I asked and their answer.
+                Click any person pin on the campus map, then hold down the space bar to approach them and hear their story.
               </p>
               <div className="idle-quick-stats">
                 <div className="stat-pill">
                   <strong>{strangers.length}</strong> People Met
                 </div>
                 <div className="stat-pill">
-                  <strong>{unlockedIds.length} / {strangers.length}</strong> Viewed
+                  <strong>{unlockedIds.length} / {strangers.length}</strong> Approached
                 </div>
               </div>
             </div>
           )}
 
-          {/* State 2: Unlocked Story & Conversation Card */}
+          {/* State 2: Approach Challenge - Hold Spacebar to Approach */}
+          {phase === 'approach' && activeStranger && (
+            <div className="panel-approach-challenge">
+              <div className="approach-target-header">
+                <div className="approach-target-badge">
+                  <Sparkles size={14} /> Approach Challenge
+                </div>
+                <h3 className="approach-target-title">
+                  Approaching {activeStranger.name}
+                </h3>
+                <p className="approach-target-hint">
+                  Step outside your comfort zone. Hold down the space bar to walk over and break the ice.
+                </p>
+              </div>
+
+              {/* Approach Preview Photo with dynamic focus */}
+              <div className="approach-preview-photo-wrap">
+                <img
+                  src={activeStranger.image}
+                  alt={activeStranger.name}
+                  className="approach-preview-photo"
+                  style={{
+                    filter: `brightness(${0.7 + (holdProgress / 100) * 0.3}) blur(${(1 - holdProgress / 100) * 3}px)`,
+                    transform: `scale(${1 + (holdProgress / 100) * 0.05})`
+                  }}
+                />
+                <div className="approach-overlay-gradient" />
+                <div className="approach-distance-badge">
+                  {holdProgress >= 100
+                    ? 'Connected!'
+                    : holdProgress > 65
+                    ? 'Almost there...'
+                    : holdProgress > 25
+                    ? 'Walking closer...'
+                    : 'Ready to approach'}
+                </div>
+              </div>
+
+              {/* The Spacebar Hold Action Button */}
+              <div className="approach-hold-area">
+                <button
+                  type="button"
+                  className={`btn-hold-spacebar ${isHolding ? 'holding' : ''}`}
+                  onPointerDown={(e) => {
+                    e.preventDefault();
+                    setIsHolding(true);
+                    isHoldingRef.current = true;
+                    soundManager.playApproach();
+                  }}
+                  onPointerUp={() => {
+                    setIsHolding(false);
+                    isHoldingRef.current = false;
+                  }}
+                  onPointerLeave={() => {
+                    setIsHolding(false);
+                    isHoldingRef.current = false;
+                  }}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    setIsHolding(true);
+                    isHoldingRef.current = true;
+                    soundManager.playApproach();
+                  }}
+                  onTouchEnd={() => {
+                    setIsHolding(false);
+                    isHoldingRef.current = false;
+                  }}
+                  aria-label="Hold down spacebar or hold this button to approach"
+                >
+                  <div
+                    className="hold-progress-fill"
+                    style={{ width: `${holdProgress}%` }}
+                  />
+
+                  <div className="hold-button-content">
+                    <div className="spacebar-key-visual">
+                      <span className="key-cap">SPACEBAR</span>
+                    </div>
+                    <div className="hold-text-cluster">
+                      <span className="hold-main-text">
+                        {isHolding ? 'HOLDING... STEPPING FORWARD' : 'HOLD SPACEBAR TO APPROACH'}
+                      </span>
+                      <span className="hold-sub-text">
+                        {holdProgress > 0
+                          ? `${Math.round(holdProgress)}% · Closing distance...`
+                          : 'Press & hold Space (or hold this button)'}
+                      </span>
+                    </div>
+                  </div>
+                </button>
+              </div>
+
+              <div className="approach-cancel-row">
+                <button
+                  type="button"
+                  className="btn-cancel-approach"
+                  onClick={() => {
+                    soundManager.playClick();
+                    setPhase('map');
+                  }}
+                >
+                  Choose a different person
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* State 3: Unlocked Story & Conversation Card */}
           {phase === 'unlocked' && activeStranger && (
             <div className="panel-unlocked-card">
-              {/* Photo & Identity */}
+              {/* Photo & Name Only - Larger photo, no role or location */}
               <div className="unlocked-identity-strip">
                 <div className="stranger-photo-wrap">
                   <img
@@ -484,10 +707,6 @@ export default function Chapter5ComfortZone({
                 </div>
                 <div className="stranger-info-meta">
                   <h3 className="stranger-title">{activeStranger.name}</h3>
-                  <p className="stranger-role-text">{activeStranger.role}</p>
-                  <p className="stranger-loc-text">
-                    <MapPin size={12} /> {activeStranger.location}
-                  </p>
                 </div>
               </div>
 
